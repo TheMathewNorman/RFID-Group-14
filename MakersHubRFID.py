@@ -7,11 +7,10 @@ import RPi.GPIO as GPIO # Import library for GPIO pins
 
 # Import local libraries
 from lib import SimpleMFRC522 # Import library for MFRC522
+from lib import MatsRFIDStatus # Import Mat's custom library for RFID status.
 
 reader = SimpleMFRC522.SimpleMFRC522()
+status = MatsRFIDStatus.MatsRFIDStatus()
 
-try:
-	id, text = reader.read()
-	print(id)
-finally:
-	GPIO.cleanup()
+for _ in xrange(0, 5):
+	status.quick_buzz()
