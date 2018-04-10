@@ -13,8 +13,10 @@ reader = SimpleMFRC522.SimpleMFRC522()
 status = MatsRFIDStatus.MatsRFIDStatus()
 
 id, time = reader.read()
+status.success_on()
 status.quick_buzz()
+status.success_off()
 print(id)
-raw_input("Press any key to exit.")
 
+raw_input("Press any key to exit.")
 GPIO.cleanup()

@@ -3,9 +3,11 @@ from time import sleep
 from gpiozero import Buzzer
 import RPi.GPIO as GPIO
 
+# Initialise GPIO in BCM mode without warnings
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
+# Setup GPIO pins for the buzzer, status, fail, and success LEDs
 GPIO.setup(4, GPIO.OUT) # Buzzer
 GPIO.setup(16, GPIO.OUT) # Yellow
 GPIO.setup(20, GPIO.OUT) # Red
