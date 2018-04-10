@@ -12,7 +12,14 @@ from lib import ValidateUser # Import user validation library.
 
 reader = SimpleMFRC522.SimpleMFRC522()
 status = MatsRFIDStatus.MatsRFIDStatus()
-validate = ValidateUser.ValidateUser()
+# valudateuser = ValidateUser.ValidateUser()
+
+validUsers = [17988527649, 595116637326, 252747632322]
+def validate(id):
+	if id in validUsers:
+		return True
+	else:
+		return False
 
 def accessGranted():
 	status.success_on()
@@ -36,7 +43,7 @@ while True:
 	status.status_on()
 	id, time = reader.read()
 	status.status_off()
-	if (ValidateUser.validate(id)):
+	if (validate(id)):
 		accessGranted()
 	else:
 		accessDenied()
