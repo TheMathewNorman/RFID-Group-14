@@ -12,9 +12,7 @@ from lib import MatsRFIDStatus # Import Mat's custom library for RFID status.
 reader = SimpleMFRC522.SimpleMFRC522()
 status = MatsRFIDStatus.MatsRFIDStatus()
 
-userexit = ""
-
-while true:
+while True:
 	print("Ready to read...")
 	status.status_on()
 	id, time = reader.read()
