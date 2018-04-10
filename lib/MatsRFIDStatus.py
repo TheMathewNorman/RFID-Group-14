@@ -11,6 +11,7 @@ import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
+GPIO.setup(4, GPIO.OUT) # Buzzer
 GPIO.setup(16, GPIO.OUT) # Yellow
 GPIO.setup(20, GPIO.OUT) # Red
 GPIO.setup(21, GPIO.OUT) # Green
@@ -25,12 +26,12 @@ class MatsRFIDStatus:
 	
 	def fail_slowflash(self):
 		GPIO.output(20,GPIO.HIGH)
-		sleep(1.5)
+		sleep(1.0)
 		GPIO.output(20,GPIO.LOW)
 	
 	def fail_quickflash(self):
 		GPIO.output(20,GPIO.HIGH)
-		sleep(0.5)
+		sleep(0.1)
 		GPIO.output(20,GPIO.LOW)
 		
 	# Success LED Methods
@@ -42,12 +43,12 @@ class MatsRFIDStatus:
 	
 	def success_slowflash(self):
 		GPIO.output(21,GPIO.HIGH)
-		sleep(1.5)
+		sleep(1.0)
 		GPIO.output(21,GPIO.LOW)
 	
 	def success_quickflash(self):
 		GPIO.output(21,GPIO.HIGH)
-		sleep(0.5)
+		sleep(0.1)
 		GPIO.output(21,GPIO.LOW)
 		
 	# Status LED Methods
@@ -59,12 +60,12 @@ class MatsRFIDStatus:
 	
 	def status_slowflash(self):
 		GPIO.output(16,GPIO.HIGH)
-		sleep(1.5)
+		sleep(1.0)
 		GPIO.output(16,GPIO.LOW)
 	
 	def status_quickflash(self):
 		GPIO.output(16,GPIO.HIGH)
-		sleep(0.5)
+		sleep(0.1)
 		GPIO.output(16,GPIO.LOW)
 		
 	# Status Buzzer Methods
@@ -76,12 +77,12 @@ class MatsRFIDStatus:
 	
 	def slow_buzz(self):
 		GPIO.output(4,GPIO.HIGH)
-		sleep(1.5)
+		sleep(1.0)
 		GPIO.output(4,GPIO.LOW)
 	
 	def quick_buzz(self):
 		GPIO.output(4,GPIO.HIGH)
-		sleep(0.5)
+		sleep(0.1)
 		GPIO.output(4,GPIO.LOW)
 		
 	

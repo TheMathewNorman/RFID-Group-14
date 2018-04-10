@@ -12,5 +12,10 @@ from lib import MatsRFIDStatus # Import Mat's custom library for RFID status.
 reader = SimpleMFRC522.SimpleMFRC522()
 status = MatsRFIDStatus.MatsRFIDStatus()
 
-for _ in xrange(0, 5):
-	status.quick_buzz()
+print("Quick buzz in 2")
+sleep(2)
+status.quick_buzz()
+print("Slow buzz in 2")
+sleep(2)
+status.slow_buzz()
+sleep(2)
