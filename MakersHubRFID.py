@@ -15,12 +15,13 @@ status = MatsRFIDStatus.MatsRFIDStatus()
 userexit = ""
 
 while true:
+	print("Ready to read...")
 	status.status_on()
 	id, time = reader.read()
+	status.status_off()
 	status.success_on()
 	status.quick_buzz()
 	status.success_off()
-	status.status_off()
 	print(id)
 
 GPIO.cleanup()
