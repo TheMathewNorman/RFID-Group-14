@@ -12,7 +12,7 @@ redLED = 21
 greenLED = 16
 blueLED = 20
 
-buzzer = 4
+buzzer = 17
 
 # Setup GPIO pins for the buzzer, status, fail, and success LEDs
 GPIO.setup(buzzer, GPIO.OUT) # Buzzer
