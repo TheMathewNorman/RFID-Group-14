@@ -1,3 +1,10 @@
+'''
+' Author(s): Mathew Norman
+' Date created: 10/04/18
+' Description: 
+'  Eases the process of displaying LED and Buzz status indicators for the RFID reading module.
+'''
+
 # Include libraries for functionality
 from time import sleep
 from gpiozero import Buzzer
