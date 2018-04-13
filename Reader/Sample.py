@@ -19,15 +19,17 @@ from lib import Validate # Import user validation library.
 
 reader = SimpleMFRC522.SimpleMFRC522()
 status = RFIDStatus.RFIDStatus()
-# valudateuser = ValidateUser.ValidateUser()
+validate = Validate.Validate()
 
-validUsers = [17988527649, 595116637326, 252747632322]
+#validUsers = [17988527649, 595116637326, 252747632322]
 
+'''
 def validate(id):
 	if id in validUsers:
 		return True
 	else:
 		return False
+'''
 
 def accessGranted():
 	status.green_on()
@@ -51,7 +53,7 @@ while True:
 	status.blue_on()
 	id, time = reader.read()
 	status.blue_off()
-	if (validate(id)):
+	if (validate.card(id)):
 		accessGranted()
 	else:
 		accessDenied()
