@@ -5,10 +5,10 @@
 '  Simulates a card validation
 '''
 
-class Validate:
+# Example list of valid card IDs
+validCards = [17988527649, 595116637326, 252747632322]
 
-    # Example list of valid card IDs
-	validCards = [17988527649, 595116637326, 252747632322]
+class Validate:
 
 	def card(self, id):
 		if id in validCards:
