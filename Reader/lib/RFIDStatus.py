@@ -29,7 +29,7 @@ GPIO.setup(greenLED, GPIO.OUT) # Green
 
 
 
-class MatsRFIDStatus:
+class RFIDStatus:
 	# Fail LED Methods
 	def red_on(self):
 		GPIO.output(redLED,GPIO.HIGH)

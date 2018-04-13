@@ -18,7 +18,7 @@ from lib import RFIDStatus # Import Mat's custom library for RFID status.
 from lib import Validate # Import user validation library.
 
 reader = SimpleMFRC522.SimpleMFRC522()
-status = MatsRFIDStatus.MatsRFIDStatus()
+status = RFIDStatus.RFIDStatus()
 # valudateuser = ValidateUser.ValidateUser()
 
 validUsers = [17988527649, 595116637326, 252747632322]
