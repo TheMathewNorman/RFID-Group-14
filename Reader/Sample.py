@@ -15,7 +15,7 @@ import RPi.GPIO as GPIO # Import library for GPIO pins.
 # Import local libraries.
 from lib import SimpleMFRC522 # Import library for MFRC522.
 from lib import RFIDStatus # Import Mat's custom library for RFID status.
-from lib import ValidateUser # Import user validation library.
+from lib import Validate # Import user validation library.
 
 reader = SimpleMFRC522.SimpleMFRC522()
 status = MatsRFIDStatus.MatsRFIDStatus()
