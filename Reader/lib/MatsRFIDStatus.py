@@ -16,7 +16,7 @@ buzzer = 4
 
 # Setup GPIO pins for the buzzer, status, fail, and success LEDs
 GPIO.setup(buzzer, GPIO.OUT) # Buzzer
-GPIO.setup(yellowLED, GPIO.OUT) # Yellow
+GPIO.setup(blueLED, GPIO.OUT) # Yellow
 GPIO.setup(redLED, GPIO.OUT) # Red
 GPIO.setup(greenLED, GPIO.OUT) # Green
 
@@ -59,20 +59,20 @@ class MatsRFIDStatus:
 		
 	# Status LED Methods
 	def blue_on(self):
-		GPIO.output(yellowLED,GPIO.HIGH)
+		GPIO.output(blueLED,GPIO.HIGH)
 	
 	def blue_off(self):
-		GPIO.output(yellowLED,GPIO.LOW)
+		GPIO.output(blueLED,GPIO.LOW)
 	
 	def blue_slowflash(self):
-		GPIO.output(yellowLED,GPIO.HIGH)
+		GPIO.output(blueLED,GPIO.HIGH)
 		sleep(1.0)
-		GPIO.output(yellowLED,GPIO.LOW)
+		GPIO.output(blueLED,GPIO.LOW)
 	
 	def blue_quickflash(self):
-		GPIO.output(yellowLED,GPIO.HIGH)
+		GPIO.output(blueLED,GPIO.HIGH)
 		sleep(0.1)
-		GPIO.output(yellowLED,GPIO.LOW)
+		GPIO.output(blueLED,GPIO.LOW)
 		
 	# Status Buzzer Methods
 	def buzzer_on(self):

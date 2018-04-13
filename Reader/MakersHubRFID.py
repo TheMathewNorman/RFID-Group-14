@@ -22,27 +22,27 @@ def validate(id):
 		return False
 
 def accessGranted():
-	status.success_on()
+	status.blue_on()
 	status.quick_buzz()
 	sleep(10)
-	status.success_off()
+	status.blue_off()
 	
 	
 def accessDenied():
-	status.fail_on()
+	status.red_on()
 	status.quick_buzz()
 	status.quick_buzz()
 	status.quick_buzz()
 	sleep(10)
-	status.fail_off()
+	status.red_off()
 	
 
 # Read card reader input
 while True:
 	print("Ready to read...")
-	status.status_on()
+	status.blue_on()
 	id, time = reader.read()
-	status.status_off()
+	status.blue_off()
 	if (validate(id)):
 		accessGranted()
 	else:
