@@ -14,22 +14,12 @@ import RPi.GPIO as GPIO # Import library for GPIO pins.
 
 # Import local libraries.
 from lib import SimpleMFRC522 # Import library for MFRC522.
-from lib import RFIDStatus # Import Mat's custom library for RFID status.
-from lib import Validate # Import user validation library.
+from lib import RFIDStatus # Import custom library for RFID status.
+from lib import Validate # Import custom library for user validation library.
 
 reader = SimpleMFRC522.SimpleMFRC522()
 status = RFIDStatus.RFIDStatus()
 validate = Validate.Validate()
-
-#validUsers = [17988527649, 595116637326, 252747632322]
-
-'''
-def validate(id):
-	if id in validUsers:
-		return True
-	else:
-		return False
-'''
 
 def accessGranted():
 	status.green_on()
