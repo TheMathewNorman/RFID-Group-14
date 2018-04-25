@@ -24,10 +24,12 @@
     #login-form input {
         margin: 5px 0;
         width: 95%;
-        border-radius: 8px;
-        padding: 3px;
+        padding: 5px;
         font-size: 1.2em;
     }
     #login-form input[type="text"], #login-form input[type="password"] {
-        
+        border-radius: 5px;
+    }
+    #login-form input[type="submit"] {
+        border-radius: 3px;
     }
