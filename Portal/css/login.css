@@ -29,6 +29,7 @@
     }
     #login-form input[type="text"], #login-form input[type="password"] {
         width: 400px;
+        margin: 0 0 0 20px;
         border-radius: 5px;
     }
     #login-form input[type="submit"] {
