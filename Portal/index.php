@@ -13,9 +13,9 @@
         </div>
         <div id="login-form">
             <form>
-                <input type="text" name="username" placeholder="Username"><br>
-                <input type="password" name="password" placeholder="Password"><br>
-                <input type="submit" value="Login">
+                <div class="form-field"><i class="fas fa-user"></i><input type="text" name="username" placeholder="Username"></div>
+                <div class="form-field"><i class="fas fa-lock"></i><input type="password" name="password" placeholder="Password"></div>
+                <div><input type="submit" value="Login"></div>
             </form>
         </div>
 

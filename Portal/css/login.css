@@ -19,11 +19,13 @@
     color: rgb(244,244,244);
 }
 #login-form {
+    width: 90%;
     margin: 0 auto;
+    background-color: #000;
 }
     #login-form input {
         margin: 5px 0;
-        width: 95%;
+        width: 100%;
         padding: 5px;
         font-size: 1.2em;
     }
@@ -32,4 +34,7 @@
     }
     #login-form input[type="submit"] {
         border-radius: 3px;
+    }
+    .form-field {
+        
     }
