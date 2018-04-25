@@ -8,22 +8,23 @@
     top: 0; bottom: 0;
 
 
-    height: 200px;
-    width: 400px;
+    height: 600px;
+    width: 500px;
+    padding: 10px;
 
     background-color: rgba(0,0,0,0.2);
 }
 
 #login-heading {
-    font: rgb(244,244,244);
+    color: rgb(244,244,244);
 }
 #login-form {
-    padding: 10px;
+    
 }
     #login-form input {
         margin: 5px auto;
         width: 90%;
-        border-radius: 2px;
+        border-radius: 8px;
         padding: 3px;
         font-size: 1.2em;
     }
