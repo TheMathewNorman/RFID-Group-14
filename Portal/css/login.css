@@ -19,10 +19,11 @@
     color: rgb(244,244,244);
 }
 #login-form {
-    margin: 5px auto;
+    margin: 0 auto;
 }
     #login-form input {
-        width: 100%;
+        margin: 5px 0;
+        width: 95%;
         border-radius: 8px;
         padding: 3px;
         font-size: 1.2em;
