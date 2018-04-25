@@ -10,7 +10,6 @@
 
     height: 350px;
     width: 500px;
-    padding: 10px;
 
     background-color: rgba(0,0,0,0.2);
 }
@@ -35,6 +34,7 @@
         width: 100%;
         border-radius: 3px;
     }
-    .form-field {
-
+    .form-field i {
+        padding: 2px 0;
+        color: rgb(244,244,244);
     }
