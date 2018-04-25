@@ -13,9 +13,15 @@
         </div>
         <div id="login-form">
             <form>
-                <div class="form-field"><i class="fas fa-user fa-lg"></i><input type="text" name="username" placeholder="Username"></div>
-                <div class="form-field"><i class="fas fa-lock fa-lg"></i><input type="password" name="password" placeholder="Password"></div>
-                <div><input type="submit" value="Login"></div>
+                <div class="form-field">
+                    <div class="input-icon"><i class="fas fa-user fa-lg"></i></div>
+                    <div class="input-box"><input type="text" name="username" placeholder="Username"></div>
+                </div>
+                <div class="form-field">
+                    <div class="input-icon"><i class="fas fa-lock fa-lg"></i></div>
+                    <div class="input-box"><input type="password" name="password" placeholder="Password"></div>
+                </div>
+                <input type="submit" value="Login">
             </form>
         </div>
 
