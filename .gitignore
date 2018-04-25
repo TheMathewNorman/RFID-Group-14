@@ -1,2 +1,3 @@
 webhook-deployer/
 index.php
+*.code-workspace
