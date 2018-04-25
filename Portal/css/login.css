@@ -8,7 +8,7 @@
     top: 0; bottom: 0;
 
 
-    height: 600px;
+    height: 350px;
     width: 500px;
     padding: 10px;
 
@@ -19,22 +19,22 @@
     color: rgb(244,244,244);
 }
 #login-form {
-    width: 90%;
     margin: 0 auto;
     background-color: #000;
 }
     #login-form input {
         margin: 5px 0;
-        width: 100%;
         padding: 5px;
         font-size: 1.2em;
     }
     #login-form input[type="text"], #login-form input[type="password"] {
+        width: 400px;
         border-radius: 5px;
     }
     #login-form input[type="submit"] {
+        width: 100%;
         border-radius: 3px;
     }
     .form-field {
-        
+
     }
