@@ -10,6 +10,8 @@
 
     height: 350px;
     width: 500px;
+    
+    padding: 10px;
 
     background-color: rgba(0,0,0,0.2);
 }
@@ -19,7 +21,6 @@
 }
 #login-form {
     margin: 0 auto;
-    background-color: #000;
 }
     #login-form input {
         margin: 5px 0;
@@ -34,7 +35,10 @@
         width: 100%;
         border-radius: 3px;
     }
+    .form-field {
+        margin: 8px 0;
+    }
     .form-field i {
-        padding: 2px 0;
+        padding: 0 2px;
         color: rgb(244,244,244);
     }
