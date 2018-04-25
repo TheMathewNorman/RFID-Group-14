@@ -9,10 +9,10 @@
 <body>
     <div id="login-container">
         <div id="login-heading">
-            <h1>Login</h1>
+            RFID Access Control
         </div>
         <div id="login-form">
-            <form>
+            <form action="" method="POST">
                 <div class="form-field">
                     <div class="input-icon"><i class="fas fa-user fa-lg"></i></div>
                     <div class="input-box"><input type="text" name="username" placeholder="Username"></div>
