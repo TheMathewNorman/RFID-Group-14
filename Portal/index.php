@@ -8,7 +8,9 @@
 </head>
 <body>
     <div id="login-container">
-
+        <div id="login-heading">
+            <h1>Login</h1>
+        </div>
         <div id="login-form">
             <form>
                 <input type="text" name="username" placeholder="Username"><br>
