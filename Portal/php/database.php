@@ -104,7 +104,7 @@ class Database {
         }
 
         // Form SQL query
-        $sql = "SELECT * FROM 'members'
+        $sql = "SELECT * FROM members
         WHERE id LIKE '%$searchq%'
         OR firstname LIKE '%$searchq%'
         OR lastname LIKE '%$searchq%'
