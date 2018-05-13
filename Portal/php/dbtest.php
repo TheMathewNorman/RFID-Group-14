@@ -6,9 +6,7 @@
     
     // Check connection
     if ($connection->connect_error) {
-        echo "Connection failed: " . $connection->connect_error;
-    } else {
-        echo "Connection success\n";
+        die("Connection failed: " . $connection->connect_error);
     }
 
     // Create the members table upon success
@@ -19,7 +17,7 @@
         email VARCHAR(50)
     )";
         
-    if ($connection>query($sql) !== TRUE) {
+    if ($connection->query($sql) !== TRUE) {
         echo "Error creating table: " . $connection->error;
     } else {
         echo "Creation success";
