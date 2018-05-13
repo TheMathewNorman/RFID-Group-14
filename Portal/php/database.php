@@ -106,7 +106,7 @@ class Database {
         // Form SQL query
         $sql = "SELECT * FROM 'members'
         WHERE
-        CONCAT_WS('|','id','fullname','email','phone')
+        CONCAT(id,fullname,email,phone)
         LIKE '%$nohtmlsearchq%'";
 
         // Fetch each line and display in table
