@@ -11,7 +11,7 @@ class Database {
         
         // Check connection
         if ($connection->connect_error) {
-            die("Connection failed\n$connection->connect_error");
+            die("Connection failed<br>$connection->connect_error");
         }
 
         // Create the members table upon success
@@ -65,7 +65,7 @@ class Database {
         
         // Check connection
         if ($connection->connect_error) {
-            die("Connection failed\n$connection->connect_error");
+            die("Connection failed<br>$connection->connect_error");
         }
 
         // Form SQL query
@@ -91,7 +91,7 @@ class Database {
         
         // Check connection
         if ($connection->connect_error) {
-            die("Connection failed\n$connection->connect_error");
+            die("Connection failed<br>$connection->connect_error");
         }
 
         // Form multiquery SQL
@@ -104,7 +104,7 @@ class Database {
 
         // Try performing multi SQL query, die on error.
         if (mysqli_multi_query($connection, $sql) === FALSE) {
-            die("Error adding member\n$connection->error");
+            die("Error adding member<br>$connection->error");
         }
     
         $connection->close();
@@ -116,7 +116,7 @@ class Database {
 
         // Check connection
         if ($connection->connect_error) {
-            die("Connection failed\n$connection->connect_error");
+            die("Connection failed<br>$connection->connect_error");
         }
 
         // Form SQL query
@@ -124,7 +124,7 @@ class Database {
 
         // Try DB delete, die on error.
         if ($connection->query($sql) !== TRUE) {
-            die("Error deleting member\n$connection->error");
+            die("Error deleting member<br>$connection->error");
         }
     }
 
