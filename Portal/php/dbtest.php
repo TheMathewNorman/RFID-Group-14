@@ -17,6 +17,9 @@
     $database->addMember("Mathew Norman", "someoneelse@example.com", "0400000000", "asq2889112412345643");
     echo "Member add test 2.<br>";
 
+    $database->searchMembers("Ma");
+    $database->searchMembers("abcd");    
+
     // List members
     $database->listMembers();
     echo "Member list test.<br>";
