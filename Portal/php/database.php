@@ -117,7 +117,7 @@ class Database {
                 echo "Found ".mysqli_num_rows($result)." results for $searchq<br>";
                 echo '<table><tr><th>Member ID</th><th>Full Name</th><th>Email Address</th><th>Phone No.</th></tr>';
                 while ($row=mysqli_fetch_row($result)) {
-                    echo str_replace($searchq, "<b>$nohtmlsearchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td></tr>");
+                    echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td></tr>");
                 }
                 echo '</table>';
             }
