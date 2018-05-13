@@ -17,13 +17,15 @@ class Database {
         // Create the members table upon success
         $sql = "CREATE TABLE admin (
             id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-            fullname VARCHAR(30) NOT NULL,
+            firstname VARCHAR(30) NOT NULL,
+            lastname VARCHAR(30) NOT NULL,
             email VARCHAR(50),
             phone VARCHAR(10),
             passhash VARCHAR(128) NOT NULL
         ); CREATE TABLE members (
             id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-            fullname VARCHAR(30) NOT NULL,
+            firstname VARCHAR(30) NOT NULL,
+            lastname VARCHAR(30) NOT NULL,
             email VARCHAR(50),
             phone VARCHAR(10),
             cardkey VARCHAR(128) NOT NULL
@@ -53,8 +55,8 @@ class Database {
 
     //// ADMIN TABLE FUNCTIONALITY //// 
     // Functions to include
-    // addAdmin($fullname, $email, $phone, $pass)
-    // updateAdmin($id,$fullname, $email, $phone, $pass)
+    // addAdmin($firstname, $lastname, $email, $phone, $pass)
+    // updateAdmin($id, $firstname, $lastname, $email, $phone, $pass)
     // removeAdmin($id)
     // listAdmins()
     // searchAdmins($searchq)
@@ -72,16 +74,16 @@ class Database {
         }
 
         // Form SQL query
-        $sql = "SELECT id, fullname, email, phone FROM members ORDER BY id";
+        $sql = "SELECT id, firstname, lastname, email, phone FROM members ORDER BY id";
 
         // Fetch each line and display in table
         if ($result = mysqli_query($connection, $sql)) {
             if (mysqli_num_rows($result) === 0) {
                 echo "The members table is empty.<br>";
             } else {
-                echo '<table><tr><th>Member ID</th><th>Full Name</th><th>Email Address</th><th>Phone No.</th></tr>';
+                echo '<table><tr><th>Member ID</th><th>First Name</th><th>Last Name</th><th>Email Address</th><th>Phone No.</th></tr>';
                 while ($row=mysqli_fetch_row($result)) {
-                    echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[2]</td></tr>";
+                    echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td></tr>";
                 }
                 echo '</table>';
             }
@@ -106,7 +108,7 @@ class Database {
         // Form SQL query
         $sql = "SELECT * FROM 'members'
         WHERE
-        CONCAT(id,fullname,email,phone)
+        CONCAT(id,firstname,lastname,email,phone)
         LIKE '%$nohtmlsearchq%'";
 
         // Fetch each line and display in table
@@ -131,7 +133,7 @@ class Database {
     }
 
     // Add a member to the members table.
-    function addMember($fullname, $email, $phone, $cardkey) {
+    function addMember($firstname, $lastname, $email, $phone, $cardkey) {
         // Encrypt the card key before inseting into the database
         $cardkeyhash = hash("sha512", $cardkey);
         
@@ -144,7 +146,7 @@ class Database {
         }
 
         // Form SQL query
-        $sql = "INSERT INTO members (fullname, email, phone, cardkey) VALUES ('$fullname', '$email', '$phone', '$cardkeyhash')";
+        $sql = "INSERT INTO members (firstname, lastname, email, phone, cardkey) VALUES ('$firstname', '$lastname', '$email', '$phone', '$cardkeyhash')";
 
         // Try DB insertion, die on error.
         if ($connection->query($sql) !== TRUE) {
@@ -156,7 +158,7 @@ class Database {
     }
 
     // Update a member in the members table.
-    function updateMember($memberid, $fullname, $email, $phone, $cardkey) {
+    function updateMember($memberid, $firstname, $lastname, $email, $phone, $cardkey) {
         // Encrypt the card key before inseting into the database if set
         $cardkeyhash = "";
         if ($cardkey != "") {
@@ -173,7 +175,8 @@ class Database {
 
         // Form multiquery SQL
         $sql = "";
-        if ($fullname != "") { $sql .= "UPDATE members SET fullname = '$fullname' WHERE id = '$memberid';"; }
+        if ($firstname != "") { $sql .= "UPDATE members SET firstname = '$firstname' WHERE id = '$memberid';"; }
+        if ($lastname != "") { $sql .= "UPDATE members SET lastname = '$lastname' WHERE id = '$memberid';"; }
         if ($email != "") { $sql .= "UPDATE members SET email = '$email' WHERE id = '$memberid';"; }
         if ($phone != "") { $sql .= "UPDATE members SET phone = '$phone' WHERE id = '$memberid';"; }
         if ($cardkeyhash != "") { $sql .= "UPDATE members SET cardkey = '$cardkeyhash' WHERE id = '$memberid';"; }
