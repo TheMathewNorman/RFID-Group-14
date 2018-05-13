@@ -10,9 +10,9 @@
     $database->addMember("Mathew Norman", "someoneelse@example.com", "0400000000", "asq2889112412345643");
 
     // Update test member
-    $database->updateMember('0', "Mathew Norman", "coolemail@mat.com", "", "");
+    $database->updateMember('1', "Mathew Norman", "coolemail@mat.com", "", "");
 
     // Delete test member
-    $database->deleteMember('1');
+    $database->deleteMember('2');
 
 ?>
