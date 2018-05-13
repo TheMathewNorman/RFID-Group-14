@@ -122,6 +122,8 @@ class Database {
                 echo '</table>';
             }
             mysqli_free_result($result);
+        } else {
+            die("There was an error searching the database:$connection->error");
         }
 
         // Close the connection
