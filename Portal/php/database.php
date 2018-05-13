@@ -95,8 +95,6 @@ class Database {
     }
 
     function searchMembers($searchq) {
-        $nohtmlsearchq = strtolower(htmlspecialchars($searchq));
-        
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
                 
@@ -109,23 +107,23 @@ class Database {
         $sql = "SELECT * FROM 'members'
         WHERE
         CONCAT(id,firstname,lastname,email,phone)
-        LIKE '%$nohtmlsearchq%'";
+        LIKE '%$searchq%'";
 
         // Fetch each line and display in table
         if ($result = mysqli_query($connection, $sql)) {
             if (mysqli_num_rows($result) === 0) {
-                echo "The members table contains no match for the search:<b>$nohtmlsearchq<b><br>";
+                echo "The members table contains no match for the search:<b>$searchq<b><br>";
             } else {
-                echo "Found ".mysqli_num_rows($result)." results for $nohtmlsearchq<br>";
+                echo "Found ".mysqli_num_rows($result)." results for $searchq<br>";
                 echo '<table><tr><th>Member ID</th><th>Full Name</th><th>Email Address</th><th>Phone No.</th></tr>';
                 while ($row=mysqli_fetch_row($result)) {
-                    echo str_replace($nohtmlsearchq, "<b>$nohtmlsearchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[2]</td></tr>");
+                    echo str_replace($searchq, "<b>$nohtmlsearchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td></tr>");
                 }
                 echo '</table>';
             }
             mysqli_free_result($result);
         } else {
-            die("There was an error searching the database:$connection->error");
+            die("There was an error searching the database:<br>$connection->error<br>");
         }
 
         // Close the connection

@@ -17,10 +17,10 @@
     echo "Member add test 2.<br>";
     $database->addMember("Mathew","Norman", "someoneelse@example.com", "0400000000", "asq2889112412345643");
 
-    //echo "Search test 1.<br>";
-    //$database->searchMembers("Ma");
-    //echo "Search test 2.<br>";
-    //$database->searchMembers("abcd");
+    echo "Search test 1.<br>";
+    $database->searchMembers("Ma");
+    echo "Search test 2.<br>";
+    $database->searchMembers("abcd");
 
     // List members
     echo "Member list test.<br>";
