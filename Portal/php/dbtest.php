@@ -26,11 +26,11 @@
         id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
         member_id INT(6) NOT NULL,
         reader_id INT(6),
-        group INT(6)
+        reader_group INT(6)
     ); CREATE TABLE reader (
         id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
         reader_name VARCHAR(30) NOT NULL,
-        reader_group INT(6) NOT NULL,
+        reader_group INT(6) NOT NULL
     ); CREATE TABLE logs (
         id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
         member_id INT(6) NOT NULL,
@@ -39,7 +39,7 @@
     )";
         
     if (mysqli_multi_query($connection, $sql) === FASLE) {
-        echo "Error creating table: " . $connection->error;
+        die("Error creating table: " . $connection->error);
     } else {
         echo "Creation success";
     }
