@@ -3,7 +3,14 @@
 
     // DROP TABLES BEFORE RUNNING TEST
     $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
-    $connection->query("DROP TABLE 'admin','logs','members','readers','priviledge'");
+    if ($connection->connect_error) {
+        die("Connection failed<br>$connection->connect_error");
+    }
+    $sql = "DROP TABLE 'admin','logs','members','readers','priviledge'";
+    // Try DB insertion, die on error.
+    if ($connection->query($sql) !== TRUE) {
+        die("Error dropping table:<br>$connection->error");
+    }
     $connection->close();
 
     // Create the tables
