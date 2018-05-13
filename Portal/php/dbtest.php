@@ -9,6 +9,7 @@
 
     // List members
     $database->listMembers();
+    echo "Member list test.<br>";
 
     // Insert test member
     $database->addMember("Mathew Norman", "someone@example.com", "0400000000", "0192889112412345643");
@@ -18,6 +19,7 @@
 
     // List members
     $database->listMembers();
+    echo "Member list test.<br>";
 
     // Update test member
     $database->updateMember('1', "Mathew Norman", "coolemail@mat.com", "", "");
@@ -25,6 +27,7 @@
 
     // List members
     $database->listMembers();
+    echo "Member list test.<br>";
 
     // Delete test member
     $database->deleteMember('2');
@@ -32,5 +35,5 @@
 
     // List members
     $database->listMembers();
-
+    echo "Member list test.<br>";
 ?>

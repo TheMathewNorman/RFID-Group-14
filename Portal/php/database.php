@@ -45,8 +45,6 @@ class Database {
             
         if (mysqli_multi_query($connection, $sql) === FASLE) {
             die("Error creating table: " . $connection->error);
-        } else {
-            echo "Creation success";
         }
 
         $connection->close();
