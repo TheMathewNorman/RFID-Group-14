@@ -65,7 +65,7 @@ class Database {
         }
 
         // Form SQL query
-        $sql = "INSERT INTO members (fullname, email, phone, cardkey) VALUES ($fullname, $email, $phone, $cardkeyhash)";
+        $sql = "INSERT INTO members (fullname, email, phone, cardkey) VALUES ('$fullname', '$email', '$phone', '$cardkeyhash')";
 
         // Try DB insertion, die on error.
         if ($connection->query($sql) !== TRUE) {
