@@ -10,7 +10,7 @@
     
     // Check connection
     if ($connection->connect_error) {
-        die("Connection failed: " . $connection->connect_error);
+        //die("Connection failed: " . $connection->connect_error);
     } 
 
     // Create the members table upon success
@@ -22,7 +22,7 @@
     )";
         
     if ($connection>query($sql) !== TRUE) {
-        die("Error creating table: " . $connection->error);
+        //die("Error creating table: " . $connection->error);
     }
 
     $connection->close();
