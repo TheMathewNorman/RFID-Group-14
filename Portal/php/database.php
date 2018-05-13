@@ -64,17 +64,12 @@ class Database {
 
         // Fetch each line and display in table
         if ($result = mysqli_query($connection, $sql)) {
-            
-            ////// TEST OUTPUT FROM NUM ROWS
-            echo mysqli_num_rows($result);
-            ///// REMOVE AFTER TEST
-
             if (mysqli_num_rows($result) === 0) {
                 echo "The members table is empty.";
             } else {
-                echo '<table><tr><th></th><th></th><th></th><th></th></tr>';
+                echo '<table><tr><th>Member ID</th><th>Full Name</th><th>Email Address</th><th>Phone No.</th></tr>';
                 while ($row=mysqli_fetch_row($result)) {
-                    echo "<tr><td>".$row['id']."</td><td>".$row['fullname']."</td><td>".$row['email']."</td><td>".$row['phone']."</td></tr>";
+                    echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[2]</td></tr>";
                 }
                 echo '</table>';
             }
