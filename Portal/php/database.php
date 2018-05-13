@@ -11,7 +11,7 @@ class Database {
         
         // Check connection
         if ($connection->connect_error) {
-            die("Connection failed: " . $connection->connect_error);
+            die("Connection failed\n$connection->connect_error");
         }
 
         // Create the members table upon success
@@ -52,6 +52,10 @@ class Database {
         $connection->close();
     }
 
+    function listMembers() {
+
+    }
+
     function addMember($fullname, $email, $phone, $cardkey) {
         // Encrypt the card key before inseting into the database
         $cardkeyhash = hash("sha512", $cardkey);
@@ -61,7 +65,7 @@ class Database {
         
         // Check connection
         if ($connection->connect_error) {
-            die("Connection failed: " . $connection->connect_error);
+            die("Connection failed\n$connection->connect_error");
         }
 
         // Form SQL query
@@ -74,6 +78,56 @@ class Database {
     
         $connection->close();
     }
+
+    function updateMember($memberid, $fullname, $email, $phone, $cardkey) {
+        // Encrypt the card key before inseting into the database if set
+        $cardkeyhash = "";
+        if ($cardkey != "") {
+            $cardkeyhash = hash("sha512", $cardkey);
+        }
+        
+        // Create connection
+        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+        
+        // Check connection
+        if ($connection->connect_error) {
+            die("Connection failed\n$connection->connect_error");
+        }
+
+        // Form multiquery SQL
+        $sql = "";
+        if ($fullname != "") { $sql .= "UPDATE members SET fullname = '$fullname' WHERE id = '$memberid';"; }
+        if ($email != "") { $sql .= "UPDATE members SET email = '$email' WHERE id = '$memberid';"; }
+        if ($phone != "") { $sql .= "UPDATE members SET phone = '$phone' WHERE id = '$memberid';"; }
+        if ($cardkeyhash != "") { $sql .= "UPDATE members SET cardkey = '$cardkeyhash' WHERE id = '$memberid';"; }
+
+
+        // Try performing multi SQL query, die on error.
+        if (mysqli_multi_query($connection, $sql) === FALSE) {
+            die("Error adding member\n$connection->error");
+        }
+    
+        $connection->close();
+    }
+    
+    function deleteMember($memberid) {
+        // Create connection
+        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+
+        // Check connection
+        if ($connection->connect_error) {
+            die("Connection failed\n$connection->connect_error");
+        }
+
+        // Form SQL query
+        $sql = "DELETE FROM members WHERE id = '$memberid'";
+
+        // Try DB delete, die on error.
+        if ($connection->query($sql) !== TRUE) {
+            die("Error deleting member\n$connection->error");
+        }
+    }
+
 
     // Potential methods to include
     // Check Card
