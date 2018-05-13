@@ -47,12 +47,12 @@ class Database {
                 ///////////////////////////////
             )";
             
-            if ($connection>query($sql) !== TRUE) {
-                echo "Error creating table: " . $connection>error;
+            if ($connection->query($sql) !== TRUE) {
+                echo "Error creating table: " . $connection->error;
             }
 
         } else {
-            echo "Error creating database: " . $connection>error;
+            echo "Error creating database: " . $connection->error;
         }
 
         $connection->close();
