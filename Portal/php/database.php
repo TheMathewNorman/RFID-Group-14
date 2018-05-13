@@ -105,9 +105,11 @@ class Database {
 
         // Form SQL query
         $sql = "SELECT * FROM 'members'
-        WHERE
-        CONCAT(id,firstname,lastname,email,phone)
-        LIKE '%$searchq%'";
+        WHERE id LIKE '%$searchq%'
+        OR firstname LIKE '%$searchq%'
+        OR lastname LIKE '%$searchq%'
+        OR email LIKE '%$searchq%'
+        OR phone LIKE '%$searchq%'";
 
         // Fetch each line and display in table
         if ($result = mysqli_query($connection, $sql)) {
