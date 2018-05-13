@@ -104,7 +104,7 @@ class Database {
         }
 
         // Form SQL query
-        $sql = "SELECT * FROM `some_table`
+        $sql = "SELECT * FROM 'members'
         WHERE
         CONCAT_WS('|',LOWER('id'),LOWER('fullname'),LOWER('email'),LOWER('phone'))
         LIKE '%$nohtmlsearchq%'";
