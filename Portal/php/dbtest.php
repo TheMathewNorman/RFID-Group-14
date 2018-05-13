@@ -2,7 +2,7 @@
     include "sqlcreds.php";
 
     // Create connection
-    $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['rfidDB']);
+    $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
     
     // Check connection
     if ($connection->connect_error) {
