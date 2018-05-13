@@ -1,6 +1,11 @@
 <?php    
     include "database.php";
 
+    // DROP TABLES BEFORE RUNNING TEST
+    $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+    $connection->query("DROP TABLE 'admin','logs','members','readers','priviledge'");
+    $connection->close();
+
     // Create the tables
     $database = new Database;
     $database->createTables();
