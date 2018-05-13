@@ -21,6 +21,12 @@
     $database->searchMembers("Ma");
     echo "Search test 2.<br>";
     $database->searchMembers("abcd");
+    echo "Search test 3.<br>";
+    $database->searchMembers("ma");
+    echo "Search test 4.<br>";
+    $database->searchMembers("s");
+    echo "Search test 5.<br>";
+    $database->searchMembers("1");
 
     // List members
     echo "Member list test.<br>";
