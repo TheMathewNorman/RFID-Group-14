@@ -18,7 +18,7 @@
     echo "Member add test 2.<br>";
 
     $database->searchMembers("Ma");
-    $database->searchMembers("abcd");    
+    $database->searchMembers("abcd");
 
     // List members
     $database->listMembers();

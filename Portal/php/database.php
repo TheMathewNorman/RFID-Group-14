@@ -114,6 +114,7 @@ class Database {
             if (mysqli_num_rows($result) === 0) {
                 echo "The members table contains no match for the search:<b>$nohtmlsearchq<b><br>";
             } else {
+                echo "Found ".mysqli_num_rows($result)." results for $nohtmlsearchq<br>";
                 echo '<table><tr><th>Member ID</th><th>Full Name</th><th>Email Address</th><th>Phone No.</th></tr>';
                 while ($row=mysqli_fetch_row($result)) {
                     echo str_replace($nohtmlsearchq, "<b>$nohtmlsearchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[2]</td></tr>");
