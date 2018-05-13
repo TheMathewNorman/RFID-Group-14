@@ -24,7 +24,7 @@
         cardkey VARCHAR(128) NOT NULL
     ); CREATE TABLE priviledge (
         id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-        user_id INT(6) NOT NULL,
+        member_id INT(6) NOT NULL,
         reader_id INT(6),
         group INT(6)
     ); CREATE TABLE reader (
@@ -33,7 +33,7 @@
         reader_group INT(6) NOT NULL,
     ); CREATE TABLE logs (
         id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-        user_id INT(6) NOT NULL,
+        member_id INT(6) NOT NULL,
         reader_id INT(6) NOT NULL,
         access_date TIMESTAMP NOT NULL
     )";
