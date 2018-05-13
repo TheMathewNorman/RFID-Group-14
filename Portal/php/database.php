@@ -3,13 +3,8 @@ include 'sqlcreds.php';
 
 class Database {
 
-    // Database connection credentials
-    //private $server = "localhost";
-    //private $username = "root";
-    //private $password = "";
-
     // Create the database and table
-    function createtables() {
+    function createTables() {
 
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
@@ -26,7 +21,7 @@ class Database {
             email VARCHAR(50),
             phone VARCHAR(10),
             passhash VARCHAR(128) NOT NULL
-        ); CREATE TABLE member (
+        ); CREATE TABLE members (
             id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
             fullname VARCHAR(30) NOT NULL,
             email VARCHAR(50),
@@ -57,9 +52,31 @@ class Database {
         $connection->close();
     }
 
+    function addMember($fullname, $email, $phone, $cardkey) {
+        // Encrypt the card key before inseting into the database
+        $cardkeyhash = hash("sha512", $cardkey);
+        
+        // Create connection
+        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+        
+        // Check connection
+        if ($connection->connect_error) {
+            die("Connection failed: " . $connection->connect_error);
+        }
+
+        // Form SQL query
+        $sql = "INSERT INTO members (fullname, email, phone, cardkey) VALUES ($fullname, $email, $phone, $cardkeyhash)";
+
+        // Try DB insertion, die on error.
+        if ($connection->query($sql) !== TRUE) {
+            die("Error adding member".$connection->error);
+        }
+    
+        $connection->close();
+    }
+
     // Potential methods to include
     // Check Card
-    // Add (member)
     // Update (member)
     // Delete (member)
 
