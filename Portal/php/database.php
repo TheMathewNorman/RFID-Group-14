@@ -65,7 +65,7 @@ class Database {
         // Fetch each line and display in table
         if ($result = mysqli_query($connection, $sql)) {
             if (mysqli_num_rows($result) === 0) {
-                echo "The members table is empty.";
+                echo "The members table is empty.<br>";
             } else {
                 echo '<table><tr><th>Member ID</th><th>Full Name</th><th>Email Address</th><th>Phone No.</th></tr>';
                 while ($row=mysqli_fetch_row($result)) {
