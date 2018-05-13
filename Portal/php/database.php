@@ -1,11 +1,12 @@
 <?php
+include 'sqlcreds.php';
 
 class Database {
 
     // Database connection credentials
-    private $server = "localhost";
-    private $username = "root";
-    private $password = "";
+    //private $server = "localhost";
+    //private $username = "root";
+    //private $password = "";
 
     // Create the database and table
     function create() {
