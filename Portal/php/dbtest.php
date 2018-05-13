@@ -1,10 +1,10 @@
 <?php    
     include "sqlcreds.php";
 
-    echo $GLOBALS['server'];
-    echo $GLOBALS['user'];
-    echo $GLOBALS['pass'];
-    echo $GLOBALS['rfidDB'];
+    echo $GLOBALS['server'] + "A";
+    echo $GLOBALS['user'] + "A";
+    echo $GLOBALS['pass'] + "A";
+    echo $GLOBALS['rfidDB'] + "A";
     // Create connection
     $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['rfidDB']);
     
