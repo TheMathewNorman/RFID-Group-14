@@ -35,7 +35,7 @@
 
     // Delete test Admin
     echo "Admin delete test.<br>";
-    $database->deleteAdmin(2);
+    $database->removeAdmin(2);
 
     // List Admins
     echo "Admin list test.<br>";
@@ -70,7 +70,7 @@
 
     // Delete test member
     echo "Member delete test.<br>";
-    $database->deleteMember(2);
+    $database->removeMember(2);
 
     // List members
     echo "Member list test.<br>";
