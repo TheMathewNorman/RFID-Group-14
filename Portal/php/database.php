@@ -53,7 +53,7 @@ class Database {
         $connection->close();
     }
 
-    //// ADMIN TABLE FUNCTIONALITY //// 
+    //// ADMIN TABLE //// 
     // List all admins in the admin table
     function listAdmins() {
         // Create connection
@@ -87,6 +87,7 @@ class Database {
         $connection->close();
     }
     
+    // Search the admins table.
     function searchAdmins($searchq) {
         $formattedsearchq = strtolower(htmlspecialchars($searchq));
         
@@ -127,6 +128,7 @@ class Database {
         $connection->close();
     }
     
+    // Add an admin to the admins table.
     function addAdmin($firstname, $lastname, $email, $phone, $pass) {
         // Encrypt the admin password before inserting into the database
         $passhash = hash("sha512", $pass);
@@ -151,6 +153,7 @@ class Database {
         $connection->close();
     }
 
+    // Update an admin in the admins table.
     function updateAdmin($adminid, $firstname, $lastname, $email, $phone, $pass) {
         // Encrypt the card key before inseting into the database if set
         $passhash = "";
@@ -184,6 +187,7 @@ class Database {
         $connection->close();
     }
 
+    // Delete an admin from the admins table.
     function removeAdmin($adminid) {
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
@@ -204,13 +208,6 @@ class Database {
         // Close the connection
         $connection->close();
     }
-
-    // Functions to include
-    // addAdmin($firstname, $lastname, $email, $phone, $pass)
-    // updateAdmin($id, $firstname, $lastname, $email, $phone, $pass)
-    // removeAdmin($id)
-    // listAdmins()
-    // searchAdmins($searchq)
     
 
     //// MEMBERS TABLE FUNCTIONALITY //// 
@@ -247,6 +244,7 @@ class Database {
         $connection->close();
     }
 
+    // Search the members table
     function searchMembers($searchq) {
         $formattedsearchq = strtolower(htmlspecialchars($searchq));
         
@@ -370,6 +368,10 @@ class Database {
 
     //// PRIVILEDGE TABLE FUNCTIONALITY //// 
     // Functions to include
+    // addPriviledge($memberid,$readerid,$readergroup)
+    // removePriviledge($id)
+    // modifyPriviledge($id,$memberid,$readerid,$readergroup)
+    // listPriviledges()
 
     //// READER TABLE FUNCTIONALITY //// 
     // Functions to include

@@ -6,6 +6,9 @@
     $database->createTables();
     echo "Tables created successfully.<br>";
 
+    ///////////////////////////
+    //// ADMIN TABLE TESTS ////
+    ///////////////////////////
 
     // List Admins
     echo "Admin list test.<br>";
@@ -41,6 +44,10 @@
     echo "Admin list test.<br>";
     $database->listAdmins();
 
+
+    ////////////////////////////
+    //// MEMBER TABLE TESTS ////
+    ////////////////////////////
 
     // List members
     echo "Member list test.<br>";
