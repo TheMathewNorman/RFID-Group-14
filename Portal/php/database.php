@@ -116,7 +116,7 @@ class Database {
         // Fetch each line and display in table
         if ($result = mysqli_query($connection, $sql)) {
             if (mysqli_num_rows($result) === 0) {
-                echo "The members table contains no match for the search: <b>$searchq<b><br>";
+                echo "The members table contains no match for the search: <b>$searchq</b><br>";
             } else {
                 echo "Found ".mysqli_num_rows($result)." results for $searchq<br>";
                 echo '<table><tr><th>Member ID</th><th>Full Name</th><th>Email Address</th><th>Phone No.</th></tr>';
