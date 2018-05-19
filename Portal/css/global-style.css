@@ -21,3 +21,58 @@ body {
     background-size:16px 16px;
 }
 
+#content {
+    margin: 0 auto;
+    width: 80%;
+    
+    font-size: 1.2em;
+
+    color: white;
+
+    padding: 40px 30px;
+
+    background-color: rgba(0,0,0,0.4);
+}
+#content td {
+    font-size: 1.2em;
+    color: white;
+}
+#content input[type="text"], #content input[type="email"] {
+    font-size: 1.2em;
+    margin: 8px 0;
+    border-radius: 5px;
+    border: none;
+    padding: 3px;
+}
+#content input[type="submit"], #content input[type="reset"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 5px 8px;
+    font-size: 16px;
+    border: none;
+}
+#content input[type="checkbox"] {
+    -ms-transform: scale(2); /* IE */
+    -moz-transform: scale(2); /* FF */
+    -webkit-transform: scale(2); /* Safari and Chrome */
+    -o-transform: scale(2); /* Opera */
+    padding: 10px;
+    margin-left: 5px;
+}
+#content form {
+    width: 50%;
+    margin: 0 auto;
+}
+
+#list-table, #list-table th, #list-table td, #list-table tr {
+    border: 1px solid white;
+    color: white;
+    border-collapse: collapse;
+}
+
+#list-table {
+    width: 80%;
+    margin: 0 auto;
+    font-size: 1.2em;
+}
+
