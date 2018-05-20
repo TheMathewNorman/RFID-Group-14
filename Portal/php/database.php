@@ -53,8 +53,21 @@ class Database {
         $connection->close();
     }
 
+    // Test database connection.
+    function testConnection() {
+        // Create connection
+        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+                
+        // Check connection.
+        if ($connection->connect_error) {
+            return False;
+        } else {
+            return True;
+        }
+    }
+
     //// ADMIN TABLE //// 
-    // List all admins in the admin table
+    // List all admins in the admin table.
     function listAdmins() {
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
@@ -216,7 +229,7 @@ class Database {
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
                 
-        // Check connection
+        // Check connection.
         if ($connection->connect_error) {
             die("Connection failed<br>$connection->connect_error");
         }
@@ -224,7 +237,7 @@ class Database {
         // Form SQL query
         $sql = "SELECT id, firstname, lastname, email, phone FROM members ORDER BY id";
 
-        // Fetch each line and display in table
+        // Fetch each line and display in table.
         if ($result = mysqli_query($connection, $sql)) {
             if (mysqli_num_rows($result) === 0) {
                 echo "The members table is empty.<br>";
