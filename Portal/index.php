@@ -1,5 +1,7 @@
 <?php
-    
+    if (!file_exists("./php/sqlcreds.php")) {
+        header("Location: ./page/first-run.php");
+    }
 ?>
 
 <!DOCTYPE html>
