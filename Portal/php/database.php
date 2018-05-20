@@ -54,14 +54,29 @@ class Database {
     }
 
     // Test database connection.
-    function testConnection() {
+    function testConnection($server="", $dbuser="", $dbpass="", $dbname="") {
+        if ($server=="") {
+            $server = $GLOBALS['server'];
+        }
+        if ($dbuser=="") {
+            $dbuser = $GLOBALS['user'];
+        }
+        if ($dbpass=="") {
+            $dbpass = $GLOBALS['pass'];
+        }
+        if ($dbname=="") {
+            $dbname = $GLOBALS['dbname'];
+        }
+        
         // Create connection
-        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+        $connection = new mysqli($server, $dbuser, $dbpass, $dbname);
                 
-        // Check connection.
+        // Check connection and return status
         if ($connection->connect_error) {
+            $connection->close();
             return False;
         } else {
+            $connection->close();
             return True;
         }
     }

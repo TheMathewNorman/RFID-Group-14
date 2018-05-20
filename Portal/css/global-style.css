@@ -29,20 +29,22 @@ body {
 
     color: white;
 
-    padding: 40px 30px;
+    padding: 5px 30px 40px 30px;
 
     background-color: rgba(0,0,0,0.4);
 }
 #content td {
     font-size: 1.2em;
+    font-weight: bold;
     color: white;
 }
-#content input[type="text"], #content input[type="email"] {
-    font-size: 1.2em;
+#content input[type="text"], #content input[type="email"], #content input[type="password"] {
+    font-size: 1.1em;
     margin: 8px 0;
     border-radius: 5px;
     border: none;
-    padding: 3px;
+    padding: 5px;
+    width: 500px;
 }
 #content input[type="submit"], #content input[type="reset"] {
     background-color: #4CAF50;
