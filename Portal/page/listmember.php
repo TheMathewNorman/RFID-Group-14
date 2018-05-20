@@ -1,5 +1,7 @@
 <?php
     // List members code goes here
+    include_once "../php/database.php";
+    $database = new Database();
 ?>
 <html>
 <head>
@@ -12,12 +14,9 @@
     
         <?php include "menu.php"; ?>
     
-
-  <div style="text-align: right;">
-    <form action="" method="POST">
+    <form action="" method="GET">
       <input type="text" placeholder="Search.." name="search"> <input type="submit" value="Search">
     </form>
-  </div>
   
     <table id="list-table">
       <tr>
@@ -30,7 +29,7 @@
         <th>Delete</th>
       </tr>
       <?php
-        // Echo table
+        $database->listMembers();
       ?>
     </table>
   

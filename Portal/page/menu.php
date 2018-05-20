@@ -1,13 +1,13 @@
 
 <div id="menu">
     <div class="dropdown">
-    <button class="dropbtn" onclick="location.href='';">Home</button>
+    <button class="dropbtn" onclick="location.href='index.php';">Home</button>
     </div>
     <div class="dropdown">
-    <button class="dropbtn">Members</button>
+    <button class="dropbtn" onclick="location.href='listmember.php';">Members</button>
     <div class="dropdown-content">
-        <a href="#">Add New</a>
-        <a href="#">List</a>
+        <a href="addmember.php">Add New</a>
+        <a href="listmember.php">List</a>
     </div>
     </div>
     <div class="dropdown">

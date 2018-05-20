@@ -229,11 +229,9 @@ class Database {
             if (mysqli_num_rows($result) === 0) {
                 echo "The members table is empty.<br>";
             } else {
-                echo '<table><tr><th>Member ID</th><th>First Name</th><th>Last Name</th><th>Email Address</th><th>Phone No.</th></tr>';
                 while ($row=mysqli_fetch_row($result)) {
                     echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td></tr>";
                 }
-                echo '</table>';
             }
             mysqli_free_result($result);
         } else {

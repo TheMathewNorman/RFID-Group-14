@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
 <head>
 <title>First Run Setup</title>
