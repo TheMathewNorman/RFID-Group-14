@@ -15,7 +15,7 @@
         <?php include "menu.php"; ?>
     
     <form action="" method="GET">
-      <input type="text" placeholder="Search.." name="search"> <input type="submit" value="Search">
+      <input type="text" placeholder="Search..." name="search"> <input type="submit" value="Search">
     </form>
   
     <table id="list-table">
