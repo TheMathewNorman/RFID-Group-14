@@ -66,17 +66,22 @@ body {
     margin: 0 auto;
 }
 
-#list-table, #list-table th, #list-table td, #list-table tr {
-    border: 1px solid white;
-    color: white;
-    border-collapse: collapse;
-
-    text-align: center;
-}
-
 #list-table {
     width: 80%;
     margin: 0 auto;
-    font-size: 1.2em;
 }
-
+    #list-table th {
+        font-size: 1.2em;
+        font-weight: bolder;
+    }
+    #list-table td {
+        font-size: 1em;
+        font-weight: bold;
+    }
+    #list-table, #list-table th, #list-table td, #list-table tr {
+        border: 1px solid white;
+        color: white;
+        border-collapse: collapse;
+    
+        text-align: center;
+    }
