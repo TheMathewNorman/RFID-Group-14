@@ -155,6 +155,10 @@ class Database {
         // Close the connection
         $connection->close();
     }
+
+    function loginAdmin($email, $pass) {
+        
+    }
     
     // Add an admin to the admins table.
     function addAdmin($firstname, $lastname, $email, $phone, $pass) {
