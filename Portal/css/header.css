@@ -1,0 +1,22 @@
+#header {
+    display: table;
+    width: 100%;
+    padding: 20px;
+
+}
+.header-content {
+    display: table-cell;
+    vertical-align: middle;
+}
+#header-logo {
+    width: 10%;
+}
+    #header-logo img {
+        height: 125px;
+        width: 125px;
+    }
+#header-title {
+    text-align: right;
+    padding-right: 50px;
+    font-size: 3em;
+}

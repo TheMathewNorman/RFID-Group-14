@@ -20,7 +20,15 @@
         <a href="listadmin.php">List</a>
     </div>
     </div>
-    <div class="dropdown">
-    <button class="dropbtn">Settings</button>
+
+    <div class="dropdown right">
+        <button class="dropbtn">About</button>
+    </div>
+    <div class="dropdown right">
+        <button class="dropbtn">Settings</button>
+        <div class="dropdown-content">
+            <a href="#">General</a>
+            <a href="#">Database</a>
+        </div>
     </div>
 </div>

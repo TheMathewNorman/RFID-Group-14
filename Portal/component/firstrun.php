@@ -50,8 +50,9 @@
                 <tr><td style="text-align:right">Database: </td><td><input type="text" name="dbname" required></td></tr>
                 <tr><td style="text-align:right">Username: </td><td><input type="text" name="dbuser" required></td></tr>
                 <tr><td style="text-align:right">Password: </td><td><input type="password" name="dbpass" required></td></tr>
-                
-                <tr><td colspan="2" style="font-weight:bolder;padding:15px 0 5px 0;">Admin account:</td></tr>
+            </table>
+            Admin:
+            <table>            
                 <tr><td style="text-align:right">First name: </td><td><input type="text" name="fname" required></td></tr>
                 <tr><td style="text-align:right">Last name: </td><td><input type="text" name="lname" required></td></tr>
                 <tr><td style="text-align:right">Email: </td><td><input type="email" name="email" required></td></tr>

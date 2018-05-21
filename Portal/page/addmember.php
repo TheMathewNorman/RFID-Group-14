@@ -5,27 +5,13 @@
     <head>
         <title>Add Member</title>
         <link rel="stylesheet" type="text/css" href="../css/global-style.css">
+        <link rel="stylesheet" type="text/css" href="../css/header.css">
         <link rel="stylesheet" type="text/css" href="../css/menu.css">
     </head>
     <body bgcolor="#f5f5f5">
         <div id="content">
-        
-
-        <?php include "menu.php"; ?>
-        <!--<table align="center" cellspacing="30">
-            <tr>
-                <th><a href="Home.html">Home</a></th>
-                <th><a href="ManageUsers.html">ManageUsers</a></th>
-                <th><a href="ViewLogs.html">ViewLogs</a></th>
-                <th><a href="setting.html">setting</a></th>
-                <th></th>
-            </tr>
-        </table>-->
-        
-        
-            <!--    <img src="addmember.png" alt= "addmember logo" width="100"height="100"> -->
-            
-            
+        <?php include "../component/header.php"; ?>
+        <?php include "../component/menu.php"; ?>  
             <form action="" method="POST">
                 <table>
                     <tr><td style="text-align:right">First name: </td><td><input type="text" name="firstname" required> *</td></tr>

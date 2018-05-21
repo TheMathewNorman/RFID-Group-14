@@ -1,15 +1,23 @@
 /* https://www.w3schools.com/howto/howto_css_dropdown.asp */
 
 #menu {
-    background-color: #4CAF50;
+    background-color: #24B476;
+    margin-bottom: 40px;
+    
+    border-radius: 10PX;
+}
+.right {
+    float:right;
 }
 
 .dropbtn {
-    background-color: #4CAF50;
+    background-color: #24B476;
     color: white;
     padding: 16px;
     font-size: 16px;
     border: none;
+
+    border-radius: 10PX;
 }
 
 .dropdown {
@@ -40,5 +48,5 @@
 }
 
 .dropdown:hover .dropbtn {
-    background-color: #3e8e41;
+    background-color: #14A466;
 }

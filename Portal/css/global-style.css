@@ -8,9 +8,14 @@
     font-style: normal;
 }
 
+/* Reset all initial margins and padding */
+* {
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: 'Lato';
-    /* background-color: rgb(64,64,64); */
     
     background:
         radial-gradient(black 15%, transparent 16%) 0 0,
@@ -32,6 +37,8 @@ body {
     padding: 5px 30px 40px 30px;
 
     background-color: rgba(0,0,0,0.4);
+
+    border-radius: 0 0 15px 15px;
 }
 #content td {
     font-size: 1.2em;
@@ -41,17 +48,18 @@ body {
 #content input[type="text"], #content input[type="email"], #content input[type="password"] {
     font-size: 1.1em;
     margin: 8px 0;
-    border-radius: 5px;
+    border-radius: 3px;
     border: none;
     padding: 5px;
     width: 500px;
 }
 #content input[type="submit"], #content input[type="reset"] {
-    background-color: #4CAF50;
+    background-color: #24B476;
     color: white;
     padding: 5px 8px;
-    font-size: 16px;
+    font-size: 1.1em;
     border: none;
+    border-radius: 2px;
 }
 #content input[type="checkbox"] {
     -ms-transform: scale(2); /* IE */

@@ -3,6 +3,7 @@ include 'sqlcreds.php';
 
 class Database {
 
+    //// GENERAL FUNCTIONALITY //// 
     // Create the tables.
     function createTables() {
 
@@ -81,7 +82,7 @@ class Database {
         }
     }
 
-    //// ADMIN TABLE //// 
+    //// ADMIN TABLE FUNCTIONALITY //// 
     // List all admins in the admin table.
     function listAdmins() {
         // Create connection

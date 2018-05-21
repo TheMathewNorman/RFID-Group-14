@@ -1,3 +1,4 @@
 webhook-deployer/index.php
 *.code-workspace
 Portal/php/sqlcreds.php
+*.png
