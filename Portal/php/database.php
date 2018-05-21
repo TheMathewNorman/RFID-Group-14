@@ -102,7 +102,7 @@ class Database {
                 echo "The adminss table is empty.<br>";
             } else {
                 while ($row=mysqli_fetch_row($result)) {
-                    echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><button>Update</button></td><td><button>Delete</button></td></tr>";
+                    echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><button><i class=\"fas fa-sync fa-lg\"></i></button></td><td><button><i class=\"fas fa-trash fa-lg\"></i></button></td></tr>";
                 }
             }
             mysqli_free_result($result);
@@ -140,11 +140,9 @@ class Database {
                 echo "The admins table contains no match for the search: <b>$searchq</b><br>";
             } else {
                 echo "Found ".mysqli_num_rows($result)." results for $searchq<br>";
-                echo '<table><tr><th>Admin ID</th><th>First Name</th><th>Last Name</th><th>Email Address</th><th>Phone No.</th></tr>';
                 while ($row=mysqli_fetch_row($result)) {
-                    echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td></tr>");
+                    echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><button><i class=\"fas fa-sync fa-lg\"></i></button></td><td><button><i class=\"fas fa-trash fa-lg\"></i></button></td></tr>");
                 }
-                echo '</table>';
             }
             mysqli_free_result($result);
         } else {
@@ -261,7 +259,7 @@ class Database {
                 echo "The members table is empty.<br>";
             } else {
                 while ($row=mysqli_fetch_row($result)) {
-                    echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><button>Update</button></td><td><button>Delete</button></td></tr>";
+                    echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><button><i class=\"fas fa-sync fa-lg\"></i></button></td><td><button><i class=\"fas fa-trash fa-lg\"></i></button></td></tr>";
                 }
             }
             mysqli_free_result($result);
@@ -299,11 +297,9 @@ class Database {
                 echo "The members table contains no match for the search: <b>$searchq</b><br>";
             } else {
                 echo "Found ".mysqli_num_rows($result)." results for $searchq<br>";
-                echo '<table><tr><th>Member ID</th><th>First Name</th><th>Last Name</th><th>Email Address</th><th>Phone No.</th></tr>';
                 while ($row=mysqli_fetch_row($result)) {
-                    echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td></tr>");
+                    echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><button><i class=\"fas fa-sync fa-lg\"></i></button></td><td><button><i class=\"fas fa-trash fa-lg\"></i></button></td></tr>");
                 }
-                echo '</table>';
             }
             mysqli_free_result($result);
         } else {
