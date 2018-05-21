@@ -1,0 +1,13 @@
+
+
+#list-table, #list-table th, #list-table td, #list-table tr {
+    border: 1px solid white;
+    color: white;
+    border-collapse: collapse;
+}
+
+#list-table {
+    width: 80%;
+    margin: 0 auto;
+    font-size: 1.2em;
+}
