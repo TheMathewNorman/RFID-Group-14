@@ -88,6 +88,10 @@ body {
     #list-table td {
         font-weight: bold;
     }
+    #list-table i {
+        color: white;
+        background-color: rgba(0,0,0,0);
+    }
     #list-table, #list-table th, #list-table td, #list-table tr {
         border: 1px solid white;
         color: white;
