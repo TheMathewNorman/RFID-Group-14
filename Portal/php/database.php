@@ -102,7 +102,7 @@ class Database {
             } else {
                 echo '<table><tr><th>Admin ID</th><th>First Name</th><th>Last Name</th><th>Email Address</th><th>Phone No.</th></tr>';
                 while ($row=mysqli_fetch_row($result)) {
-                    echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td></tr>";
+                    echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><button>Delete</button></td><td><button>Delete</button></td></tr>";
                 }
                 echo '</table>';
             }
@@ -262,7 +262,7 @@ class Database {
                 echo "The members table is empty.<br>";
             } else {
                 while ($row=mysqli_fetch_row($result)) {
-                    echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td></tr>";
+                    echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><button>Delete</button></td><td><button>Delete</button></td></tr>";
                 }
             }
             mysqli_free_result($result);
