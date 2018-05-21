@@ -11,13 +11,13 @@
     </div>
     </div>
     <div class="dropdown">
-    <button class="dropbtn">View Logs</button>
+    <button class="dropbtn" onclick="location.href='viewlogs.php';">View Logs</button>
     </div>
     <div class="dropdown">
-    <button class="dropbtn">Staff</button>
+    <button class="dropbtn" onclick="location.href='listadmin.php';">Admins</button>
     <div class="dropdown-content">
-        <a href="#">Add New</a>
-        <a href="#">List</a>
+        <a href="addadmin.php">Add New</a>
+        <a href="listadmin.php">List</a>
     </div>
     </div>
     <div class="dropdown">

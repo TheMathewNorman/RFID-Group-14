@@ -5,17 +5,19 @@
   <link rel="stylesheet" type="text/css" href="../css/menu.css">
 </head>
 <body>
+  <div id="content">
+    <?php include "menu.php"; ?>
+    <form action="" method="GET">
+      <input type="text" name="search"> <input type="submit" value="Search">
+    </form>
 
-  <form action="" method="GET">
-    <input type="text" name="search"> <input type="submit" value="Search">
-  </form>
-
-  <table>
-    <tr>
-      <th>ID</th>
-      <th> Type</th>
-      <th>Date</th>
-      <th>Log Message</th>
-    </tr>
-  </table>
+    <table id="list-table">
+      <tr>
+        <th>ID</th>
+        <th> Type</th>
+        <th>Date</th>
+        <th>Log Message</th>
+      </tr>
+    </table>
+  </div>
 </html>
