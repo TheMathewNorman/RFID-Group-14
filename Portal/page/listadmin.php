@@ -5,7 +5,7 @@
 ?>
 <html>
 <head>
-  <title>List Members</title>
+  <title>List Admins</title>
   <link rel="stylesheet" type="text/css" href="../css/global-style.css">
   <link rel="stylesheet" type="text/css" href="../css/menu.css">
 </head>
@@ -29,7 +29,7 @@
         <th>Delete</th>
       </tr>
       <?php
-        $database->listMembers();
+        $database->listAdmins();
       ?>
     </table>
   
