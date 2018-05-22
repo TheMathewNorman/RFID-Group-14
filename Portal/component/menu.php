@@ -11,7 +11,11 @@
     </div>
     </div>
     <div class="dropdown">
-    <button class="dropbtn" onclick="location.href='viewlogs.php';">View Logs</button>
+    <button class="dropbtn" onclick="location.href='viewlogs.php';">Access History</button>
+    <div class="dropdown-content">
+        <a href="viewlogs.php">Check-ins</a>
+        <a href="viewlogs.php">Access logs</a>
+    </div>
     </div>
     <div class="dropdown">
     <button class="dropbtn" onclick="location.href='listadmin.php';">Admins</button>
@@ -22,13 +26,14 @@
     </div>
 
     <div class="dropdown right">
-        <button class="dropbtn" onclick="location.href='about.php';">About</button>
+        <button class="dropbtn" onclick="location.href='logout.php';">Logout</button>
     </div>
     <div class="dropdown right">
-        <button class="dropbtn">Settings</button>
+        <button class="dropbtn" onclick="location.href='settings.php';">Settings</button>
         <div class="dropdown-content">
             <a href="settings.php">General</a>
             <a href="settings.php">Database</a>
+            <a href="settings.php">About</a>
         </div>
     </div>
 </div>
