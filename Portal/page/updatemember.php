@@ -23,10 +23,10 @@
             
             <form action="" method="POST">
                 <table class="form-table">
-                <tr><td style="text-align:right">First name: </td><td><input type="text" name="firstname"></td></tr>
-                <tr><td style="text-align:right">Last name: </td><td><input type="text" name="lastname"></td></tr>
-                <tr><td style="text-align:right">Email: </td><td><input type="email" name="email" ></td></tr>
-                <tr><td style="text-align:right">Phone: </td><td><input type="text" name="phone"></td></tr>
+                <tr><td style="text-align:right">First name: </td><td><input type="text" name="firstname" placeholder="<?php echo $userInfo['fname']; ?>"></td></tr>
+                <tr><td style="text-align:right">Last name: </td><td><input type="text" name="lastname" placeholder="<?php echo $userInfo['lname']; ?>"></td></tr>
+                <tr><td style="text-align:right">Email: </td><td><input type="email" name="email"  placeholder="<?php echo $userInfo['email']; ?>"></td></tr>
+                <tr><td style="text-align:right">Phone: </td><td><input type="text" name="phone" placeholder="<?php echo $userInfo['phone']; ?>"></td></tr>
                 <tr><td style="text-align:right">Keycard: </td><td><input type="text" name="keycard"></td></tr>
                 <tr><td style="text-align:right">Delete:</td><td><input type="checkbox" name="delete" value="Delete"></td></tr>
                 <tr><td colspan="2" style="text-align:right"><input type="submit" value="Update Member"> <input type="reset" value="Clear"></td></tr>
