@@ -18,6 +18,8 @@
 
         $database->addMember($fname,$lname,$email,$phone,$keycard);
         header("Location: listmember.php");
+    } else {
+        echo "ERROR WAS HERE";
     }
 ?>
 <html>
