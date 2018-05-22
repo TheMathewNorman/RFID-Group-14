@@ -158,9 +158,9 @@ class Database {
     }
     
     // Add an admin to the admins table.
-    function addAdmin($firstname, $lastname, $email="", $phone="", $pass) {
+    function addAdmin($firstname, $lastname, $email="", $phone="", $password) {
         // Encrypt the admin password before inserting into the database
-        $passhash = hash("sha512", $pass);
+        $passhash = hash("sha512", $password);
         
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);

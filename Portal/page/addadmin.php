@@ -42,7 +42,7 @@
                     <tr><td style="text-align:right">Email: </td><td><input type="email" name="email" ></td></tr>
                     <tr><td style="text-align:right">Phone: </td><td><input type="text" name="phone"></td></tr>
                     <tr><td style="text-align:right">Password: </td><td><input type="password" name="password" required> *</td></tr>
-                    <tr><td colspan="2" style="text-align:right"><input type="submit" value="Add Member"> <input type="reset" value="Clear"></td></tr>
+                    <tr><td colspan="2" style="text-align:right"><input type="submit" value="Create Admin"> <input type="reset" value="Clear"></td></tr>
                     <tr><td colspan="2" style="text-align:right;font-size: 1em;">* Required</td></tr>
                 </table>
             </form>
