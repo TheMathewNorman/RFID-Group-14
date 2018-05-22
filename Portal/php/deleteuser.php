@@ -7,14 +7,14 @@
 
     echo "$table<br>$userid";
 
-    // $redirect = "../page/index.php";
+    $redirect = "../page/index.php";
 
-    // if ($table == "admin") {
-    //     $database->removeAdmin($userid);
-    //     $redirect = "../page/listadmin.php";
-    // } else if ($table == "member") {
-    //     $database->removeMember($userid);
-    //     $redirect = "../page/listmember.php";
-    // }
-    // header("Location: $redirect");
+    if ($table == "admin") {
+         $database->removeAdmin($userid);
+        $redirect = "../page/listadmin.php";
+    } else if ($table == "member") {
+        $database->removeMember($userid);
+        $redirect = "../page/listmember.php";
+    }
+    header("Location: $redirect");
 ?>
