@@ -16,10 +16,11 @@
     <?php include "../component/header.php"; ?>
     <?php include "../component/menu.php"; ?>
     
-    <form action="" method="GET">
-      <input type="text" placeholder="Search..." name="search"> <input type="submit" value="Search">
-    </form>
-  
+    <!-- Not yet functional
+      <form action="" method="GET">
+        <input type="text" placeholder="Search..." name="search"> <input type="submit" value="Search">
+      </form>
+    -->
     <table id="list-table">
       <tr>
         <th>ID</th>
