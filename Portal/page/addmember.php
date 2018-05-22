@@ -2,9 +2,9 @@
     include_once "../php/database.php";
     $database = new Database();
 
-    if (isset($_POST['fname']) && isset($_POST['lname']) && isset($_POST['keycard'])) {
-        $fname = $_POST['fname'];
-        $lname = $_POST['lname'];
+    if (isset($_POST['firstname']) && isset($_POST['lastname']) && isset($_POST['keycard'])) {
+        $fname = $_POST['firstname'];
+        $lname = $_POST['lastname'];
         $email = "";
         $phone = "";
         $keycard = $_POST['keycard'];
@@ -18,8 +18,6 @@
 
         $database->addMember($fname,$lname,$email,$phone,$keycard);
         header("Location: listmember.php");
-    } else {
-        echo "ERROR WAS HERE";
     }
 ?>
 <html>
