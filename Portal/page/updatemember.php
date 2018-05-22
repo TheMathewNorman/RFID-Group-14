@@ -1,5 +1,12 @@
 <?php
-    // Update member code goes here
+    if (!isset($_GET['id'])) {
+        header("Location: listmember.php");
+    }
+
+    include_once "../php/database.php";
+    $database = new Database();
+
+    $userInfo = $database->fetchMemberInfo($_GET['id']);
 ?>
 <html>
     <head>
