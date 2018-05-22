@@ -20,7 +20,7 @@ class Database {
             id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
             firstname VARCHAR(30) NOT NULL,
             lastname VARCHAR(30) NOT NULL,
-            email VARCHAR(50),
+            email VARCHAR(50) NOT NULL,
             phone VARCHAR(10),
             passhash VARCHAR(128) NOT NULL
         ); CREATE TABLE members (
@@ -102,7 +102,7 @@ class Database {
                 echo "The admins table is empty.";
             } else {
                 while ($row=mysqli_fetch_row($result)) {
-                    echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"#\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=admin&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>";
+                    echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"../updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=admin&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>";
                 }
             }
             mysqli_free_result($result);
@@ -141,7 +141,7 @@ class Database {
             } else {
                 echo "Found ".mysqli_num_rows($result)." results for $searchq<br>";
                 while ($row=mysqli_fetch_row($result)) {
-                    echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"#\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=admin&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>");
+                    echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"../updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=admin&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>");
                 }
             }
             mysqli_free_result($result);
@@ -157,8 +157,38 @@ class Database {
         
     }
     
+    function fetchAdminInfo($adminid) {
+        // Create connection
+        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+                
+        // Check connection
+        if ($connection->connect_error) {
+            die("Connection failed<br>$connection->connect_error");
+        }
+
+        // Form SQL query
+        $sql = "SELECT firstname, lastname, email, phone FROM admins WHERE id = '$adminid'";
+
+        $userInfo;
+
+        // Fetch each line and display in table
+        if ($result = mysqli_query($connection, $sql)) {
+            $row=mysqli_fetch_row($result);
+            
+            $userInfo = array("fname"=>$row[0], "lname"=>$row[1], "email"=>$row[2], "phone"=>$row[3]);
+
+            mysqli_free_result($result);
+        } else {
+            die("There was an error retreiving a list of admins from the database:<br>$connection->error<br>");
+        }
+
+        return $userInfo;
+
+        $connection->close();
+    }
+
     // Add an admin to the admins table.
-    function addAdmin($firstname, $lastname, $email="", $phone="", $password) {
+    function addAdmin($firstname, $lastname, $email, $phone="", $password) {
         // Encrypt the admin password before inserting into the database
         $passhash = hash("sha512", $password);
         
@@ -241,6 +271,36 @@ class Database {
 
     //// MEMBERS TABLE FUNCTIONALITY //// 
     // List all members in the members table.
+    function fetchMemberInfo($memberid) {
+        // Create connection
+        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+                
+        // Check connection
+        if ($connection->connect_error) {
+            die("Connection failed<br>$connection->connect_error");
+        }
+
+        // Form SQL query
+        $sql = "SELECT firstname, lastname, email, phone FROM members WHERE id = '$memberid'";
+
+        $userInfo;
+
+        // Fetch each line and display in table
+        if ($result = mysqli_query($connection, $sql)) {
+            $row=mysqli_fetch_row($result);
+            
+            $userInfo = array("fname"=>$row[0], "lname"=>$row[1], "email"=>$row[2], "phone"=>$row[3]);
+
+            mysqli_free_result($result);
+        } else {
+            die("There was an error retreiving a list of admins from the database:<br>$connection->error<br>");
+        }
+
+        return $userInfo;
+
+        $connection->close();
+    }
+
     function listMembers() {
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
@@ -259,7 +319,7 @@ class Database {
                 echo "The members table is empty.<br>";
             } else {
                 while ($row=mysqli_fetch_row($result)) {
-                    echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"#\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=member&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>";
+                    echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"../updatemember.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=member&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>";
                 }
             }
             mysqli_free_result($result);
@@ -298,7 +358,7 @@ class Database {
             } else {
                 echo "Found ".mysqli_num_rows($result)." results for $searchq<br>";
                 while ($row=mysqli_fetch_row($result)) {
-                    echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"#\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=member&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>");
+                    echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"../updatemember.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=member&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>");
                 }
             }
             mysqli_free_result($result);
