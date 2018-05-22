@@ -88,9 +88,9 @@ body {
     #list-table td {
         font-weight: bold;
     }
-    #list-table i {
+    #list-table a {
         color: white;
-        background-color: rgba(0,0,0,0);
+        font-size: 0.9em;
     }
     #list-table, #list-table th, #list-table td, #list-table tr {
         border: 1px solid white;
@@ -98,4 +98,12 @@ body {
         border-collapse: collapse;
     
         text-align: center;
+    }
+
+.form-table {
+    width: 90%;
+    margin: 0 auto;
+}
+    .form-table th, .form-table td {
+        padding: 5px;
     }

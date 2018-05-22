@@ -1,5 +1,24 @@
 <?php
-    // Add members code goes here
+    include_once "../php/database.php";
+    $database = new Database();
+
+    if (isset($_POST['fname']) && isset($_POST['lname']) && isset($_POST['keycard'])) {
+        $fname = $_POST['fname'];
+        $lname = $_POST['lname'];
+        $email = "";
+        $phone = "";
+        $keycard = $_POST['keycard'];
+
+        if (isset($_POST['email'])) {
+            $email = $_POST['email'];
+        }
+        if (isset($_POST['phone'])) {
+            $phone = $_POST['phone'];
+        }
+
+        $database->addMember($fname,$lname,$email,$phone,$keycard);
+        header("Location: listmember.php");
+    }
 ?>
 <html>
     <head>
@@ -12,8 +31,9 @@
         <div id="content">
         <?php include "../component/header.php"; ?>
         <?php include "../component/menu.php"; ?>  
+    
             <form action="" method="POST">
-                <table>
+                <table class="form-table">
                     <tr><td style="text-align:right">First name: </td><td><input type="text" name="firstname" required> *</td></tr>
                     <tr><td style="text-align:right">Last name: </td><td><input type="text" name="lastname"  required> *</td></tr>
                     <tr><td style="text-align:right">Email: </td><td><input type="email" name="email" ></td></tr>
@@ -23,6 +43,7 @@
                     <tr><td colspan="2" style="text-align:right;font-size: 1em;">* Required</td></tr>
                 </table>
             </form>
-        </div>
+        
+    </div>
     </body>
 </html>

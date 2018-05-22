@@ -158,7 +158,7 @@ class Database {
     }
     
     // Add an admin to the admins table.
-    function addAdmin($firstname, $lastname, $email, $phone, $pass) {
+    function addAdmin($firstname, $lastname, $email="", $phone="", $pass) {
         // Encrypt the admin password before inserting into the database
         $passhash = hash("sha512", $pass);
         
@@ -311,7 +311,7 @@ class Database {
     }
 
     // Add a member to the members table.
-    function addMember($firstname, $lastname, $email, $phone, $cardkey) {
+    function addMember($firstname, $lastname, $email="", $phone="", $cardkey) {
         // Encrypt the card key before inserting into the database
         $cardkeyhash = hash("sha512", $cardkey);
         

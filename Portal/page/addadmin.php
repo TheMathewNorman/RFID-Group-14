@@ -14,7 +14,7 @@
         <?php include "../component/menu.php"; ?>
             
             <form action="" method="POST">
-                <table>
+                <table class="form-table">
                     <tr><td style="text-align:right">First name: </td><td><input type="text" name="firstname" required> *</td></tr>
                     <tr><td style="text-align:right">Last name: </td><td><input type="text" name="lastname"  required> *</td></tr>
                     <tr><td style="text-align:right">Email: </td><td><input type="email" name="email" ></td></tr>
