@@ -6,21 +6,21 @@
     <div class="dropdown">
     <button class="dropbtn" onclick="location.href='listmember.php';">Members</button>
     <div class="dropdown-content">
-        <a href="addmember.php">Add New</a>
+        <a href="addmember.php">Add</a>
         <a href="listmember.php">List</a>
     </div>
     </div>
     <div class="dropdown">
-    <button class="dropbtn" onclick="location.href='viewlogs.php';">Access History</button>
+    <button class="dropbtn" onclick="location.href='viewlogs.php';">Logs</button>
     <div class="dropdown-content">
-        <a href="viewlogs.php">Check-ins</a>
-        <a href="viewlogs.php">Access logs</a>
+        <a href="viewlogs.php">View check-ins</a>
+        <a href="viewlogs.php">View all</a>
     </div>
     </div>
     <div class="dropdown">
     <button class="dropbtn" onclick="location.href='listadmin.php';">Admins</button>
     <div class="dropdown-content">
-        <a href="addadmin.php">Add New</a>
+        <a href="addadmin.php">Add</a>
         <a href="listadmin.php">List</a>
     </div>
     </div>
