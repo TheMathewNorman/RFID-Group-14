@@ -9,7 +9,7 @@
         $lname = $_POST['lastname'];
         $email = "";
         $phone = "";
-        $pass = $_POST['password'];
+        $password = $_POST['password'];
 
         if (isset($_POST['email'])) {
             $email = $_POST['email'];
@@ -17,7 +17,7 @@
         if (isset($_POST['phone'])) {
             $phone = $_POST['phone'];
         }
-        $database->addAdmin($fname,$lname,$email,$phone,$pass);
+        $database->addAdmin($fname,$lname,$email,$phone,$password);
         
         header("Location: listadmin.php");
     }
