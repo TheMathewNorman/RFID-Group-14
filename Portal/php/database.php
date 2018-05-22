@@ -182,9 +182,9 @@ class Database {
             die("There was an error retreiving a list of admins from the database:<br>$connection->error<br>");
         }
 
-        return $userInfo;
-
         $connection->close();
+
+        return $userInfo;
     }
 
     // Add an admin to the admins table.

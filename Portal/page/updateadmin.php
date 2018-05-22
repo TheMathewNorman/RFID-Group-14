@@ -21,6 +21,8 @@
         <?php include "../component/header.php"; ?>
         <?php include "../component/menu.php"; ?>
             
+            <?php var_dump($userInfo); ?>
+
             <form action="" method="POST">
                 <table class="form-table">
                 <tr><td style="text-align:right">First name: </td><td><input type="text" name="firstname" placeholder="<?php $userInfo['fname']; ?>"></td></tr>
