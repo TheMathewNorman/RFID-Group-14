@@ -22,13 +22,13 @@
     </div>
 
     <div class="dropdown right">
-        <button class="dropbtn">About</button>
+        <button class="dropbtn" onclick="location.href='about.php';">About</button>
     </div>
     <div class="dropdown right">
         <button class="dropbtn">Settings</button>
         <div class="dropdown-content">
-            <a href="#">General</a>
-            <a href="#">Database</a>
+            <a href="settings.php">General</a>
+            <a href="settings.php">Database</a>
         </div>
     </div>
 </div>

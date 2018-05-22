@@ -99,7 +99,7 @@ class Database {
         // Fetch each line and display in table
         if ($result = mysqli_query($connection, $sql)) {
             if (mysqli_num_rows($result) === 0) {
-                echo "The adminss table is empty.<br>";
+                echo "The admins table is empty.";
             } else {
                 while ($row=mysqli_fetch_row($result)) {
                     echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"#\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=admin&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>";
