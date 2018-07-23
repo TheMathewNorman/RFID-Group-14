@@ -2,7 +2,7 @@
     $location = "";
     
     if (!file_exists("./php/sqlcreds.php")) {
-        $location = "./components/firstrun.php";
+        $location = "./component/firstrun.php";
     } 
     header("Location: $location");
 ?>
