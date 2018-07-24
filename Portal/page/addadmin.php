@@ -6,7 +6,7 @@
     if (isset($_POST['firstname']) && isset($_POST['lastname']) && isset($_POST['email']) && isset($_POST['password'])) {
         $fname = $_POST['firstname'];
         $lname = $_POST['lastname'];
-        $email = "";
+        $email = $_POST['email'];
         $phone = "";
         $password = $_POST['password'];
 
