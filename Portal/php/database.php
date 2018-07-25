@@ -154,7 +154,28 @@ class Database {
     }
 
     function loginAdmin($email, $pass) {
+        $passhash = hash("sha512", $pass);
         
+        // Create connection
+        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+                
+        // Check connection
+        if ($connection->connect_error) {
+            die("Connection failed<br>$connection->connect_error");
+        }
+
+        $sql = "SELECT COUNT(*) AS RESULT FROM admins WHERE email LIKE $email AND passhash LIKE $passhash";
+
+        // If there are no users matching the email/passhash in the admins db, return false otherwise create session & return true.
+        if ($result = mysqli_query($connection, $sql)) {
+            if (mysqli_num_rows($result) > 0) {
+                // Create session
+                return true;
+            } else {
+                return false;
+            }
+        }
+
     }
     
     function fetchAdminInfo($adminid) {

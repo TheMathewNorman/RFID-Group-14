@@ -1,10 +1,15 @@
 <?php
+    // First run redirect
     $location = "";
-    
     if (!file_exists("./php/sqlcreds.php")) {
         $location = "./component/firstrun.php";
-    } 
+    }
     header("Location: $location");
+
+    // Check login
+    if (isset($_POST['email']) && isset($_POST['password'])) {
+
+    }
 ?>
 
 <!DOCTYPE html>
@@ -24,7 +29,7 @@
             <form action="" method="POST">
                 <div class="form-field">
                     <div class="input-icon"><i class="fas fa-user fa-lg"></i></div>
-                    <div class="input-box"><input type="text" name="username" placeholder="Username"></div>
+                    <div class="input-box"><input type="text" name="email" placeholder="Email"></div>
                 </div>
                 <div class="form-field">
                     <div class="input-icon"><i class="fas fa-lock fa-lg"></i></div>
