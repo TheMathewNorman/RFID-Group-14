@@ -4,13 +4,14 @@ session_start();
 class Sessions {
 
     // Create a session
-    function startSession() {
-
+    function startSession($userid, $fname) {
+        
     }
 
     // End a Session
     function endSession() {
-
+        session_unset();
+        session_destroy();
     }
 
 }

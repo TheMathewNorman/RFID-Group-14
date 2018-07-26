@@ -156,6 +156,9 @@ class Database {
     function loginAdmin($email, $pass) {
         $passhash = hash("sha512", $pass);
         
+        include_once "./sessions.php";
+        $sessions = new Sessions();
+
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
                 
@@ -169,9 +172,13 @@ class Database {
         // If there are no users matching the email/passhash in the admins db, return false otherwise create session & return true.
         if ($result = mysqli_query($connection, $sql)) {
             if (mysqli_num_rows($result) > 0) {
-                // Create session
+
+                // Create user session
+
+                $connection->close();
                 return true;
             } else {
+                $connection->close();
                 return false;
             }
         }
