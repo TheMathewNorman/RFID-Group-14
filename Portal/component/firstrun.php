@@ -35,7 +35,7 @@
 ?>
 <html>
 <head>
-    <title>First Run Setup</title>
+    <title>First-Run Setup</title>
     <link rel="stylesheet" type="text/css" href="../css/global-style.css">
     <link rel="stylesheet" type="text/css" href="../css/menu.css">
 </head>
