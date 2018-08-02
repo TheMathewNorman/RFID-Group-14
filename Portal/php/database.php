@@ -102,7 +102,7 @@ class Database {
                 echo "The admins table is empty.";
             } else {
                 while ($row=mysqli_fetch_row($result)) {
-
+                    // Replace and remove the delete button functionality for the key admin.
                     if ($row[0] == 1) { echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><span title=\"You cannot delete the primary admin account.\"><i class=\"fa fa-key fa-lg\"></i></span></td></tr>"; }
                     else { echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=admin&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>"; }
                 }
@@ -143,7 +143,9 @@ class Database {
             } else {
                 echo "Found ".mysqli_num_rows($result)." results for $searchq<br>";
                 while ($row=mysqli_fetch_row($result)) {
-                    echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=admin&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>");
+                    // Replace and remove the delete button functionality for the key admin.
+                    if ($row[0] == 1) { echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><span title=\"You cannot delete the primary admin account.\"><i class=\"fa fa-key fa-lg\"></i></span></td></tr>"); }
+                    else { echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=admin&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>"); }
                 }
             }
             mysqli_free_result($result);
@@ -278,24 +280,28 @@ class Database {
 
     // Delete an admin from the admins table.
     function removeAdmin($adminid) {
-        // Create connection
-        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+        // Prevent deletion of key admin account.
+        if ($adminid <= 1) { 
 
-        // Check connection
-        if ($connection->connect_error) {
-            die("Connection failed<br>$connection->connect_error");
+            // Create connection
+            $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+
+            // Check connection
+            if ($connection->connect_error) {
+                die("Connection failed<br>$connection->connect_error");
+            }
+
+            // Form SQL query
+            $sql = "DELETE FROM admins WHERE id = '$adminid'";
+
+            // Try DB delete, die on error.
+            if ($connection->query($sql) !== TRUE) {
+                die("Error deleting admin:<br>$connection->error");
+            }
+
+            // Close the connection
+            $connection->close();
         }
-
-        // Form SQL query
-        $sql = "DELETE FROM admins WHERE id = '$adminid'";
-
-        // Try DB delete, die on error.
-        if ($connection->query($sql) !== TRUE) {
-            die("Error deleting admin:<br>$connection->error");
-        }
-
-        // Close the connection
-        $connection->close();
     }
     
 

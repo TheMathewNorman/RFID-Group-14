@@ -1,37 +1,37 @@
 <?php
-    include_once "../php/database.php";
-    $database = new Database();
+    //include_once "../php/database.php";
+    //$database = new Database();
     
     // Handle the form submission
-    if (isset($_POST['server']) && isset($_POST['dbname']) && isset($_POST['dbuser']) && isset($_POST['dbpass'])) {
-        // Test connection
-        if ($database->testConnection($_POST['server'], $_POST['dbuser'], $_POST['dbpass'], $_POST['dbname'])) {
-            // Create SQL creds file.
-            $fileContents = "<?php\n";
-            $fileContents .= '$GLOBALS[\'server\'] = "localhost";\n';
-            $fileContents .= '$GLOBALS[\'user\'] = "rfidmyadmin";\n';
-            $fileContents .= '$GLOBALS[\'pass\'] = "H#5D5gRGzfrgC6eMYh";\n';
-            $fileContents .= '$GLOBALS[\'dbname\'] = "rfidDB";\n';
-            $fileContents .= "?>";
-            $sqlcredsfile = fopen("../php/sqlcreds.php","w");
-            fwrite($sqlcredsfile, $fileContents);
-            fclose($sqlcredsfile);
+    // if (isset($_POST['server']) && isset($_POST['dbname']) && isset($_POST['dbuser']) && isset($_POST['dbpass'])) {
+    //     // Test connection
+    //     if ($database->testConnection($_POST['server'], $_POST['dbuser'], $_POST['dbpass'], $_POST['dbname'])) {
+    //         // Create SQL creds file.
+    //         $fileContents = "<?php\n";
+    //         $fileContents .= '$GLOBALS[\'server\'] = "localhost";\n';
+    //         $fileContents .= '$GLOBALS[\'user\'] = "rfidmyadmin";\n';
+    //         $fileContents .= '$GLOBALS[\'pass\'] = "H#5D5gRGzfrgC6eMYh";\n';
+    //         $fileContents .= '$GLOBALS[\'dbname\'] = "rfidDB";\n';
+    //         $fileContents .= "?>";
+    //         $sqlcredsfile = fopen("../php/sqlcreds.php","w");
+    //         fwrite($sqlcredsfile, $fileContents);
+    //         fclose($sqlcredsfile);
 
-            // Assign new instance of Database.
-            $database = new Database();
+    //         // Assign new instance of Database.
+    //         $database = new Database();
 
-            // Create tables
-            $database->createTables();
+    //         // Create tables
+    //         $database->createTables();
 
-            // Add admin account
-            $database->addAdmin($_POST['fname'],$_POST['fname'],$_POST['email'],$_POST['phone'],$_POST['pass']);
+    //         // Add admin account
+    //         $database->addAdmin($_POST['fname'],$_POST['fname'],$_POST['email'],$_POST['phone'],$_POST['pass']);
 
-            // Redirect to login page
-            header("Location: ../index.php");
-        } else {
-            echo "ERROR";
-        }
-    }
+    //         // Redirect to login page
+    //         header("Location: ../index.php");
+    //     } else {
+    //         echo "ERROR";
+    //     }
+    // }
 ?>
 <html>
 <head>
