@@ -1,5 +1,10 @@
 @import "global-style.css";
 
+@keyframes field-height {
+    from { height: 400px; } 
+    to { height: 525px; }
+}
+
 #setup-container {
     /* Center div horizontally and vertically */
     margin: auto;
@@ -8,7 +13,10 @@
     top: 0; bottom: 0;
 
 
-    height: 550px;
+    height: 400px;
+    animation-name: field-height;
+    animation-duration: 2s;
+
     width: 500px;
     
     padding: 40px 30px;
