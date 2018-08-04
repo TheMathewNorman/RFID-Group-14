@@ -1,8 +1,8 @@
 @import "global-style.css";
 
 @keyframes field-height {
-    0% { height: 300px; } 
-    100% { height: 400px; }
+    0% { height: 200px; } 
+    100% { height: 300px; }
 }
 
 #setup-container {
