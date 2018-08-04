@@ -1,4 +1,5 @@
 <?php
-    header("Content-Type: text/plain;charset=UTF-8");
-    die($_SERVER['DOCUMENT_ROOT']);
-    ?>
+    $file = '/var/www/html/file.txt';
+    $handle = fopen($my_file, 'w') or die('Cannot open file:  '.$my_file); //implicitly creates file
+
+?>
