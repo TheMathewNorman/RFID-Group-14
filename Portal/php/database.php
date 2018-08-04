@@ -487,6 +487,35 @@ class Database {
         $connection->close();
     }
 
+    //// LOG TABLE FUNCTIONALITY //// 
+    // Functions to include
+    // addEntry($memberid, $readerid, $datetime)
+    // listEntries()
+    // searchEntries($searchq)
+    function listEntries() {
+        // Create connection
+        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+                
+        // Check connection.
+        if ($connection->connect_error) {
+            die("Connection failed<br>$connection->connect_error");
+        }
+
+        // Form SQL query
+        $sql = "SELECT memberid, readerid, access_date FROM logs ORDER BY id";
+
+        // Fetch each line and display in table.
+        if ($result = mysqli_query($connection, $sql)) {
+            // Output results as table rows.
+        } else {
+            die("There was an error listing the members from the database:<br>$connection->error<br>");
+        }
+
+        // Close the connection
+        $connection->close();
+    }
+
+
     //// PRIVILEDGE TABLE FUNCTIONALITY //// 
     // Functions to include
     // addPriviledge($memberid,$readerid,$readergroup)
@@ -502,11 +531,7 @@ class Database {
     // listReaders()
     // searchReaders($searchq)
 
-    //// LOG TABLE FUNCTIONALITY //// 
-    // Functions to include
-    // addEntry($memberid, $readerid, $datetime)
-    // listEntries()
-    // searchEntries($searchq)
+    
 
 }
 ?>

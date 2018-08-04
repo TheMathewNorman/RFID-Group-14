@@ -21,10 +21,14 @@
         
         <!-- Database setup form -->
         <div id="setup-form">
-        <form action="" method="POST">
+        <form action="validate.database.php" method="POST">
             <div class="form-field">
                 <div class="input-icon"><i class="fas fa-user fa-lg"></i></div>
-                <div class="input-box"><input type="text" name="server" placeholder="Server"></div>
+                <div class="input-box"><input type="text" name="server" value="localhost"></div>
+            </div>
+            <div class="form-field">
+                <div class="input-icon"><i class="fas fa-user fa-lg"></i></div>
+                <div class="input-box"><input type="text" name="dbname" placeholder="Database name"></div>
             </div>
             <div class="form-field">
                 <div class="input-icon"><i class="fas fa-user fa-lg"></i></div>
@@ -34,7 +38,7 @@
                 <div class="input-icon"><i class="fas fa-lock fa-lg"></i></div>
                 <div class="input-box"><input type="password" name="dbpass" placeholder="Password"></div>
             </div>
-            <input type="submit" value="Submit">
+            <input type="submit" value="Next">
             </form>
         </div>
 
