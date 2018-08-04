@@ -1,5 +1,4 @@
 <?php
-    $file = '/var/www/html/file.txt';
-    $handle = fopen($file, 'w') or die('Cannot open file:  '.$file); //implicitly creates file
 
 ?>
+<a href="http://therfid.men/php/sqlcreds.php">http://therfid.men/php/sqlcreds.php</a>
