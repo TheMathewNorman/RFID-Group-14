@@ -8,15 +8,14 @@
 <meta charset="UTF-8" />
 <title>Access Control Management System</title>
 
-<link rel="stylesheet" href="../css/global-style.css">
 <link rel="stylesheet" href="../css/login.css">
 </head>
 <body>
-    <div id="setup-container">
-        <div id="setup-heading">
+    <div id="login-container">
+        <div id="login-heading">
             First Run Setup
         </div>
-        <div id="setup-form">
+        <div id="login-form">
             <form action="" method="POST">
                 <div class="form-field">
                     <div class="input-icon"><i class="fas fa-user fa-lg"></i></div>
