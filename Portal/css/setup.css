@@ -23,7 +23,15 @@
     font-size: 2em;
     font-weight: 500;
     color: rgb(244,244,244);
-    margin-bottom: 50px;
+    margin-bottom: 10px;
+}
+#setup-subheading {
+    text-indent: 15px;
+    font-size: 1.5em;
+    font-weight: 300;
+    color: rgb(244,244,244);
+    font-style: italic;
+    margin-bottom: 40px;
 }
 #setup-form {
     margin: 0 auto;

@@ -15,6 +15,9 @@
         <div id="setup-heading">
             First Run Setup
         </div>
+        <div id="setup-subheading">
+            Database Credentials
+        </div>
         <div id="setup-form">
             <form action="" method="POST">
                 <div class="form-field">
