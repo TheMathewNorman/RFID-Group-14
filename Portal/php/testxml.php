@@ -21,8 +21,7 @@
     $dbPass = $doc->createTextNode('Password1');
     $dbPass = $server->appendChild($dbPass);
 
-    echo "Saving<br>";
-    echo $doc->saveXML();
+echo 'Result';
 
     
 
