@@ -15,26 +15,16 @@
         <div id="setup-heading">
             First Run Setup
         </div>
-        <div id="setup-subheading">
-            Database Credentials
+        <div id="setup-text">
+            Some information is required before being able to use this system.
         </div>
-        <div id="setup-form">
-            <form action="" method="POST">
-                <div class="form-field">
-                    <div class="input-icon"><i class="fas fa-user fa-lg"></i></div>
-                    <div class="input-box"><input type="text" name="server" placeholder="Server"></div>
-                </div>
-                <div class="form-field">
-                    <div class="input-icon"><i class="fas fa-user fa-lg"></i></div>
-                    <div class="input-box"><input type="text" name="dbuser" placeholder="Username"></div>
-                </div>
-                <div class="form-field">
-                    <div class="input-icon"><i class="fas fa-lock fa-lg"></i></div>
-                    <div class="input-box"><input type="password" name="dbpass" placeholder="Password"></div>
-                </div>
-                <input type="submit" value="Submit">
-            </form>
-        </div>
+        <?php
+            if ($_GET['page'] == '2') {
+                include "newadmin.php";
+            } else {
+                include "database.php";
+            }
+        ?>
 
     </div>
 </body>
