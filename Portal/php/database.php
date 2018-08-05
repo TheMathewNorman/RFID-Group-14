@@ -158,10 +158,10 @@ class Database {
     }
 
     function loginAdmin($email, $pass) {
-        return "The email is " . $email;
         
-        // $passhash = hash("sha512", $pass);
+        $passhash = hash("sha512", $pass);
         
+        return "The passhash is " . $passhash;
         // include_once "./sessions.php";
         // $sessions = new Sessions();
 
