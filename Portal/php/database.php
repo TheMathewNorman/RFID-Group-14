@@ -161,9 +161,11 @@ class Database {
         
         $passhash = hash("sha512", $pass);
         
-        return "The passhash is " . $passhash;
-        // include_once "./sessions.php";
-        // $sessions = new Sessions();
+        
+        include_once "./sessions.php";
+        $sessions = new Sessions();
+
+        return "Sessions class has been included";
 
         // // Create connection
         // $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
