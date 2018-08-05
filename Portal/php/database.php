@@ -162,7 +162,7 @@ class Database {
         $passhash = hash("sha512", $pass);
         
         
-        include_once "./sessions.php";
+        include_once "./php/sessions.php";
         $sessions = new Sessions();
 
         return "Sessions class has been included";
