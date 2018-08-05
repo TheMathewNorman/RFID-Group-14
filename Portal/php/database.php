@@ -163,6 +163,8 @@ class Database {
         include_once "./sessions.php";
         $sessions = new Sessions();
 
+        echo "check 1";
+
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
                 
@@ -173,8 +175,11 @@ class Database {
 
         $sql = "SELECT id, firstname FROM admins WHERE email LIKE $email AND passhash LIKE $passhash";
 
+        echo "check 2";
+
         // If there are no users matching the email/passhash in the admins db, return false otherwise create session & return true.
         if ($result = mysqli_query($connection, $sql)) {
+            echo "check 3";
             if (mysqli_num_rows($result) > 0) {
                 // Get user details
                 $row = mysqli_fetch_row($result);
