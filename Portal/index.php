@@ -14,7 +14,7 @@
     $database = new Database();
     if (isset($_POST['email']) && isset($_POST['password'])) {
         
-        var_dump($database->loginAdmin($_POST['email'], $_POST['password']));        
+        echo $database->loginAdmin($_POST['email'], $_POST['password']);
     }
 ?>
 
