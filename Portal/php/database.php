@@ -173,13 +173,14 @@ class Database {
             die("Connection failed<br>$connection->connect_error");
         }
 
-        $sql = "SELECT * FROM admins WHERE"; // email = '$email' AND password = '$passhash'";
+        $sql = "SELECT * FROM admins"; //WHERE email = '$email' AND password = '$passhash'";
 
         if ($result = mysqli_query($connection, $sql)) {
             if (mysqli_num_rows($results) == 1) {
-                while ($row = mysqli_fetch_row($result)) {
-                    return $row;
-                }
+                return mysqli_fetch_row($result);
+                // while ($row = mysqli_fetch_array($result)) {
+                //     return $row;
+                // }
             }
         }
         
