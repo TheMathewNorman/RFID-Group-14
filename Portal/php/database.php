@@ -165,8 +165,6 @@ class Database {
         include_once "./php/sessions.php";
         $sessions = new Sessions();
 
-        // return "Sessions class has been included";
-
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
                 
@@ -178,7 +176,7 @@ class Database {
         $sql = "SELECT * FROM admins WHERE email = '$email' AND password = '$passhash'";
 
         if ($result = mysqli_query($connection, $sql)) {
-            if (!(mysqli_num_rows($results) <> 1)) {
+            if (mysqli_num_rows($results) == 1) {
                 return mysqli_fetch_row($result);
             }
         }
