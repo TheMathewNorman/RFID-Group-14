@@ -176,13 +176,13 @@ class Database {
         $sql = "SELECT * FROM admins"; //WHERE email = '$email' AND password = '$passhash'";
 
         if ($result = mysqli_query($connection, $sql)) {
-            if (mysqli_num_rows($results) == 1) {
+            //if (mysqli_num_rows($results) == 1) {
                 $row = mysqli_fetch_array($result);
                 return $row;
                 // while ($row = mysqli_fetch_array($result)) {
                 //     return $row;
                 // }
-            }
+            //}
         }
         
 
