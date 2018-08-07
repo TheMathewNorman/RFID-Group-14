@@ -175,7 +175,7 @@ class Database {
             die("Connection failed<br>$connection->connect_error");
         }
 
-        $sql = "SELECT * FROM admins"; // WHERE email LIKE $email";
+        $sql = "SELECT * FROM admins WHERE email = '$email'";
 
         if ($result = mysqli_query($connection, $sql)) {
             while ($row = mysqli_fetch_array($result)) {
