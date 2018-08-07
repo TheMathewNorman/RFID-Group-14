@@ -178,9 +178,10 @@ class Database {
         $sql = "SELECT * FROM admins WHERE email = '$email'";
 
         if ($result = mysqli_query($connection, $sql)) {
-            while ($row = mysqli_fetch_array($result)) {
-                return $row;
-            }
+            mysqli_num_rows();
+            // while ($row = mysqli_fetch_array($result)) {
+                
+            // }
         }
         
 
