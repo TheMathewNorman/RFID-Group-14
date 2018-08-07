@@ -175,23 +175,30 @@ class Database {
             die("Connection failed<br>$connection->connect_error");
         }
 
-        $sql = "SELECT id, firstname FROM admins WHERE email LIKE $email AND passhash LIKE $passhash";
+        $sql = "SELECT id, firstname FROM admins WHERE email LIKE $email";
 
-        // If there are no users matching the email/passhash in the admins db, return false otherwise create session & return true.
         if ($result = mysqli_query($connection, $sql)) {
-            if (mysqli_num_rows($result) > 0) {
-                // Get user details
-                $row = mysqli_fetch_row($result);
-                // Create session
-                $sessions->startSession($row[0]. $row[1]);
-                // Close mysqli connection
-                $connection->close();
-                return true;
-            } else {
-                $connection->close();
-                return false;
+            while ($row = mysqli_fetch_array($result)) {
+                var_dump($row);
             }
         }
+        
+
+        // // If there are no users matching the email/passhash in the admins db, return false otherwise create session & return true.
+        // if ($result = mysqli_query($connection, $sql)) {
+        //     if (mysqli_num_rows($result) > 0) {
+        //         // Get user details
+        //         $row = mysqli_fetch_row($result);
+        //         // Create session
+        //         $sessions->startSession($row[0]. $row[1]);
+        //         // Close mysqli connection
+        //         $connection->close();
+        //         return true;
+        //     } else {
+        //         $connection->close();
+        //         return false;
+        //     }
+        // }
 
     }
     
