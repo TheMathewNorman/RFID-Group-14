@@ -31,8 +31,8 @@
         <th>Delete</th>
       </tr>
       <?php
-        if (isset($_POST['search'])) {
-          $database->searchAdmins($_POST['search']);
+        if (isset($_GET['search'])) {
+          $database->searchAdmins($_GET['search']);
         } else {
           $database->listAdmins();
         }
