@@ -177,7 +177,9 @@ class Database {
 
         if ($result = mysqli_query($connection, $sql)) {
             if (mysqli_num_rows($results) == 1) {
-                return mysqli_fetch_row($result);
+                while ($row = mysqli_fetch_row($result)) {
+                    return $row;
+                }
             }
         }
         
