@@ -16,11 +16,9 @@
 <?php include "../component/header.php"; ?>
         <?php include "../component/menu.php"; ?>
     
-    <!-- Not yet functional
       <form action="" method="GET">
         <input type="text" placeholder="Search..." name="search"> <input type="submit" value="Search">
       </form>
-    -->
   
     <table id="list-table">
       <tr>
@@ -33,7 +31,11 @@
         <th>Delete</th>
       </tr>
       <?php
-        $database->listMembers();
+          if (isset($_GET['search'])) {
+            $database->searchMembers($_GET['search']);
+          } else {
+            $database->listAdmins();
+          }
       ?>
     </table>
   
