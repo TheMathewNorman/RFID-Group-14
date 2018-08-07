@@ -13,7 +13,7 @@
     include_once "./php/database.php";
     $database = new Database();
     if (isset($_POST['email']) && isset($_POST['password'])) {
-        
+        echo hash("sha512", $_POST['password']) . "<br>";
         var_dump($database->loginAdmin($_POST['email'], $_POST['password']));
     }
 ?>
