@@ -381,11 +381,11 @@ class Database {
 
         // Form SQL query
         $sql = "SELECT * FROM members
-        WHERE id LIKE '%$searchq%'
-        OR LOWER(firstname) LIKE '%$searchq%'
-        OR LOWER(lastname) LIKE '%$searchq%'
-        OR LOWER(email) LIKE '%$searchq%'
-        OR LOWER(phone) LIKE '%$searchq%'";
+        WHERE id LIKE '%$formattedsearchq%'
+        OR LOWER(firstname) LIKE '%$formattedsearchq%'
+        OR LOWER(lastname) LIKE '%$formattedsearchq%'
+        OR LOWER(email) LIKE '%$formattedsearchq%'
+        OR LOWER(phone) LIKE '%$formattedsearchq%'";
 
         // Fetch each line and display in table
         if ($result = mysqli_query($connection, $sql)) {
