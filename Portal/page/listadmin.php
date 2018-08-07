@@ -1,7 +1,7 @@
 <?php
     // List members code goes here
     include_once "../php/database.php";
-    $database = new Database();
+    $database = new Database(); 
 ?>
 <html>
 <head>
@@ -16,11 +16,10 @@
     <?php include "../component/header.php"; ?>
     <?php include "../component/menu.php"; ?>
     
-    <!-- Not yet functional
       <form action="" method="GET">
         <input type="text" placeholder="Search..." name="search"> <input type="submit" value="Search">
       </form>
-    -->
+    
     <table id="list-table">
       <tr>
         <th>ID</th>
@@ -32,7 +31,11 @@
         <th>Delete</th>
       </tr>
       <?php
-        $database->listAdmins();
+        if (isset($_POST['search']) {
+          $database->searchAdmins($_POST['search'])
+        } else {
+          $database->listAdmins();
+        }
       ?>
     </table>
   
