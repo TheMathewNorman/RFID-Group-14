@@ -15,11 +15,11 @@
         if (isset($_SESSION['userid'])) {
     ?>
             Hello <?php echo $_SESSION['fname']; ?>,
-            <p>
-            Welcome to the Creative Geelong member access management system.
             <br><br>
-            Please use the above menu to navigate the system and remember to logout when done.
-            </p>
+            Welcome to the Creative Geelong member access management system.
+            <br>
+            Please use the above menu to navigate the system and remember to <a href="../php/logout.php">logout</a> when done.
+            <br><br>
             Thank you.
     <?php
         } else {
