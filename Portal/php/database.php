@@ -302,7 +302,7 @@ class Database {
     // Delete an admin from the admins table.
     function removeAdmin($adminid) {
         // Prevent deletion of key admin account.
-        if ($adminid <= 1) { 
+        if ($adminid > 1) { 
 
             // Create connection
             $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
@@ -453,7 +453,7 @@ class Database {
     }
 
     // Update a member in the members table.
-    function updateMember($memberid, $firstname, $lastname, $email, $phone, $cardkey) {
+    function updateMember($memberid = "", $firstname = "", $lastname = "", $email = "", $phone = "", $cardkey = "") {
         // Encrypt the card key before inseting into the database if set
         $cardkeyhash = "";
         if ($cardkey != "") {
@@ -500,7 +500,7 @@ class Database {
         $sql = "DELETE FROM members WHERE id = '$memberid'";
 
         // Try DB delete, die on error.
-        if ($connection->query($sql) !== TRUE) {
+        if (!$connection->query($sql)) {
             die("Error deleting member:<br>$connection->error");
         }
 

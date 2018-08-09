@@ -35,7 +35,7 @@
           if (isset($_GET['searchInput'])) {
             $database->searchMembers($_GET['searchInput']);
           } else {
-            $database->listAdmins();
+            $database->listMembers();
           }
       ?>
     </table>
