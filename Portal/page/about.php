@@ -17,7 +17,7 @@
 
         <p>
         Development credits: 
-            <ul style="margin-left: 20px;">
+            <ul>
             <li>Adam Smeaton</li>
             <li>Asrin Dayananda</li>
             <li>Mathew Norman</li>
