@@ -9,7 +9,7 @@
   <link rel="stylesheet" type="text/css" href="../css/global-style.css">
   <link rel="stylesheet" type="text/css" href="../css/header.css">
   <link rel="stylesheet" type="text/css" href="../css/menu.css">
-  <script type="text/javascript" src="../js/input.js" />
+  <script type="text/javascript" src="../js/input.js"></script>
 </head>
 <body>
 <div id="content">
