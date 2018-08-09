@@ -16,7 +16,12 @@
     if (isset($_POST['email']) && isset($_POST['password'])) {
         $loginResponse = $database->loginAdmin($_POST['email'], $_POST['password']);
 
-        $error = $loginResponse[0] . ": " . $loginResponse[1];
+        if ($loginResponse[0]) {
+            $error = $loginResponse[0] . ": " . $loginResponse[1] . "<br> User: ".$loginResponse['id']."<br>Name: ".$loginResponse['fname'];
+        } else {
+            $error = $loginResponse[0] . ": " . $loginResponse[1];
+        }
+        
     }
 
 
