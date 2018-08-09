@@ -1,13 +1,13 @@
 <?php    
     if (isset($_GET['test'])) {
         if ($_GET['test'] == "good") {
-            // 401 Unauthorized
-            http_response_code(401);
-            echo "Unauthorized";
+            // 200 OK
+            http_response_code(200);
+            echo "OK";
         } else {
-            // 401 Unauthorized
-            http_response_code(401);
-            echo "Unauthorized";
+            // 403 Forbidden
+            http_response_code(403);
+            echo "Forbidden";
         }
     }
 ?>
