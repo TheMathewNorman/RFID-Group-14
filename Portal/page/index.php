@@ -13,7 +13,7 @@
 
     <?php
         if (isset($_SESSION['userid'])) {
-            echo "<p>Hello ".$_SESSION['fname'].",<br> welcome to the RFID management system.</p>";
+            echo "<p>Hello ".$_SESSION['fname'].", welcome to the RFID management system.</p>";
         } else {
             echo "This page is still under development.";
         }
