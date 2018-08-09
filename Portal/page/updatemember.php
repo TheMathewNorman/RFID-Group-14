@@ -15,7 +15,8 @@
     }
     
     if (isset($_POST['firstname']) || isset($_POST['lastname']) || isset($_POST['email']) || isset($_POST['phone']) || isset($_POST['keycard'])) {        
-        var_dump($_POST);
+        $database->updateMember($_GET['id'], $_POST['firstname'], $_POST['lastname'], $_POST['email'], $_POST['phone'], $_POST['keycard']);
+        header("Location: listmember.php");
     } 
 ?>
 <html>
@@ -35,7 +36,7 @@
                 <table class="form-table">
                 <tr><td style="text-align:right">First name: </td><td><input type="text" name="firstname" placeholder="<?php echo $userInfo['fname']; ?>"></td></tr>
                 <tr><td style="text-align:right">Last name: </td><td><input type="text" name="lastname" placeholder="<?php echo $userInfo['lname']; ?>"></td></tr>
-                <tr><td style="text-align:right">Email: </td><td><input type="email" name="email"  placeholder="<?php echo $userInfo['email']; ?>"></td></tr>
+                <tr><td style="text-align:right">Email: </td><td><input type="email" name="email" placeholder="<?php echo $userInfo['email']; ?>"></td></tr>
                 <tr><td style="text-align:right">Phone: </td><td><input type="text" name="phone" placeholder="<?php echo $userInfo['phone']; ?>"></td></tr>
                 <tr><td style="text-align:right">Keycard: </td><td><input type="text" name="keycard"></td></tr>
                 <tr><td style="text-align:right">Delete:</td><td><input type="checkbox" name="delete" value="true"></td></tr>
