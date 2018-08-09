@@ -9,7 +9,9 @@
     }
 
     if (isset($_GET['error'])) {
-        $error = $_GET['error'];
+        if ($_GET['error'] = "nologin") {
+            $error = "You must be logged in to view that page.";
+        }
     }
     
     include_once "./php/database.php";
