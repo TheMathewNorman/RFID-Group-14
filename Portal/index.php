@@ -30,6 +30,7 @@
         <div id="login-heading">
             RFID Access Control
         </div>
+        <div id="login-error"><?php echo $error; ?></div>
         <div id="login-form">
             <form action="" method="POST">
                 <div class="form-field">
@@ -41,7 +42,6 @@
                     <div class="input-box"><input type="password" name="password" placeholder="Password"></div>
                 </div>
                 <input type="submit" value="Login">
-                <div id="login-error"><?php echo $error; ?></div>
             </form>
         </div>
 
