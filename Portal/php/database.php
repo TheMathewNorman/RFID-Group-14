@@ -173,35 +173,37 @@ class Database {
                 
         // Check connection
         if ($connection->connect_error) {
-            
-        }
-
-        // SQL Query to match admin account with same email and passhash as entered
-        $sql = "SELECT * FROM admins WHERE email = '$email' AND passhash = '$passhash'";
-
-        if ($result = mysqli_query($connection, $sql)) {
-            if (mysqli_num_rows($result) == 1) {
-                // LOGIN SUCCESS
-                $loginResult[0] = true;
-
-                // Pass login information
-                $userDetails = mysqli_fetch_array($result);
-                $loginResult['id'] = $userDetails['id'];
-                $loginResult['fname'] = $userDetails['firstname'];
-
-                return $loginResult;
-            
-            } else if (mysqli_num_rows($result) > 1) {
-                $loginResult[1] = "There is more than one admin with the email address: $email";
-            } else {
-                $loginResult[1] = "Username or password was incorrect. (2)";
-            }
+            $loginResult[1] = "Failed to connect to database.";
         } else {
-            $loginResult[1] = "Username or password was incorrect. (1)";
-        }
-        
-        return $loginResult;
 
+            // SQL Query to match admin account with same email and passhash as entered
+            $sql = "SELECT * FROM admins WHERE email = '$email' AND passhash = '$passhash'";
+
+            if ($result = mysqli_query($connection, $sql)) {
+                if (mysqli_num_rows($result) == 1) {
+                    // LOGIN SUCCESS
+                    $loginResult[0] = true;
+
+                    // Pass login information
+                    $userDetails = mysqli_fetch_array($result);
+                    $loginResult['id'] = $userDetails['id'];
+                    $loginResult['fname'] = $userDetails['firstname'];
+
+                    // Return successful login result
+                    return $loginResult;
+                
+                } else if (mysqli_num_rows($result) > 1) {
+                    $loginResult[1] = "There is more than one admin with the email address: $email";
+                } else {
+                    $loginResult[1] = "Username or password was incorrect. (2)";
+                }
+            } else {
+                $loginResult[1] = "Username or password was incorrect. (1)";
+            }
+        }
+
+        // Return login result
+        return $loginResult;
     }
     
     function fetchAdminInfo($adminid) {
