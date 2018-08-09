@@ -75,4 +75,6 @@
 #login-error {
     background-color: #222222;
     color: red;
+    padding: 2px;
+    margin-top: 5px;
 }
