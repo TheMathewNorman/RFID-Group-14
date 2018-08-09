@@ -73,7 +73,6 @@
             width: 95%;
         }
 #login-error {
-    background-color: #222222;
     color: red;
     padding: 2px;
     margin: 0 auto;
