@@ -1,14 +1,14 @@
 <?php
+    // Check login
+    // session_start();
+
     // First run redirect
     $location = "";
     if (!file_exists("./php/sqlcreds.php")) {
         $location = "./component/firstrun.php";
     }
     header("Location: $location");
-
-
-    // Check login
-    session_start();
+    
     // List members code goes here
     include_once "./php/database.php";
     $database = new Database();
