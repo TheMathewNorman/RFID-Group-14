@@ -8,9 +8,12 @@
         $location = "./component/firstrun.php";
     }
 
-    if (isset($_GET['error'])) {
-        if ($_GET['error'] = "nologin") {
+    if (isset($_GET['message'])) {
+        if ($_GET['message'] = "nologin") {
             $error = "You must be logged in to view that page.";
+        }
+        if ($_GET['message'] = "logout") {
+            $error = "You have successfully been logged out.";
         }
     }
     
