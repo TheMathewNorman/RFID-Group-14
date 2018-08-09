@@ -33,7 +33,7 @@
         <div class="dropdown-content">
             <a href="settings.php">General</a>
             <a href="settings.php">Database</a>
-            <a href="settings.php">About</a>
+            <a href="about.php">About</a>
         </div>
     </div>
 </div>
