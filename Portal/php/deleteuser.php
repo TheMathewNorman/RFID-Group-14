@@ -3,17 +3,17 @@
     $database = new Database();
 
     $table = $_GET['table'];
-    $userid = $_GET['id'];
+    $memberid = $_GET['id'];
 
-    echo "$table<br>$userid";
+    echo "$table<br>$memberid";
 
     $redirect = "../page/index.php";
 
     if ($table == "admin") {
-         $database->removeAdmin($userid);
+         $database->removeAdmin($memberid);
         $redirect = "../page/listadmin.php";
     } else if ($table == "member") {
-        $database->removeMember($userid);
+        $database->removeMember($memberid);
         $redirect = "../page/listmember.php";
     }
     header("Location: $redirect");
