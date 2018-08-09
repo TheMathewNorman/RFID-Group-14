@@ -6,7 +6,7 @@ class Sessions {
     // Redirect any user not logged in
     function checkLogin() {
         if (!isset($_SESSION['userid'])) {
-            header("Location: therfid.men/?error=nologin");
+            header("Location: ../index.php?error=nologin");
         }
     }
 
