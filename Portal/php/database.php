@@ -176,21 +176,14 @@ class Database {
         $sql = "SELECT * FROM admins WHERE email = '$email' AND passhash = '$passhash'";
 
         if ($result = mysqli_query($connection, $sql)) {
-            //if (mysqli_num_rows($results) == 1) {
-                
-                $testarray = array();
-                array_push($testarray, mysqli_num_rows($result));
+            if (mysqli_num_rows($result) == 1) {
 
-                while ($row = mysqli_fetch_array($result)) {
-                    array_push($testarray, $row);
-                }
-                return $testarray;
-                // while ($row = mysqli_fetch_array($result)) {
-                //     return $row;
-                // }
-            // } else {
-            //     return "More than one result.";
-            // }
+                $row = mysqli_fetch_array($result);
+                return $row;
+                
+            } else {
+                return "More than one result.";
+            }
         } else {
             return "No result.";
         }
