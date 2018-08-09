@@ -7,7 +7,7 @@
     if (!file_exists("./php/sqlcreds.php")) {
         $location = "./component/firstrun.php";
     }
-    header("Location: $location");
+    //header("Location: $location");
     
     // List members code goes here
     include_once "./php/database.php";
