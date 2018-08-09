@@ -195,10 +195,10 @@ class Database {
                 } else if (mysqli_num_rows($result) > 1) {
                     $loginResult[1] = "There is more than one admin with the email address: $email";
                 } else {
-                    $loginResult[1] = "Username or password was incorrect. (2)";
+                    $loginResult[1] = "Username or password was incorrect.";
                 }
             } else {
-                $loginResult[1] = "Username or password was incorrect. (1)";
+                $loginResult[1] = "Failed to run query.";
             }
         }
 
