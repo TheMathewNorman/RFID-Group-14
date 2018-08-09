@@ -500,7 +500,7 @@ class Database {
         $sql = "DELETE FROM members WHERE id = '$memberid'";
 
         // Try DB delete, die on error.
-        if ($connection->query($sql) !== TRUE) {
+        if (!$connection->query($sql)) {
             die("Error deleting member:<br>$connection->error");
         }
 
