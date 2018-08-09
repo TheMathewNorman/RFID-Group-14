@@ -163,7 +163,7 @@ class Database {
         //[1] = Error description on failure.
         //['id'] = Admin ID on success
         //['fname'] = Admin First Name on success
-        $loginResult[0] = false;
+        $loginResponse[0] = false;
 
         // SHA512 hash for password
         $passhash = hash("sha512", $pass);
@@ -173,7 +173,7 @@ class Database {
                 
         // Check connection
         if ($connection->connect_error) {
-            $loginResult[1] = "Failed to connect to database.";
+            $loginResponse[1] = "Failed to connect to database.";
         } else {
 
             // SQL Query to match admin account with same email and passhash as entered
@@ -182,28 +182,28 @@ class Database {
             if ($result = mysqli_query($connection, $sql)) {
                 if (mysqli_num_rows($result) == 1) {
                     // LOGIN SUCCESS
-                    $loginResult[0] = true;
+                    $loginResponse[0] = true;
 
                     // Pass login information
                     $userDetails = mysqli_fetch_array($result);
-                    $loginResult['id'] = $userDetails['id'];
-                    $loginResult['fname'] = $userDetails['firstname'];
+                    $loginResponse['id'] = $userDetails['id'];
+                    $loginResponse['fname'] = $userDetails['firstname'];
 
-                    // Return successful login result
-                    return $loginResult;
+                    // Return successful login response
+                    return $loginResponse;
                 
                 } else if (mysqli_num_rows($result) > 1) {
-                    $loginResult[1] = "There is more than one admin with the email address: $email";
+                    $loginResponse[1] = "There is more than one admin with the email address: $email";
                 } else {
-                    $loginResult[1] = "Username or password was incorrect.";
+                    $loginResponse[1] = "Username or password was incorrect.";
                 }
             } else {
-                $loginResult[1] = "Failed to run query.";
+                $loginResponse[1] = "Failed to run query.";
             }
         }
 
-        // Return login result
-        return $loginResult;
+        // Return login response
+        return $loginResponse;
     }
     
     function fetchAdminInfo($adminid) {

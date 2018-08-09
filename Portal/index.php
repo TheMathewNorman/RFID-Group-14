@@ -2,20 +2,21 @@
     // Check login
     session_start();
 
-    // First run redirect
+    // First-run redirect
     $location = "";
     if (!file_exists("./php/sqlcreds.php")) {
         $location = "./component/firstrun.php";
     }
     
-    // List members code goes here
     include_once "./php/database.php";
+    include_once "./php/sessions.php";
     $database = new Database();
+    $sessions = new Sessions();
 
     if (isset($_POST['email']) && isset($_POST['password'])) {
         $loginResponse = $database->loginAdmin($_POST['email'], $_POST['password']);
 
-        $error = $loginResponse[0] . " " . $loginResponse[1];
+        $error = $loginResponse[0] . ": " . $loginResponse[1];
     }
 
 
