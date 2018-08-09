@@ -13,7 +13,15 @@
 
     <?php
         if (isset($_SESSION['userid'])) {
-            echo "<p>Hello <span style=\"font-weight:bold;font-style:italic;\">".$_SESSION['fname']."</span>, welcome to the RFID management system.</p>";
+    ?>
+            Hello <?php $_SESSION['fname']; ?>,
+            <p>
+            Welcome to the Creative Geelong member access management system.
+            <br><br>
+            Please use the above menu to navigate the system and remember to logout when done.
+            </p>
+            Thank you.
+    <?php
         } else {
             echo "This page is still under development.";
         }
