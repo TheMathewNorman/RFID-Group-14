@@ -158,6 +158,13 @@ class Database {
     }
 
     function loginAdmin($email, $pass) {
+        // Login response
+        //[0] = False on failure || True on success.
+        //[1] = Error description on failure.
+        //['id'] = Admin ID on success
+        //['fname'] = Admin First Name on success
+        $loginResult[0] = false;
+
         // SHA512 hash for password
         $passhash = hash("sha512", $pass);
 
@@ -166,13 +173,12 @@ class Database {
                 
         // Check connection
         if ($connection->connect_error) {
-            $loginResult[0] = false;
+            
         }
 
         // SQL Query to match admin account with same email and passhash as entered
         $sql = "SELECT * FROM admins WHERE email = '$email' AND passhash = '$passhash'";
 
-        $loginResult[0] = false;
         if ($result = mysqli_query($connection, $sql)) {
             if (mysqli_num_rows($result) == 1) {
                 // LOGIN SUCCESS
@@ -194,7 +200,6 @@ class Database {
             $loginResult[1] = "Username or password was incorrect. (1)";
         }
         
-        $loginResult[1] = "Login failure.";
         return $loginResult;
 
     }
