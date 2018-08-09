@@ -23,7 +23,7 @@
     font-size: 2em;
     font-weight: 500;
     color: rgb(244,244,244);
-    margin-bottom: 50px;
+    margin-bottom: 10px;
 }
 #login-form {
     margin: 0 auto;
@@ -72,4 +72,12 @@
             border-radius: 5px;
             width: 95%;
         }
-    
+#login-error {
+    color: white;
+    padding: 2px;
+    margin: 0 auto;
+    margin-top: 5px;
+    width: 90%;
+    text-align: center;
+    height: 1em;
+}

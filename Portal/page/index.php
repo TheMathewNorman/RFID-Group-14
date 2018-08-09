@@ -9,7 +9,23 @@
     <div id="content">
     <?php include "../component/header.php"; ?>
     <?php include "../component/menu.php"; ?>
-    This page is still under development.
+    
+
+    <?php
+        if (isset($_SESSION['userid'])) {
+    ?>
+            Hello <?php echo $_SESSION['fname']; ?>,
+            <br><br>
+            Welcome to the Creative Geelong member access management system.
+            <br>
+            Please use the above menu to navigate the system and remember to <a href="../php/logout.php" style="color:white;font-weight:bold">logout</a> when done.
+            <br><br>
+            Thank you.
+    <?php
+        } else {
+            echo "This page is still under development.";
+        }
+    ?>
 </div>
 </body>
 </html>

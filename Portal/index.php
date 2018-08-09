@@ -1,20 +1,44 @@
 <?php
-    // First run redirect
+    // Check login
+    session_start();
+
+    // First-run redirect
     $location = "";
     if (!file_exists("./php/sqlcreds.php")) {
         $location = "./component/firstrun.php";
     }
-    header("Location: $location");
 
-
-    // Check login
-    session_start();
-    // List members code goes here
+    if (isset($_GET['message'])) {
+        if ($_GET['message'] = "nologin") {
+            $error = "You must be logged in to view that page.";
+        }
+        if ($_GET['message'] = "logout") {
+            $error = "You have successfully been logged out.";
+        }
+    }
+    
     include_once "./php/database.php";
+    include_once "./php/sessions.php";
     $database = new Database();
+    $sessions = new Sessions();
+
     if (isset($_POST['email']) && isset($_POST['password'])) {
-        
-        var_dump($database->loginAdmin($_POST['email'], $_POST['password']));
+        $loginResponse = $database->loginAdmin($_POST['email'], $_POST['password']);
+
+        if ($loginResponse[0]) {
+            // Create a session
+            $sessions->startSession($loginResponse['id'], $loginResponse['fname']);
+            
+            // Redirect
+            $location = "./page/index.php";
+        } else {
+            // Return error on login failure.
+            $error = "Error: " . $loginResponse[1];
+        }        
+    }
+
+    if ($location !== "") {
+        header("Location: $location");
     }
 ?>
 
@@ -31,6 +55,7 @@
         <div id="login-heading">
             RFID Access Control
         </div>
+        <div id="login-error"><?php echo $error; ?></div>
         <div id="login-form">
             <form action="" method="POST">
                 <div class="form-field">
@@ -42,7 +67,6 @@
                     <div class="input-box"><input type="password" name="password" placeholder="Password"></div>
                 </div>
                 <input type="submit" value="Login">
-                <span><?php echo $error; ?></span>
             </form>
         </div>
 

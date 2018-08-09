@@ -158,48 +158,56 @@ class Database {
     }
 
     function loginAdmin($email, $pass) {
-        
-        $passhash = hash("sha512", $pass);
-        
-        
-        include_once "./php/sessions.php";
-        $sessions = new Sessions();
+        // Login response
+        //[0] = False on failure || True on success.
+        //[1] = Error description on failure.
+        //['id'] = Admin ID on success
+        //['fname'] = Admin First Name on success
+        $loginResponse[0] = false;
 
-        // return "Sessions class has been included";
+        // SHA512 hash for password
+        $passhash = hash("sha512", $pass);
 
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
                 
         // Check connection
         if ($connection->connect_error) {
-            die("Connection failed<br>$connection->connect_error");
-        }
+            $loginResponse[1] = "Failed to connect to database.";
+        } else {
 
-        $sql = "SELECT * FROM admins WHERE email = '$email' AND password = '$passhash'";
+            // SQL Query to match admin account with same email and passhash as entered
+            $sql = "SELECT * FROM admins WHERE email = '$email' AND passhash = '$passhash'";
 
-        if ($result = mysqli_query($connection, $sql)) {
-            if (!(mysqli_num_rows($results) <> 1)) {
-                return mysqli_fetch_row($result);
+            if ($result = mysqli_query($connection, $sql)) {
+                if (mysqli_num_rows($result) == 1) {
+                    // LOGIN SUCCESS
+                    $loginResponse[0] = true;
+
+                    // Pass login information
+                    $userDetails = mysqli_fetch_array($result);
+                    $loginResponse[1] = "Login successful.";
+                    $loginResponse['id'] = $userDetails['id'];
+                    $loginResponse['fname'] = $userDetails['firstname'];
+
+                    // Return successful login response
+                    return $loginResponse;
+                
+                } else if (mysqli_num_rows($result) > 1) {
+                    $loginResponse[0] = false;
+                    $loginResponse[1] = "There is more than one admin with the email address: $email";
+                } else {
+                    $loginResponse[0] = false;
+                    $loginResponse[1] = "Email or password was incorrect.";
+                }
+            } else {
+                $loginResponse[0] = false;
+                $loginResponse[1] = "Failed to run query.";
             }
         }
-        
 
-        // // If there are no users matching the email/passhash in the admins db, return false otherwise create session & return true.
-        // if ($result = mysqli_query($connection, $sql)) {
-        //     if (mysqli_num_rows($result) > 0) {
-        //         // Get user details
-        //         $row = mysqli_fetch_row($result);
-        //         // Create session
-        //         $sessions->startSession($row[0]. $row[1]);
-        //         // Close mysqli connection
-        //         $connection->close();
-        //         return true;
-        //     } else {
-        //         $connection->close();
-        //         return false;
-        //     }
-        // }
-
+        // Return login response
+        return $loginResponse;
     }
     
     function fetchAdminInfo($adminid) {

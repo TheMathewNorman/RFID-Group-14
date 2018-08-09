@@ -26,7 +26,7 @@
     </div>
 
     <div class="dropdown right">
-        <button class="dropbtn" onclick="location.href='#">Logout</button>
+        <button class="dropbtn" onclick="location.href='../php/logout.php'">Logout</button>
     </div>
     <div class="dropdown right">
         <button class="dropbtn" onclick="location.href='settings.php';">Settings</button>
