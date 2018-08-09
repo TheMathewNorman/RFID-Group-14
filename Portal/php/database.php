@@ -186,6 +186,7 @@ class Database {
 
                     // Pass login information
                     $userDetails = mysqli_fetch_array($result);
+                    $loginResponse[1] = "Login successful.";
                     $loginResponse['id'] = $userDetails['id'];
                     $loginResponse['fname'] = $userDetails['firstname'];
 
@@ -193,11 +194,14 @@ class Database {
                     return $loginResponse;
                 
                 } else if (mysqli_num_rows($result) > 1) {
+                    $loginResponse[0] = false;
                     $loginResponse[1] = "There is more than one admin with the email address: $email";
                 } else {
+                    $loginResponse[0] = false;
                     $loginResponse[1] = "Username or password was incorrect.";
                 }
             } else {
+                $loginResponse[0] = false;
                 $loginResponse[1] = "Failed to run query.";
             }
         }
