@@ -9,7 +9,15 @@
     <div id="content">
     <?php include "../component/header.php"; ?>
     <?php include "../component/menu.php"; ?>
-    This page is still under development.
+    
+
+    <?php
+        if (isset($_SESSION['userid'])) {
+            echo "<p>Hello ".$_SESSION['fname'].",<br> welcome to the RFID management system.</p>";
+        } else {
+            echo "This page is still under development.";
+        }
+    ?>
 </div>
 </body>
 </html>

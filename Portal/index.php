@@ -17,13 +17,17 @@
         $loginResponse = $database->loginAdmin($_POST['email'], $_POST['password']);
 
         if ($loginResponse[0]) {
-            $error = $loginResponse[0] . ": " . $loginResponse[1] . "<br> User: ".$loginResponse['id']."<br>Name: ".$loginResponse['fname'];
+            // Create a session
+            $sessions->startSession($loginResponse['id'], $loginResponse['fname']);
+            
+            // Redirect
+            $location = "./page/index.php";
         } else {
-            $error = $loginResponse[0] . ": " . $loginResponse[1];
+            // Return error on login failure.
+            $error = "Error: " . $loginResponse[1];
         }
         
     }
-
 
     if ($location !== "") {
         header("Location: $location");
