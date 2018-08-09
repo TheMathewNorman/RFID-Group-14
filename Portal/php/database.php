@@ -302,7 +302,7 @@ class Database {
     // Delete an admin from the admins table.
     function removeAdmin($adminid) {
         // Prevent deletion of key admin account.
-        if ($adminid <= 1) { 
+        if ($adminid > 1) { 
 
             // Create connection
             $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
