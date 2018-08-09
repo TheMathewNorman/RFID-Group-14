@@ -18,7 +18,7 @@
             <br><br>
             Welcome to the Creative Geelong member access management system.
             <br>
-            Please use the above menu to navigate the system and remember to <a href="../php/logout.php">logout</a> when done.
+            Please use the above menu to navigate the system and remember to <a href="../php/logout.php" style="color:white;font-weight:bold">logout</a> when done.
             <br><br>
             Thank you.
     <?php
