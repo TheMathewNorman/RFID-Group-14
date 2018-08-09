@@ -107,3 +107,13 @@ body {
     .form-table th, .form-table td {
         padding: 5px;
     }
+
+#about-page {
+    padding: 20px;
+}
+    #about-page p {
+        margin: 5px 0;
+    }
+    #about-page ul {
+        margin-left: 20px;
+    }
