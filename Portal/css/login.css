@@ -72,4 +72,7 @@
             border-radius: 5px;
             width: 95%;
         }
-    
+#login-error {
+    background-color: #222222;
+    color: red;
+}

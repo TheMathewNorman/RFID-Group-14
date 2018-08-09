@@ -41,7 +41,7 @@
                     <div class="input-box"><input type="password" name="password" placeholder="Password"></div>
                 </div>
                 <input type="submit" value="Login">
-                <span><?php echo $error; ?></span>
+                <span id="login-error"><?php echo $error; ?></span>
             </form>
         </div>
 
