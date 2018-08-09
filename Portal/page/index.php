@@ -14,7 +14,7 @@
     <?php
         if (isset($_SESSION['userid'])) {
     ?>
-            Hello <?php $_SESSION['fname']; ?>,
+            Hello <?php echo $_SESSION['fname']; ?>,
             <p>
             Welcome to the Creative Geelong member access management system.
             <br><br>
