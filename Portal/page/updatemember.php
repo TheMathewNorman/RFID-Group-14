@@ -10,8 +10,7 @@
     $userInfo = $database->fetchMemberInfo($_GET['id']);
 
     if (isset($_POST['delete']) && $_POST['delete'] === "true") {
-        var_dump($_POST);
-        //header("Location: ../php/deleteuser.php?table=member&id=".$_GET['id']);
+        header("Location: ../php/deleteuser.php?table=member&id=".$_GET['id']);
     }
     
     if (isset($_POST['firstname']) || isset($_POST['lastname']) || isset($_POST['email']) || isset($_POST['phone']) || isset($_POST['keycard'])) {        
