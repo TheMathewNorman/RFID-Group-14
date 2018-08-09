@@ -13,7 +13,7 @@
     include_once "./php/database.php";
     $database = new Database();
     if (isset($_POST['email']) && isset($_POST['password'])) {
-        $error = $database->loginAdmin($_POST['email'], $_POST['password'])[0];
+        $error = $database->loginAdmin($_POST['email'], $_POST['password']);
     }
 ?>
 
