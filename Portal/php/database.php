@@ -198,7 +198,7 @@ class Database {
                     $loginResponse[1] = "There is more than one admin with the email address: $email";
                 } else {
                     $loginResponse[0] = false;
-                    $loginResponse[1] = "Username or password was incorrect.";
+                    $loginResponse[1] = "Email or password was incorrect.";
                 }
             } else {
                 $loginResponse[0] = false;
