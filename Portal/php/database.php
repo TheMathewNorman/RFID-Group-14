@@ -179,7 +179,7 @@ class Database {
             //if (mysqli_num_rows($results) == 1) {
                 
                 $testarray = array();
-                array_push($testarry, mysqli_num_rows($result));
+                array_push($testarray, mysqli_num_rows($result));
 
                 while ($row = mysqli_fetch_array($result)) {
                     array_push($testarray, $row);
