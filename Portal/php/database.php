@@ -158,53 +158,44 @@ class Database {
     }
 
     function loginAdmin($email, $pass) {
-        
+        // SHA512 hash for password
         $passhash = hash("sha512", $pass);
-        
-        
-        include_once "./php/sessions.php";
-        $sessions = new Sessions();
 
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
                 
         // Check connection
         if ($connection->connect_error) {
-            die("Connection failed<br>$connection->connect_error");
+            $loginResult[0] = false;
         }
 
+        // SQL Query to match admin account with same email and passhash as entered
         $sql = "SELECT * FROM admins WHERE email = '$email' AND passhash = '$passhash'";
 
+        $loginResult[0] = false;
         if ($result = mysqli_query($connection, $sql)) {
             if (mysqli_num_rows($result) == 1) {
+                // LOGIN SUCCESS
+                $loginResult[0] = true;
 
-                $row = mysqli_fetch_array($result);
-                return "Login success.";
-                
+                // Pass login information
+                $userDetails = mysqli_fetch_array($result);
+                $loginResult['id'] = $userDetails['id'];
+                $loginResult['fname'] = $userDetails['firstname'];
+
+                return $loginResult;
+            
+            } else if (mysqli_num_rows($result) > 1) {
+                $loginResult[1] = "There is more than one admin with the email address: $email";
             } else {
-                return "Login failure.";
+                $loginResult[1] = "Username or password was incorrect. (2)";
             }
         } else {
-            return "Login failure.";
+            $loginResult[1] = "Username or password was incorrect. (1)";
         }
         
-        return "Login failure.";
-
-        // // If there are no users matching the email/passhash in the admins db, return false otherwise create session & return true.
-        // if ($result = mysqli_query($connection, $sql)) {
-        //     if (mysqli_num_rows($result) > 0) {
-        //         // Get user details
-        //         $row = mysqli_fetch_row($result);
-        //         // Create session
-        //         $sessions->startSession($row[0]. $row[1]);
-        //         // Close mysqli connection
-        //         $connection->close();
-        //         return true;
-        //     } else {
-        //         $connection->close();
-        //         return false;
-        //     }
-        // }
+        $loginResult[1] = "Login failure.";
+        return $loginResult;
 
     }
     
