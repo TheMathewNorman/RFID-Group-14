@@ -183,10 +183,13 @@ class Database {
                 //     return $row;
                 // }
             } else {
-                return false;
+                return "More than one result.";
             }
+        } else {
+            return "No result.";
         }
         
+        return "Some other thing.";
 
         // // If there are no users matching the email/passhash in the admins db, return false otherwise create session & return true.
         // if ($result = mysqli_query($connection, $sql)) {
