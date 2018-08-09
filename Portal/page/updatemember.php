@@ -6,7 +6,10 @@
     include_once "../php/database.php";
     $database = new Database();
 
+    // Used form with information as placeholder text.
     $userInfo = $database->fetchMemberInfo($_GET['id']);
+
+    echo $_POST['delete'];
 ?>
 <html>
     <head>

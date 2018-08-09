@@ -453,7 +453,7 @@ class Database {
     }
 
     // Update a member in the members table.
-    function updateMember($memberid, $firstname, $lastname, $email, $phone, $cardkey) {
+    function updateMember($memberid = "", $firstname = "", $lastname = "", $email = "", $phone = "", $cardkey = "") {
         // Encrypt the card key before inseting into the database if set
         $cardkeyhash = "";
         if ($cardkey != "") {
