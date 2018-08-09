@@ -9,7 +9,14 @@
     // Used form with information as placeholder text.
     $userInfo = $database->fetchMemberInfo($_GET['id']);
 
-    echo $_POST['delete'];
+    if (isset($_POST['delete']) && $_POST['delete'] === "true") {
+        var_dump($_POST);
+        //header("Location: ../php/deleteuser.php?table=member&id=".$_GET['id']);
+    }
+    
+    if (isset($_POST['firstname']) || isset($_POST['lastname']) || isset($_POST['email']) || isset($_POST['phone']) || isset($_POST['keycard'])) {        
+        var_dump($_POST);
+    } 
 ?>
 <html>
     <head>
@@ -31,7 +38,7 @@
                 <tr><td style="text-align:right">Email: </td><td><input type="email" name="email"  placeholder="<?php echo $userInfo['email']; ?>"></td></tr>
                 <tr><td style="text-align:right">Phone: </td><td><input type="text" name="phone" placeholder="<?php echo $userInfo['phone']; ?>"></td></tr>
                 <tr><td style="text-align:right">Keycard: </td><td><input type="text" name="keycard"></td></tr>
-                <tr><td style="text-align:right">Delete:</td><td><input type="checkbox" name="delete" value="Delete"></td></tr>
+                <tr><td style="text-align:right">Delete:</td><td><input type="checkbox" name="delete" value="true"></td></tr>
                 <tr><td colspan="2" style="text-align:right"><input type="submit" value="Update Member"> <input type="reset" value="Clear"></td></tr>
                 </table>
             </form>
