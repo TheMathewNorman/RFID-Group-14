@@ -179,13 +179,13 @@ class Database {
             if (mysqli_num_rows($result) == 1) {
 
                 $row = mysqli_fetch_array($result);
-                return $row;
+                return true;
                 
             } else {
-                return "More than one result.";
+                return false;
             }
         } else {
-            return "No result.";
+            return false;
         }
         
         return "Some other thing.";
