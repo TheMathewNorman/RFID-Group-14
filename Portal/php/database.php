@@ -179,16 +179,16 @@ class Database {
             if (mysqli_num_rows($result) == 1) {
 
                 $row = mysqli_fetch_array($result);
-                return "Login Success.";
+                return "Login success.";
                 
             } else {
-                return "Login Failure.";
+                return "Login failure.";
             }
         } else {
-            return "Login Failure.";
+            return "Login failure.";
         }
         
-        return "Login Failure.";
+        return "Login failure.";
 
         // // If there are no users matching the email/passhash in the admins db, return false otherwise create session & return true.
         // if ($result = mysqli_query($connection, $sql)) {
