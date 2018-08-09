@@ -108,12 +108,12 @@ body {
         padding: 5px;
     }
 
-#about-page {
+#about-text {
     padding: 20px;
 }
-    #about-page p {
+    #about-text p {
         margin: 20px 0;
     }
-    #about-page ul {
+    #about-text ul {
         margin-left: 20px;
     }
