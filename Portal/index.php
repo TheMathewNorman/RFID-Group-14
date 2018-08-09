@@ -7,6 +7,10 @@
     if (!file_exists("./php/sqlcreds.php")) {
         $location = "./component/firstrun.php";
     }
+
+    if (isset($_GET['error'])) {
+        $error = $_GET['error'];
+    }
     
     include_once "./php/database.php";
     include_once "./php/sessions.php";
@@ -25,8 +29,7 @@
         } else {
             // Return error on login failure.
             $error = "Error: " . $loginResponse[1];
-        }
-        
+        }        
     }
 
     if ($location !== "") {

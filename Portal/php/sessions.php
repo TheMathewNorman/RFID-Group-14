@@ -3,6 +3,13 @@ session_start();
 
 class Sessions {
 
+    // Redirect any user not logged in
+    function checkLogin() {
+        if (!isset($_SESSION['userid'])) {
+            header("Location: therfid.men/?error=nologin");
+        }
+    }
+
     // Create a session
     function startSession($userid, $fname) {
         $_SESSION['userid'] = $userid;
