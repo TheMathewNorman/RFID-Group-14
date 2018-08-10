@@ -107,3 +107,13 @@ body {
     .form-table th, .form-table td {
         padding: 5px;
     }
+
+#about-text {
+    padding: 20px;
+}
+    #about-text p {
+        margin: 10px 0;
+    }
+    #about-text ul {
+        margin-left: 20px;
+    }
