@@ -1,5 +1,20 @@
 <?php
+    // Inlcude the database class functionality.
+    include_once '../php/database.php';
+    $database = new Database();
 
+    // Used to relay any error messages to the user.
+    $error = '';
+
+    if (isset($_POST['dbname']) && isset($_POST['dbuser']) && isset($_POST['dbpass'])) {
+        
+
+        if ($database->testConnection()) {
+            header('Location: ./create.admin.php');
+        } else {
+            $error = "Failed to connect to database. Please check credentials and try again.";
+        }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -16,12 +31,20 @@
             First Run Setup
         </div>
         <div id="setup-subheading">
+            <?php
+                if ($error !== '') {
+                    echo $error;
+                } else {
+            ?>
             Some information is required before being able to use this system.
+            <?php
+                }
+            ?>
         </div>
         
         <!-- Database setup form -->
         <div id="setup-form">
-        <form action="validate.database.php" method="POST">
+        <form action="" method="POST">
             <div class="form-field">
                 <div class="input-icon"><i class="fas fa-user fa-lg"></i></div>
                 <div class="input-box"><input type="text" name="server" value="localhost"></div>
@@ -41,26 +64,6 @@
             <input type="submit" value="Next">
             </form>
         </div>
-
-    <!-- Admin setup form 
-    <div id="setup-form">
-        <form action="index.php?page=2" method="POST">
-            <div class="form-field">
-                <div class="input-icon"><i class="fas fa-user fa-lg"></i></div>
-                <div class="input-box"><input type="text" name="fname" placeholder="Server"></div>
-            </div>
-            <div class="form-field">
-                <div class="input-icon"><i class="fas fa-user fa-lg"></i></div>
-                <div class="input-box"><input type="text" name="lname" placeholder="Username"></div>
-            </div>
-            <div class="form-field">
-                <div class="input-icon"><i class="fas fa-lock fa-lg"></i></div>
-                <div class="input-box"><input type="password" name="email" placeholder="Password"></div>
-            </div>
-            <input type="submit" value="Submit">
-        </form>
-    </div>
--->
     </div>
 </body>
 </html>
