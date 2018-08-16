@@ -8,7 +8,7 @@
 
     // // Check if post variables are set
     // if () {
-
+        // // Create admin and login
     // }
 ?>
 
@@ -31,7 +31,7 @@
                     echo $error;
                 } else {
             ?>
-            Some information is required before being able to use this system.
+            Please enter the details for the primary admin account.
             <?php
                 }
             ?>

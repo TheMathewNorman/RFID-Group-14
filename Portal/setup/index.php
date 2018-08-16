@@ -8,8 +8,11 @@
 
     if (isset($_POST['dbname']) && isset($_POST['dbuser']) && isset($_POST['dbpass'])) {
         
-
+        
         if ($database->testConnection($_POST['server'], $_POST['dbuser'], $_POST['dbpass'], $_POST['dbname'])) {
+            // Create tables
+
+            // Go to next page
             header('Location: ./create.admin.php');
         } else {
             $error = "<b>Failed to connect to database. Please check credentials and try again.</b>";
@@ -36,7 +39,7 @@
                     echo $error;
                 } else {
             ?>
-            Some information is required before being able to use this system.
+            Please enter information used to connect to the database.
             <?php
                 }
             ?>
