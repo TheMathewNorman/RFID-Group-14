@@ -24,7 +24,7 @@
 <link rel="stylesheet" href="../css/setup.css">
 </head>
 <body>
-    <div id="setup-container" style="height:350px">
+    <div id="setup-container" style="height:325px">
         <div id="setup-heading">
             First Run Setup
         </div>
