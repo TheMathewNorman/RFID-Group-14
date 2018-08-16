@@ -12,7 +12,7 @@
         if ($database->testConnection($_POST['server'], $_POST['dbuser'], $_POST['dbpass'], $_POST['dbname'])) {
             header('Location: ./create.admin.php');
         } else {
-            $error = "Failed to connect to database. Please check credentials and try again.";
+            $error = "<b>Failed to connect to database. Please check credentials and try again.</b>";
         }
     }
 ?>
