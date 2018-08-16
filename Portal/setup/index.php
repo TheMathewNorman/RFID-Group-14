@@ -15,7 +15,7 @@
         <div id="setup-heading">
             First Run Setup
         </div>
-        <div id="setup-text">
+        <div id="setup-subheading">
             Some information is required before being able to use this system.
         </div>
         
