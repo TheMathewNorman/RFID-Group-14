@@ -9,7 +9,7 @@
     if (isset($_POST['dbname']) && isset($_POST['dbuser']) && isset($_POST['dbpass'])) {
         
 
-        if ($database->testConnection()) {
+        if ($database->testConnection($_POST['server'], $_POST['dbuser'], $_POST['dbpass'], $_POST['dbname'])) {
             header('Location: ./create.admin.php');
         } else {
             $error = "Failed to connect to database. Please check credentials and try again.";

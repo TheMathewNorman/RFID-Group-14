@@ -6,13 +6,10 @@
     // Used to relay any error messages to the user.
     $error = '';
 
-    if (isset($_POST['dbname']) && isset($_POST['dbuser']) && isset($_POST['dbpass'])) {
-        if ($database->testConnection()) {
-            header('Location: ./create.admin.php');
-        } else {
-            $error = "Failed to connect to database. Please check credentials and try again.";
-        }
-    }
+    // // Check if post variables are set
+    // if () {
+
+    // }
 ?>
 
 <!DOCTYPE html>
@@ -24,7 +21,7 @@
 <link rel="stylesheet" href="../css/setup.css">
 </head>
 <body>
-    <div id="setup-container" style="height:325px">
+    <div id="setup-container" style="height:3250px">
         <div id="setup-heading">
             First Run Setup
         </div>
