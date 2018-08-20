@@ -46,7 +46,7 @@ class Database {
             access_date TIMESTAMP NOT NULL
         )";
             
-        if (mysqli_multi_query($connection, $sql) === FASLE) {
+        if (mysqli_multi_query($connection, $sql) === FALSE) {
             die("Error creating table: " . $connection->error);
         }
 
