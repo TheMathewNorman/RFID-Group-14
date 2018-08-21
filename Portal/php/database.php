@@ -38,7 +38,8 @@ class Database {
         ); CREATE TABLE readers (
             id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
             reader_name VARCHAR(30) NOT NULL,
-            reader_group INT(6) NOT NULL
+            reader_group INT(6) NOT NULL,
+            approved BOOL NOT NULL
         ); CREATE TABLE logs (
             id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
             member_id INT(6) NOT NULL,
@@ -547,6 +548,7 @@ class Database {
     //// READER TABLE FUNCTIONALITY //// 
     // Functions to include
     // addReader($name,$group,$timeout)
+    // approveReader($id)
     // updateReader($name,$group,$timeout)
     // removeReader($readerid)
     // listReaders()
