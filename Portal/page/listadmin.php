@@ -35,7 +35,7 @@
         if (isset($_GET['searchInput'])) {
           $sanInput = filter_var($_GET['searchInput'], FILTER_SANITIZE_EMAIL);
           if($sanInput != null){
-            $database->searchAdmins($sanInput));
+            $database->searchAdmins($sanInput);
           }
         } else {
           $database->listAdmins();
