@@ -17,7 +17,7 @@
 <?php include "../component/header.php"; ?>
         <?php include "../component/menu.php"; ?>
     
-      <form action="" method="GET" name="search" onsubmit="validateInput()">
+      <form action="" method="GET" name="search" onSubmit="validateInput()">
         <input type="text" placeholder="Search..." name="searchInput"> <input type="submit" value="Search">
       </form>
   
@@ -33,7 +33,10 @@
       </tr>
       <?php
           if (isset($_GET['searchInput'])) {
-            $database->searchMembers($_GET['searchInput']);
+            $sanInput = filter_var($_GET['searchInput'], FILTER_SANITIZE_EMAIL);
+            if($sanInput != null){
+              $database->searchMembers($_GET['searchInput']);
+            }
           } else {
             $database->listMembers();
           }
