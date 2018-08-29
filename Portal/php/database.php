@@ -540,10 +540,13 @@ class Database {
 
     //// PRIVILEDGE TABLE FUNCTIONALITY //// 
     // Functions to include
-    // addPriviledge($memberid,$readerid,$readergroup)
-    // removePriviledge($id)
-    // modifyPriviledge($id,$memberid,$readerid,$readergroup)
-    // listPriviledges()
+    // addPrivilege($memberid,$readerid,$readergroup)
+    function checkPrivilege($key, $readerid) {
+
+    }
+    // removePrivilege($id)
+    // modifyPrivilege($id,$memberid,$readerid,$readergroup)
+    // listPrivileges()
 
     //// READER TABLE FUNCTIONALITY //// 
     // Functions to include

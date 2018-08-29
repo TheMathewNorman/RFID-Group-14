@@ -1,7 +1,4 @@
 <?php
-    // Check login
-    session_start();
-
     // First-run redirect
     $location = "";
     if (!file_exists("./php/sqlcreds.php")) {
@@ -17,11 +14,13 @@
         }
     }
     
+    // Include instances of required classes
     include_once "./php/database.php";
     include_once "./php/sessions.php";
     $database = new Database();
     $sessions = new Sessions();
 
+    // Attempt to login when credientials have been entered.
     if (isset($_POST['email']) && isset($_POST['password'])) {
         $loginResponse = $database->loginAdmin($_POST['email'], $_POST['password']);
 
