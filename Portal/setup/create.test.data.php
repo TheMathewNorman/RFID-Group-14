@@ -16,7 +16,8 @@ if ($connection->connect_error) {
 
     // Populate admins
     $sql = "INSERT INTO admins(firstname, lastname, email, phone, passhash) VALUES('RFID','Admin','admin@therfid.men','0400000000','".hash("sha512", "Password1")."')";
-    $connection->query($sql);
+    mysqli_query($connection, $sql);
+    //$connection->query($sql);
     echo "Admins successful.<br>";
 
     // Populate members
