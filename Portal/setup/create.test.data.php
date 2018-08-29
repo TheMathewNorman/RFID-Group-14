@@ -12,12 +12,12 @@ if ($connection->connect_error) {
     // Clear current contents
     $sql = "DELETE FROM admins; DELETE FROM logs; DELETE FROM members; DELETE FROM privilege; DELETE FROM readers";
     mysqli_multi_query($connection, $sql);
-    echo "Clear tables.";
+    echo "Clear tables.<br>";
 
     // Populate admins
     $sql = "INSERT INTO admins(firstname, lastname, email, phone, passhash) VALUES('RFID','Admin','admin@therfid.men','0400000000','".hash("sha512", "Password1")."')";
     $connection->query($sql);
-    echo "Admins successful.";
+    echo "Admins successful.<br>";
 
     // Populate members
     $sql = "INSERT INTO members(firstname, lastname, email, phone, cardkey) VALUES('Adam','Smeaton','adam@deakin.com','0411111111','".hash('sha512','111222333')."')";
@@ -30,7 +30,7 @@ if ($connection->connect_error) {
     $connection->query($sql);
     $sql = "INSERT INTO members(firstname, lastname, email, phone, cardkey) VALUES('Yuan','Ren','yuan@deakin.com','0455555555','".hash('sha512','555666777')."')";
     $connection->query($sql);
-    echo "Members successful";
+    echo "Members successful.<br>";
 
     // Populate readers
     $sql = "INSERT INTO readers(id, reader_name, reader_group) VALUES(1, 'Door', 1)";
@@ -39,7 +39,7 @@ if ($connection->connect_error) {
     $connection->query($sql);
     $sql = "INSERT INTO readers(id, reader_name, reader_group) VALUES(3, 'CNC Machine', 2)";
     $connection->query($sql);
-    echo "Readers successful";
+    echo "Readers successful.<br>";
 
     // Populate privilege
     $sql = "INSERT INTO privilege(id, member_id, reader_id) VALUES(1, 1, 1)";
@@ -64,7 +64,7 @@ if ($connection->connect_error) {
     $connection->query($sql);
     $sql = "INSERT INTO privilege(id, member_id, reader_id) VALUES(11, 5, 3)";
     $connection->query($sql);
-    echo "Privilege successful";
+    echo "Privilege successful.<br>";
 
     // Populate logs
     $sql = "INSERT INTO logs(id, member_id, reader_id) VALUES(1, 1, 1)";
@@ -97,7 +97,7 @@ if ($connection->connect_error) {
     $connection->query($sql);
     $sql = "INSERT INTO logs(id, member_id, reader_id) VALUES(15, 5, 3)";
     $connection->query($sql);
-    echo "Logs successful";
+    echo "Logs successful.<br>";
 }
 
 echo "Successful.";
