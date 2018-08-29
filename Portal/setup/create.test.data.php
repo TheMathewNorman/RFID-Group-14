@@ -10,8 +10,16 @@ if ($connection->connect_error) {
 } else {
 
     // Clear current contents
-    $sql = "DELETE FROM admins; DELETE FROM logs; DELETE FROM members; DELETE FROM privilege; DELETE FROM readers";
-    mysqli_multi_query($connection, $sql);
+    $sql = "DELETE FROM admins";
+    if (!mysqli_query($connection, $sql)) { die("Error clearing admins.".mysqli_error($connection)); }
+    $sql = "DELETE FROM logs";
+    if (!mysqli_query($connection, $sql)) { die("Error clearing logs.".mysqli_error($connection)); }
+    $sql = "DELETE FROM members";
+    if (!mysqli_query($connection, $sql)) { die("Error clearing members.".mysqli_error($connection)); }
+    $sql = "DELETE FROM privilege";
+    if (!mysqli_query($connection, $sql)) { die("Error clearing privilege.".mysqli_error($connection)); }
+    $sql = "DELETE FROM readers";
+    if (!mysqli_query($connection, $sql)) { die("Error clearing readers.".mysqli_error($connection)); }
     echo "Clear tables.<br>";
 
     // Populate admins
