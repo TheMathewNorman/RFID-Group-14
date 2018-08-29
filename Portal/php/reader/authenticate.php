@@ -1,15 +1,16 @@
 <?php
-    // Readers will validate cards here.
+
+include_once('../database.php');
+$database = new Database();
+
+// Readers will validate cards here.
 if (isset($_GET['reader']) && isset($_GET['key'])) {
-    $reader = $_GET['reader'];
+    $readerid = $_GET['reader'];
     $key = $_GET['key'];
     
-    if ($reader == 10 && $key == 9988) {
-        echo 1;
-    } else {
-        echo 0;
-    }
+    echo $database->checkPrivilege($readerid,$key);
+    
 } else {
-    echo 0;
+    die(0);
 }
 ?>

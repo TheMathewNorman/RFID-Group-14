@@ -544,6 +544,23 @@ class Database {
     // removePriviledge($id)
     // modifyPriviledge($id,$memberid,$readerid,$readergroup)
     // listPriviledges()
+    function checkPrivilege($readerid, $key) {
+        $keyhash = hash('sha512', $key);
+        
+        // Create connection
+        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+                
+        // Check connection and return status
+        if ($connection->connect_error) {
+            die('Connection failed:<br>'.$connection->connect_error);
+        }
+
+        // Find any results for given member and reader combination in the privilege table
+        $sql = "SELECT privilege.id FROM ((privilege INNER JOIN members ON privilege.member_id = members.id) INNER JOIN readers ON privilege.reader_id = readers.id) WHERE readers.id = $readerid AND members.cardkey = $keyhash";
+
+        // Return number of rows
+        return mysqli_num_rows($connection->query($sql));
+    }
 
     //// READER TABLE FUNCTIONALITY //// 
     // Functions to include
