@@ -11,6 +11,6 @@ if (isset($_GET['reader']) && isset($_GET['key'])) {
     echo $database->checkPrivilege($readerid,$key);
     
 } else {
-    die(0);
+    die("0");
 }
 ?>
