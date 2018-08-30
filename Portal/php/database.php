@@ -515,32 +515,32 @@ class Database {
     function addLogEntry($readerid, $key) {
         $keyhash = hash('sha512', $key);
 
+        $return = true;
+
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
 
         // Check connection.
         if ($connection->connect_error) {
-            die("Connection failed<br>$connection->connect_error");
+            $return = false;
         }
 
         // Get member id from key
         $sql = "SELECT id FROM members WHERE cardkey = '$keyhash'";
         if ($result = mysqli_query($connection, $sql)) {
             if ($row = mysqli_fetch_row($result)) {
-                $memberid = $row[0];
-                echo "Member Id: $memberid<br>";
-                
                 // Add log entry
                 $sql = "INSERT INTO logs (member_id, reader_id) VALUES ($memberid, $readerid)";
                 if (!mysqli_query($connection, $sql)) {
-                    echo "Error: ".mysqli_error($connection)."<br>";
-                    return false;
+                    $return = false;
                 }
             }
         }
 
         // Close the connection
         $connection->close();
+
+        return $return;
     }
     function getLogEntries() {
         $logHTML = "";
