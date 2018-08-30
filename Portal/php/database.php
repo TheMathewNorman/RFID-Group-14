@@ -529,14 +529,14 @@ class Database {
 
             // Fetch each line and display in table.
             if ($result = mysqli_query($connection, $sql)) {
-                $logHTML.= "<tr>";
                 while ($row = mysqli_fetch_row($result)) {
+                    $logHTML.= "<tr>";
                     $logHTML.= "<td>".$row['ID']."</td>";
                     $logHTML.= "<td>".$row['Member']."</td>";
                     $logHTML.= "<td>".$row['Reader']."</td>";
                     $logHTML.= "<td>".$row['Date']."</td>";
+                    $logHTML.= "</tr>";
                 }
-                $logHTML.="</tr>";
             } else {
                 $logHTML.="There was an error getting log information from the database.";
             }
