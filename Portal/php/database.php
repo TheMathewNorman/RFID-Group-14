@@ -682,8 +682,8 @@ class Database {
                         WHERE member_id = ".$row[0]." 
                         ORDER BY access_date DESC
                         LIMIT 1";
-                    if ($result = mysqli_query($connection, $sql)) {
-                        $dateData = mysqli_fetch_row($result);
+                    if ($dateDataResult = mysqli_query($connection, $sql)) {
+                        $dateData = mysqli_fetch_row($dateDataResult);
                     }
                     
                     // Highlight rows where the member is currently on site
