@@ -532,8 +532,9 @@ class Database {
                 while ($row = mysqli_fetch_row($result)) {
                     $logHTML.= "<tr>";
                     $logHTML.= "<td>".$row[0]."</td>";
-                    $logHTML.= "<td>".$row[1]."</td>";
-                    $logHTML.= "<td>".$row[2]."</td>";
+                    $logHTML.= "<td><b>".$row[1]."</b> accessed <b>".$row[2]."</b></td>";
+                    //$logHTML.= "<td>".$row[1]."</td>";
+                    //$logHTML.= "<td>".$row[2]."</td>";
                     $logHTML.= "<td>".$row[3]."</td>";
                     $logHTML.= "</tr>";
                 }

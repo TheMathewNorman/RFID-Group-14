@@ -21,9 +21,9 @@
       -->
       <table id="list-table">
         <tr>
-          <th>ID</th>
-          <th>Member</th>
-          <th>Reader</th>
+          <th>#</th>
+          <th>Message</th>
+          <!-- <th>Reader</th> -->
           <th>Date & Time</th>
         </tr>
         <?php
