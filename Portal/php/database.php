@@ -560,7 +560,8 @@ class Database {
             $sql = "SELECT logs.id AS ID, members.id AS MID, CONCAT(members.firstname, ' ', members.lastname) AS Member, readers.id AS RID, readers.reader_name AS Reader, DATE_FORMAT(logs.access_date, '%e/%m/%Y at %r') AS Date
             FROM ((logs
             INNER JOIN members ON logs.member_id = members.id)
-            INNER JOIN readers ON logs.reader_id = readers.id)";
+            INNER JOIN readers ON logs.reader_id = readers.id)
+            ORDER BY logs.access_date DESC";
 
             // Fetch each line and display in table.
             if ($result = mysqli_query($connection, $sql)) {
@@ -610,7 +611,8 @@ class Database {
             XOR DATE_FORMAT(logs.access_date, '%e-%m-%Y %T') LIKE '%$searchq%'
             XOR DATE_FORMAT(logs.access_date, '%e-%m-%y %r') LIKE '%$searchq%'
             XOR DATE_FORMAT(logs.access_date, '%e-%m-%Y %T') LIKE '%$searchq%'
-            XOR DATE_FORMAT(logs.access_date, '%r %T %e %m %M %Y') LIKE '%$searchq%'";
+            XOR DATE_FORMAT(logs.access_date, '%r %T %e %m %M %Y') LIKE '%$searchq%'
+            ORDER BY logs.access_date DESC";
 
             // Fetch each line and display in table.
             if ($result = mysqli_query($connection, $sql)) {
@@ -653,7 +655,8 @@ class Database {
             $sql = "SELECT logs.id AS ID, members.id AS MID, CONCAT(members.firstname, ' ', members.lastname) AS Member, readers.id AS RID, readers.reader_name AS Reader, DATE_FORMAT(logs.access_date, '%e/%m/%Y at %r') AS Date
             FROM ((logs
             INNER JOIN members ON logs.member_id = members.id)
-            INNER JOIN readers ON logs.reader_id = readers.id)";
+            INNER JOIN readers ON logs.reader_id = readers.id)
+            ORDER BY logs.access_date DESC";
 
             // Fetch each line and display in table.
             if ($result = mysqli_query($connection, $sql)) {
