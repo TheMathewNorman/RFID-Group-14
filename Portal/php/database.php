@@ -526,13 +526,20 @@ class Database {
         }
 
         // Get member id from key
+        $memberid;
         $sql = "SELECT id FROM members WHERE cardkey = '$keyhash'";
         if ($result = mysqli_query($connection, $sql)) {
             if ($row = mysqli_fetch_row($result)) {
-                // Add log entry
-                $sql = "INSERT INTO logs (member_id, reader_id) VALUES ($memberid, $readerid)";
-                mysqli_query($connection, $sql);
+                $memberid = $row[0];
             }
+        } else {
+            $return = false;
+        }
+
+        // Add log entry
+        $sql = "INSERT INTO logs (member_id, reader_id) VALUES ($memberid, $readerid)";
+        if (!mysqli_query($connection, $sql)) {
+            $return = false;
         }
 
         // Close the connection
