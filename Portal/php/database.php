@@ -678,8 +678,6 @@ class Database {
             // Fetch each line and display in table.
             if ($result = mysqli_query($connection, $sql)) {
                 while ($row = mysqli_fetch_row($result)) {
-                    // var_dump($row);
-                    // echo "<br><br>";
 
                     // Highlight rows where the member is currently on site
                     if ($row[3] == 1 && $row[5] < 10) {
@@ -699,7 +697,7 @@ class Database {
                     } else {
                         $logHTML.= '<td>No</td>';
                     }
-                    $logHTML.= "<td>".$row[4]."</td>";
+                    $logHTML.= "<td>".$row[4]."(".$row[5]." hours ago)"."</td>";
                     $logHTML.= "</tr>";
                 }
             } else {
