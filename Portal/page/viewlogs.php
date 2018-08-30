@@ -39,7 +39,7 @@
         </tr>
         <?php
           if ($search) {
-            echo $database->searchLogEntries($search);
+            echo $database->searchLogEntries($_GET['search']);
           } else {
             echo $database->getLogEntries();
           }
