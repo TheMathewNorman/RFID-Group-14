@@ -1,6 +1,10 @@
 <?php
   include_once '../php/database.php';
   $database = new Database();
+
+  include_once '../php/validate.php';
+  $validate = new Validate();
+  
 ?>
 <html>
   <head>
@@ -27,11 +31,16 @@
           <th>Date & Time</th>
         </tr>
         <?php
-          echo $database->getLogEntries();
+          if (isset($_GET['search'])) {
+            echo $database->searchLogEntries();
+          } else {
+            echo $database->getLogEntries();
+          }
         ?>
       </table>
-    
-
-
+    <?php
+      echo $validate->validateEmail("email@email.com")."<br>";
+      echo $validate->validateEmail("email@emailcom");
+    ?>
   </div>
 </html>

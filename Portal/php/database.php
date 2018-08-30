@@ -544,9 +544,47 @@ class Database {
         // Close the connection
         $connection->close();
         
+        // Return table or message
         return $logHTML;
     }
+    function searchLogEntries($searchq) {
+        $logHTML = "";
 
+        // Create connection
+        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+
+        // Check connection.
+        if ($connection->connect_error) {
+            $logHTML.="Connection failed<br>$connection->connect_error";
+        } else {
+
+            // Form SQL query
+            $sql = "SELECT logs.id AS ID, CONCAT(members.firstname, ' ', members.lastname) AS Member, readers.reader_name AS Reader, DATE_FORMAT(logs.access_date, '%e/%m/%Y at %r') AS Date 
+            FROM ((logs 
+            INNER JOIN members ON logs.member_id = members.id) 
+            INNER JOIN readers ON logs.reader_id = readers.id) 
+            WHERE logs.id = '$searchq'";
+
+            // Fetch each line and display in table.
+            if ($result = mysqli_query($connection, $sql)) {
+                while ($row = mysqli_fetch_row($result)) {
+                    $logHTML.= "<tr>";
+                    $logHTML.= "<td>".$row[0]."</td>";
+                    $logHTML.= "<td>".$row[1]."</td>";
+                    $logHTML.= "<td>".$row[2]."</td>";
+                    $logHTML.= "<td>".$row[3]."</td>";
+                    $logHTML.= "</tr>";
+                }
+            } else {
+                $logHTML.="There was an error getting log information from the database.";
+            }
+        }
+        // Close the connection
+        $connection->close();
+        
+        // Return table or message
+        return $logHTML;
+    }
 
     //// PRIVILEDGE TABLE FUNCTIONALITY //// 
     // Functions to include
