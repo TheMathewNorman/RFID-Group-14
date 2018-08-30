@@ -531,9 +531,7 @@ class Database {
             if ($row = mysqli_fetch_row($result)) {
                 // Add log entry
                 $sql = "INSERT INTO logs (member_id, reader_id) VALUES ($memberid, $readerid)";
-                if (!mysqli_query($connection, $sql)) {
-                    $return = false;
-                }
+                mysqli_query($connection, $sql);
             }
         }
 
