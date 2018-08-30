@@ -513,9 +513,6 @@ class Database {
     // Functions to include
     // addLogEntry($memberid, $readerid, $datetime)
     // searchLogEntries($searchq)
-    function testLogEntries() {
-        return "Works.";
-    }
     function getLogEntries() {
         $logHTML = "";
 
@@ -530,19 +527,19 @@ class Database {
             // Form SQL query
             $sql = "SELECT logs.id AS ID, CONCAT(members.firstname, ' ', members.lastname) AS Member, readers.reader_name AS Reader, DATE_FORMAT(logs.access_date, '%e/%m/%Y at %r') AS Date FROM ((logs INNER JOIN members ON logs.member_id = members.id) INNER JOIN readers ON logs.reader_id = readers.id)";
 
-            echo "getting here";
-
             // Fetch each line and display in table.
-            $logHTML.= "<tr>";
             if ($result = mysqli_query($connection, $sql)) {
-                $logHTML.= "<td>".$result['ID']."</td>";
-                $logHTML.= "<td>".$result['Member']."</td>";
-                $logHTML.= "<td>".$result['Reader']."</td>";
-                $logHTML.= "<td>".$result['Date']."</td>";
+                $logHTML.= "<tr>";
+                while ($row = mysqli_fetch_row($result)) {
+                    $logHTML.= "<td>".$row['ID']."</td>";
+                    $logHTML.= "<td>".$row['Member']."</td>";
+                    $logHTML.= "<td>".$row['Reader']."</td>";
+                    $logHTML.= "<td>".$row['Date']."</td>";
+                }
+                $logHTML.="</tr>";
             } else {
                 $logHTML.="There was an error getting log information from the database.";
             }
-            $logHTML.="</tr>";
         }
         // Close the connection
         $connection->close();
