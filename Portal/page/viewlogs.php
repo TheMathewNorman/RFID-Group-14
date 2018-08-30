@@ -8,7 +8,7 @@
   if (isset($_GET['search'])) {
     $search = $validate->sanitizeString($_GET['search']);
   }
-  
+
   if (isset($_GET['checkins'])) {
     if ($_GET['checkins']) {
       $checkins = true;
@@ -45,7 +45,7 @@
           <th>Date & Time</th>
         </tr>
         <?php
-          if (isset($_GET['search']) || $search != "") {
+          if (isset($_GET['search']) && $search !== "") {
             echo $database->searchLogEntries($search);
           } else if (isset($_GET['checkins']) && $checkins == true) {
             echo $database->getCheckinEntries();
