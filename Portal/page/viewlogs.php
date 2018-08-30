@@ -5,11 +5,9 @@
   include_once '../php/validate.php';
   $validate = new Validate();
 
-  // if (isset($_GET['search'])) {
-  //   $search = $validate->sanitizeString($_GET['search']);
-  // } else {
-  //   $seach = false;
-  // }
+  if (isset($_GET['search'])) {
+    $search = $validate->sanitizeString($_GET['search']);
+  }
 
   
 ?>
@@ -25,11 +23,10 @@
       <?php include "../component/header.php"; ?>
       <?php include "../component/menu.php"; ?>
 
-      <!-- Commented out until functional 
       <form action="" method="GET">
         <input type="text" placeholder="Search..." name="search"> <input type="submit" value="Search">
       </form>
-      -->
+      
       <table id="list-table">
         <tr>
           <th>#</th>
@@ -39,7 +36,7 @@
         </tr>
         <?php
           if (isset($_GET['search'])) {
-            echo $database->searchLogEntries($_GET['search']);
+            echo $database->searchLogEntries($search);
           } else {
             echo $database->getLogEntries();
           }

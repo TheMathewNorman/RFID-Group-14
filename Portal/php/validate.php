@@ -21,9 +21,6 @@ class Validate {
     function sanitizeString($input) {
         // Remove any illegal or uncommon characters
         $result = filter_var($input, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
-        if ($result = "") {
-            $result = false;
-        }
         
         // Return result
         return $result;
