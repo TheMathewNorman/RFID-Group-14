@@ -45,7 +45,7 @@ class Database {
             member_id INT(6) NOT NULL,
             reader_id INT(6) NOT NULL,
             access_date TIMESTAMP NOT NULL,
-            check_in BOOL DEFAULT FALSE
+            check_in BOOL DEFAULT false
         )";
             
         if (mysqli_multi_query($connection, $sql) === FALSE) {
@@ -513,7 +513,7 @@ class Database {
     //// LOG TABLE FUNCTIONALITY //// 
     // Functions to include
     // addLogEntry($memberid, $readerid, $datetime)
-    function addLogEntry($readerid, $key, $checkin=false) {
+    function addLogEntry($readerid, $key, $checkin=0) {
         $keyhash = hash('sha512', $key);
 
         $return = true;
