@@ -670,7 +670,8 @@ class Database {
             INNER JOIN members ON logs.member_id = members.id)
             INNER JOIN readers ON logs.reader_id = readers.id)
             WHERE logs.check_in = 1
-            GROUP BY logs.member_id";
+            GROUP BY logs.member_id
+            ORDER BY Active DESC";
 
             // Fetch each line and display in table.
             if ($result = mysqli_query($connection, $sql)) {
