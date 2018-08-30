@@ -28,8 +28,10 @@
           <th>Reader</th>
           <th>Date & Time</th>
         </tr>
-        <?php 
+        <?php
+          echo "getting log entried";
           echo $database->logEntries();
+          echo "done";
         ?>
       </table>
     
