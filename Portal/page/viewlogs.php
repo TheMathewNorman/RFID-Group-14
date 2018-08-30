@@ -23,7 +23,7 @@
         <tr>
           <th>#</th>
           <th>Message</th>
-          <!-- <th>Reader</th> -->
+          <th>Reader</th>
           <th>Date & Time</th>
         </tr>
         <?php
