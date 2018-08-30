@@ -567,13 +567,17 @@ class Database {
 
             // Fetch each line and display in table.
             if ($result = mysqli_query($connection, $sql)) {
-                while ($row = mysqli_fetch_row($result)) {
-                    $logHTML.= "<tr>";
-                    $logHTML.= "<td>".$row[0]."</td>";
-                    $logHTML.= "<td>".$row[1]."</td>";
-                    $logHTML.= "<td>".$row[2]."</td>";
-                    $logHTML.= "<td>".$row[3]."</td>";
-                    $logHTML.= "</tr>";
+                if (mysqli_num_rows($result) > 0) {
+                    while ($row = mysqli_fetch_row($result)) {
+                        $logHTML.= "<tr>";
+                        $logHTML.= "<td>".$row[0]."</td>";
+                        $logHTML.= "<td>".$row[1]."</td>";
+                        $logHTML.= "<td>".$row[2]."</td>";
+                        $logHTML.= "<td>".$row[3]."</td>";
+                        $logHTML.= "</tr>";
+                    }
+                } else {
+                    $logHTML.= "There were no results.";
                 }
             } else {
                 $logHTML.="There was an error getting log information from the database.";
