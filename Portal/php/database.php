@@ -697,7 +697,8 @@ class Database {
                     } else {
                         $logHTML.= '<td>No</td>';
                     }
-                    $logHTML.= "<td>".$row[4]."(".$row[5]." hours ago)"."</td>";
+                    $logHTML.= "<td>".$row[5]." hours ago</td>";
+                    $logHTML.= "<td>".$row[4]."</td>";
                     $logHTML.= "</tr>";
                 }
             } else {

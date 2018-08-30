@@ -20,7 +20,8 @@
           <th>Member</th>
           <th># of Visits</th>
           <th>Currently Active</th>
-          <th>Last Check-in</th>
+          <th>Hours</th>
+          <th>Last Visit</th>
         </tr>
         <?php
           echo $database->getCheckinEntries();
