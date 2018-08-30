@@ -8,7 +8,11 @@ if (isset($_GET['reader']) && isset($_GET['key'])) {
     $readerid = $_GET['reader'];
     $key = $_GET['key'];
     
-    echo $database->checkPrivilege($readerid,$key) ? "True":"False";
+    if ($database->checkPrivilege($readerid,$key)) {
+        die("1");
+    } else {
+        die("0");
+    }
     
 } else {
     die("0");
