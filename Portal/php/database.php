@@ -658,12 +658,19 @@ class Database {
         } else {
 
             // Form SQL query
-            $sql = "SELECT logs.id AS ID, members.id AS MID, CONCAT(members.firstname, ' ', members.lastname) AS Member, readers.id AS RID, readers.reader_name AS Reader, DATE_FORMAT(logs.access_date, '%e/%m/%Y at %r') AS Date
+            $sql = "SELECT 
+                members.id AS MID, 
+                CONCAT(members.firstname, ' ', members.lastname) AS Member,
+                FLOOR(count(check_in) / 2) AS Checkins,
+                CASE
+                    when count(logs.check_in) MOD 2 = 0 then 'NO'
+                    when count(logs.check_in) MOD 2 = 1 then 'YES'
+                END AS Active
             FROM ((logs
             INNER JOIN members ON logs.member_id = members.id)
             INNER JOIN readers ON logs.reader_id = readers.id)
             WHERE logs.check_in = 1
-            ORDER BY logs.access_date DESC";
+            GROUP BY logs.member_id";
 
             // Fetch each line and display in table.
             if ($result = mysqli_query($connection, $sql)) {
@@ -673,8 +680,6 @@ class Database {
                     $logHTML.= "<td>".$row[1]."</td>";
                     $logHTML.= "<td>".$row[2]."</td>";
                     $logHTML.= "<td>".$row[3]."</td>";
-                    $logHTML.= "<td>".$row[4]."</td>";
-                    $logHTML.= "<td>".$row[5]."</td>";
                     $logHTML.= "</tr>";
                 }
             } else {

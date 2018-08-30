@@ -1,26 +1,6 @@
 <?php
   include_once '../php/database.php';
   $database = new Database();
-
-  include_once '../php/validate.php';
-  $validate = new Validate();
-
-  $search = "";
-  if (isset($_GET['search'])) {
-    $search = $validate->sanitizeString($_GET['search']);
-  } else if (isset($_GET['today'])) {
-    $today = getdate();
-    
-    $search.= $today['year'].'-';
-    // Pad when less then 10
-    if ($today['mon'] < 10) {
-      $search.= '0'.$today['mon'].'-';
-    } else {
-      $search.= $today['mon'].'-';
-    }
-    $search.= $today['mday'];
-  }
-  
 ?>
 <html>
   <head>
@@ -40,19 +20,13 @@
       
       <table id="list-table">
         <tr>
-          <th>#</th>
           <th>Member ID</th>
           <th>Member</th>
-          <th>Reader ID</th>
-          <th>Reader</th>
-          <th>Date & Time</th>
+          <th># of Visits</th>
+          <th>Currently Active</th>
         </tr>
         <?php
-          if ($search !== "") {
-            echo $database->searchLogEntries($search);
-          } else {
-            echo $database->getLogEntries();
-          }
+          echo $database->getCheckinEntries();
         ?>
       </table>
   </div>
