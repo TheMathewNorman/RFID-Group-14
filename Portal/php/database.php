@@ -596,8 +596,8 @@ class Database {
             INNER JOIN members ON logs.member_id = members.id) 
             INNER JOIN readers ON logs.reader_id = readers.id) 
             WHERE logs.id = '$searchq'
-            OR logs.memberid = '$searchq'
-            OR logs.readerid = '$searchq'
+            OR logs.member_id = '$searchq'
+            OR logs.reader_id = '$searchq'
             OR members.firstname LIKE '%$searchq%'
             OR members.lastname LIKE '%$searchq%'
             OR readers.reader_name LIKE '%$searchq%'
