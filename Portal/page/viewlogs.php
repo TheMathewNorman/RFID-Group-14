@@ -22,10 +22,8 @@
   }
 
   $checkins = false;
-  if (isset($_GET['checkins'])) {
-    if ($_GET['checkins']) {
-      $checkins = true;
-    }
+  if (isset($_GET['showCheckins'])) {
+    $checkins = true;
   }
   
 ?>

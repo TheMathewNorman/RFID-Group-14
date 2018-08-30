@@ -539,7 +539,9 @@ class Database {
 
         // Add log entry
         $sql = "INSERT INTO logs (member_id, reader_id, check_in) VALUES ($memberid, $readerid, $checkin)";
-        $connection->query($sql);
+        if (!$connection->query($sql)) {
+            $return = false;
+        }
 
         // Close the connection
         $connection->close();
@@ -658,6 +660,7 @@ class Database {
             FROM ((logs
             INNER JOIN members ON logs.member_id = members.id)
             INNER JOIN readers ON logs.reader_id = readers.id)
+            WHERE logs.check_in = 1
             ORDER BY logs.access_date DESC";
 
             // Fetch each line and display in table.
