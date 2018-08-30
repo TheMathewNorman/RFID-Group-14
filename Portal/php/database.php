@@ -663,8 +663,8 @@ class Database {
                 CONCAT(members.firstname, ' ', members.lastname) AS Member,
                 FLOOR(count(check_in) / 2) AS Checkins,
                 CASE
-                    when count(logs.check_in) MOD 2 = 0 then 'NO'
-                    when count(logs.check_in) MOD 2 = 1 then 'YES'
+                    when count(logs.check_in) MOD 2 = 0 then 0
+                    when count(logs.check_in) MOD 2 = 1 then 1
                 END AS Active
             FROM ((logs
             INNER JOIN members ON logs.member_id = members.id)
@@ -680,7 +680,11 @@ class Database {
                     $logHTML.= "<td>".$row[0]."</td>";
                     $logHTML.= "<td>".$row[1]."</td>";
                     $logHTML.= "<td>".$row[2]."</td>";
-                    $logHTML.= "<td>".$row[3]."</td>";
+                    if ($row[3] == 1) {
+                        $logHTML.= '<td style="background-color: rgba(0,50,0,0.3)">'.$row[3].'</td>';
+                    } else {
+                        $logHTML.= '<td style="background-color: rgba(50,0,0,0.1)">'.$row[3].'</td>';
+                    }
                     $logHTML.= "</tr>";
                 }
             } else {
