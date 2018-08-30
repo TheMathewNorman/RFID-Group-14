@@ -513,7 +513,7 @@ class Database {
     // Functions to include
     // addLogEntry($memberid, $readerid, $datetime)
     // searchLogEntries($searchq)
-    function logEntries() {
+    function getLogEntries() {
         $logHTML = "";
 
         // Create connection
@@ -551,15 +551,6 @@ class Database {
 
     //// PRIVILEDGE TABLE FUNCTIONALITY //// 
     // Functions to include
-<<<<<<< HEAD
-    // addPrivilege($memberid,$readerid,$readergroup)
-    function checkPrivilege($key, $readerid) {
-
-    }
-    // removePrivilege($id)
-    // modifyPrivilege($id,$memberid,$readerid,$readergroup)
-    // listPrivileges()
-=======
     // addPriviledge($memberid,$readerid,$readergroup)
     // removePriviledge($id)
     // modifyPriviledge($id,$memberid,$readerid,$readergroup)
@@ -589,7 +580,6 @@ class Database {
             return false;
         }
     }
->>>>>>> ec55f463f24a9c0cc3ef23ca02997303a486f7ea
 
     //// READER TABLE FUNCTIONALITY //// 
     // Functions to include
