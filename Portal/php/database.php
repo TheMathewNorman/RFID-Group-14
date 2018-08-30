@@ -685,7 +685,7 @@ class Database {
                     if ($row[3] == 1 && $row[5] < 10) {
                         $logHTML.= '<tr style="background-color: rgba(0,100,0,0.7)">';
                     } else if ($row[3] == 1 && $row[5] > 10) {
-                        $logHTML.= '<tr style="background-color: rgba(255,100,0,0.6)">';
+                        $logHTML.= '<tr style="background-color: rgba(25,100,0,0.6)">';
                     } else {
                         $logHTML.= '<tr style="background-color: rgba(100,0,0,0.2)">';
                     }
