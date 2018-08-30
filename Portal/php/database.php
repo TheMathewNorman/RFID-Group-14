@@ -676,14 +676,19 @@ class Database {
             // Fetch each line and display in table.
             if ($result = mysqli_query($connection, $sql)) {
                 while ($row = mysqli_fetch_row($result)) {
-                    $logHTML.= "<tr>";
+                    // Highlight rows where the member is currently on site
+                    if ($row[3] == 1) {
+                        $logHTML.= '<tr style="background-color: rgba(0,100,0,0.7)">';
+                    } else {
+                        $logHTML.= '<tr style="background-color: rgba(100,0,0,0.2)">';
+                    }
                     $logHTML.= "<td>".$row[0]."</td>";
                     $logHTML.= "<td>".$row[1]."</td>";
                     $logHTML.= "<td>".$row[2]."</td>";
                     if ($row[3] == 1) {
-                        $logHTML.= '<td style="background-color: rgba(0,100,0,0.7)">YES</td>';
+                        $logHTML.= '<td>YES</td>';
                     } else {
-                        $logHTML.= '<td style="background-color: rgba(100,0,0,0.3)">No</td>';
+                        $logHTML.= '<td>No</td>';
                     }
                     $logHTML.= "</tr>";
                 }
