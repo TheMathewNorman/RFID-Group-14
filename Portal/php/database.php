@@ -511,35 +511,47 @@ class Database {
 
     //// LOG TABLE FUNCTIONALITY //// 
     // Functions to include
-    // addEntry($memberid, $readerid, $datetime)
-    // listEntries()
-    // searchEntries($searchq)
-    function listEntries() {
+    // addLogEntry($memberid, $readerid, $datetime)
+    // searchLogEntries($searchq)
+    function logEntries() {
+        $logHTML = "";
+
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
                 
         // Check connection.
         if ($connection->connect_error) {
-            die("Connection failed<br>$connection->connect_error");
-        }
-
-        // Form SQL query
-        $sql = "SELECT memberid, readerid, access_date FROM logs ORDER BY id";
-
-        // Fetch each line and display in table.
-        if ($result = mysqli_query($connection, $sql)) {
-            // Output results as table rows.
+            $logHTML.="Connection failed<br>$connection->connect_error";
         } else {
-            die("There was an error listing the members from the database:<br>$connection->error<br>");
-        }
 
+            // Form SQL query
+            $sql = "SELECT logs.id AS ID, CONCAT(members.firstname, ' ', members.lastname) AS Member, readers.reader_name AS Reader, DATE_FORMAT(logs.access_date, '%e/%m/%Y at %r') AS Date
+            FROM ((logs
+            INNER JOIN members ON logs.member_id = members.id)
+            INNER JOIN readers ON logs.reader_id = readers.id)";
+
+            // Fetch each line and display in table.
+            $logHTML.= "<tr>";
+            if ($result = mysqli_query($connection, $sql)) {
+                $logHTML.= "<td>".$result['ID']."</td>";
+                $logHTML.= "<td>".$result['Member']."</td>";
+                $logHTML.= "<td>".$result['Reader']."</td>";
+                $logHTML.= "<td>".$result['Date']."</td>";
+            } else {
+                $logHTML.="There was an error getting log information from the database.";
+            }
+            $logHTML.="</tr>";
+        }
         // Close the connection
         $connection->close();
+        
+        return $logHTML;
     }
 
 
     //// PRIVILEDGE TABLE FUNCTIONALITY //// 
     // Functions to include
+<<<<<<< HEAD
     // addPrivilege($memberid,$readerid,$readergroup)
     function checkPrivilege($key, $readerid) {
 
@@ -547,6 +559,37 @@ class Database {
     // removePrivilege($id)
     // modifyPrivilege($id,$memberid,$readerid,$readergroup)
     // listPrivileges()
+=======
+    // addPriviledge($memberid,$readerid,$readergroup)
+    // removePriviledge($id)
+    // modifyPriviledge($id,$memberid,$readerid,$readergroup)
+    // listPriviledges()
+    function checkPrivilege($readerid, $key) {
+        $keyhash = hash('sha512', $key);
+        
+        // Create connection
+        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+                
+        // Check connection and return status
+        if ($connection->connect_error) {
+            die('Connection failed:<br>'.$connection->connect_error);
+        }
+
+        // Find any results for given member and reader combination in the privilege table
+        $sql = "SELECT privilege.id FROM ((privilege INNER JOIN members ON privilege.member_id = members.id) INNER JOIN readers ON privilege.reader_id = readers.id) WHERE readers.id = $readerid AND members.cardkey = '$keyhash'";
+
+        if (!($result = mysqli_query($connection, $sql))) {
+            die(mysqli_error($connection));
+        }
+
+        // Return true or false
+        if (mysqli_num_rows($result) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+>>>>>>> ec55f463f24a9c0cc3ef23ca02997303a486f7ea
 
     //// READER TABLE FUNCTIONALITY //// 
     // Functions to include

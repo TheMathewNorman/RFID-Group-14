@@ -1,3 +1,7 @@
+<?php
+  include_once '../php/database.php';
+  $database = new Database();
+?>
 <html>
   <head>
     <title>Logs</title>
@@ -20,10 +24,15 @@
       <table id="list-table">
         <tr>
           <th>ID</th>
-          <th>Type</th>
-          <th>Date</th>
-          <th>Log Message</th>
+          <th>Member</th>
+          <th>Reader</th>
+          <th>Date & Time</th>
         </tr>
+        <?php
+          echo "getting log entries";
+          echo $database->logEntries();
+          echo "done";
+        ?>
       </table>
     
 
