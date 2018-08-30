@@ -595,7 +595,13 @@ class Database {
             FROM ((logs 
             INNER JOIN members ON logs.member_id = members.id) 
             INNER JOIN readers ON logs.reader_id = readers.id) 
-            WHERE logs.id = '$searchq'";
+            WHERE logs.id = '$searchq'
+            OR logs.memberid = '$searchq'
+            OR logs.readerid = '$searchq'
+            OR members.firstname LIKE '%$searchq%'
+            OR members.lastname LIKE '%$searchq%'
+            OR readers.reader_name LIKE '%$searchq%'
+            OR DATE_FORMAT(logs.access_date, '%r %T %e %m %M %Y') LIKE '%$searchq%'";
 
             // Fetch each line and display in table.
             if ($result = mysqli_query($connection, $sql)) {
