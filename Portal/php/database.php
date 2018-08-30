@@ -528,10 +528,12 @@ class Database {
         if ($result = mysqli_query($connection, $sql)) {
             if ($row = mysqli_fetch_row($result)) {
                 $memberid = $row[0];
+                echo "Member Id: $memberid<br>";
                 
                 // Add log entry
                 $sql = "INSERT INTO logs (member_id, reader_id) VALUES ($memberid, $readerid)";
                 if (!mysqli_query($connection, $sql)) {
+                    echo "Error: ".mysqli_error($connection)."<br>";
                     return false;
                 }
             }
