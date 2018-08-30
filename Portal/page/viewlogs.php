@@ -8,12 +8,17 @@
   $search = "";
   if (isset($_GET['search'])) {
     $search = $validate->sanitizeString($_GET['search']);
-  }
-
-  $today = "";
-  if (isset($_GET['today'])) {
+  } else if (isset($_GET['today'])) {
     $today = getdate();
-    $search = $today['year'].'-'.$today['mon'].'-'.$today['mday'];
+    
+    $search.= $today['year'].'-';
+    // Pad when less then 10
+    if ($today['mon'] < 10) {
+      $search.= '0'.$today['mon'].'-';
+    } else {
+      $search.= $today['mon'].'-';
+    }
+    $search.= $today['mday'];
   }
 
   $checkins = false;
