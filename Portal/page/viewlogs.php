@@ -35,10 +35,10 @@
           <th>Date & Time</th>
         </tr>
         <?php
-          if (isset($_GET['search'])) {
-            echo $database->searchLogEntries($search);
-          } else {
+          if (!isset($_GET['search']) || $search == "") {
             echo $database->getLogEntries();
+          } else {
+            echo $database->searchLogEntries($search);
           }
         ?>
       </table>
