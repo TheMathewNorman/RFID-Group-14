@@ -538,6 +538,8 @@ class Database {
                     $logHTML.= "<td>".$row[1]."</td>";
                     $logHTML.= "<td>".$row[2]."</td>";
                     $logHTML.= "<td>".$row[3]."</td>";
+                    $logHTML.= "<td>".$row[4]."</td>";
+                    $logHTML.= "<td>".$row[5]."</td>";
                     $logHTML.= "</tr>";
                 }
             } else {
