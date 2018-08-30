@@ -30,7 +30,9 @@
       <table id="list-table">
         <tr>
           <th>#</th>
-          <th>Message</th>
+          <th>Member ID</th>
+          <th>Member</th>
+          <th>Reader ID</th>
           <th>Reader</th>
           <th>Date & Time</th>
         </tr>
