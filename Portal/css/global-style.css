@@ -86,7 +86,7 @@ body {
         font-weight: bolder;
     }
     #list-table td {
-        font-weight: bold;
+        /* font-weight: bold; */
     }
     #list-table a {
         color: white;
