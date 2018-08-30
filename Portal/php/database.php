@@ -601,7 +601,11 @@ class Database {
             OR members.firstname LIKE '%$searchq%'
             OR members.lastname LIKE '%$searchq%'
             OR readers.reader_name LIKE '%$searchq%'
-            OR DATE_FORMAT(logs.access_date, '%r %T %e %m %M %Y') LIKE '%$searchq%'";
+            XOR DATE_FORMAT(logs.access_date, '%e-%m-%Y %r') LIKE '%$searchq%'
+            XOR DATE_FORMAT(logs.access_date, '%e-%m-%Y %T') LIKE '%$searchq%'
+            XOR DATE_FORMAT(logs.access_date, '%e-%m-%y %r') LIKE '%$searchq%'
+            XOR DATE_FORMAT(logs.access_date, '%e-%m-%Y %T') LIKE '%$searchq%'
+            XOR DATE_FORMAT(logs.access_date, '%r %T %e %m %M %Y') LIKE '%$searchq%'";
 
             // Fetch each line and display in table.
             if ($result = mysqli_query($connection, $sql)) {
@@ -620,7 +624,7 @@ class Database {
                     $logHTML.= "There were no results.";
                 }
             } else {
-                $logHTML.="There was an error getting log information from the database. ".mysqli_error($connection);
+                $logHTML.="There was an error getting log information from the database: ".mysqli_error($connection);
             }
         }
         // Close the connection
