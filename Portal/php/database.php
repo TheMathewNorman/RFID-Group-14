@@ -531,10 +531,10 @@ class Database {
             if ($result = mysqli_query($connection, $sql)) {
                 while ($row = mysqli_fetch_row($result)) {
                     $logHTML.= "<tr>";
-                    $logHTML.= "<td>".$row['ID']."</td>";
-                    $logHTML.= "<td>".$row['Member']."</td>";
-                    $logHTML.= "<td>".$row['Reader']."</td>";
-                    $logHTML.= "<td>".$row['Date']."</td>";
+                    $logHTML.= "<td>".$row[0]."</td>";
+                    $logHTML.= "<td>".$row[1]."</td>";
+                    $logHTML.= "<td>".$row[2]."</td>";
+                    $logHTML.= "<td>".$row[3]."</td>";
                     $logHTML.= "</tr>";
                 }
             } else {
