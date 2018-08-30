@@ -562,8 +562,12 @@ class Database {
             die(mysqli_error($connection));
         }
 
-        // Return number of rows
-        return mysqli_num_rows($result);
+        // Return true or false
+        if (mysqli_num_rows($result) > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     //// READER TABLE FUNCTIONALITY //// 
