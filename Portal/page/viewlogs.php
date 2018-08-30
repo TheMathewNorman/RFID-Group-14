@@ -9,6 +9,12 @@
     $search = $validate->sanitizeString($_GET['search']);
   }
 
+  if (isset($_GET['today'])) {
+    $today = getdate();
+    $search = $today['year'].'-'.$today['mon'].'-'.$today['mday'];
+    echo $search;
+  }
+
   if (isset($_GET['checkins'])) {
     if ($_GET['checkins']) {
       $checkins = true;

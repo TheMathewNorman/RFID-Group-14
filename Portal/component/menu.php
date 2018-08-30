@@ -13,7 +13,8 @@
     <div class="dropdown">
     <button class="dropbtn" onclick="location.href='viewlogs.php';">Logs</button>
     <div class="dropdown-content">
-        <a href="viewlogs.php">View check-ins</a>
+        <!-- <a href="viewlogs.php">View check-ins</a> -->
+        <a href="viewlogs.php?today">View today</a>
         <a href="viewlogs.php">View all</a>
     </div>
     </div>
