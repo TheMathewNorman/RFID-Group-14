@@ -607,6 +607,7 @@ class Database {
             OR members.firstname LIKE '%$searchq%'
             OR members.lastname LIKE '%$searchq%'
             OR readers.reader_name LIKE '%$searchq%'
+            XOR DATE_FORMAT(logs.access_date, '%Y-%m-%e') = '$searchq'
             XOR DATE_FORMAT(logs.access_date, '%e-%m-%Y %r') LIKE '%$searchq%'
             XOR DATE_FORMAT(logs.access_date, '%e-%m-%Y %T') LIKE '%$searchq%'
             XOR DATE_FORMAT(logs.access_date, '%e-%m-%y %r') LIKE '%$searchq%'
