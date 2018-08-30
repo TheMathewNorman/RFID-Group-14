@@ -605,8 +605,8 @@ class Database {
             FROM ((logs 
             INNER JOIN members ON logs.member_id = members.id) 
             INNER JOIN readers ON logs.reader_id = readers.id) 
-            WHERE logs.check_in = 0;
-            (logs.id = '$searchq'
+            WHERE logs.check_in = 0
+            AND (logs.id = '$searchq'
             OR logs.member_id = '$searchq'
             OR logs.reader_id = '$searchq'
             OR members.firstname LIKE '%$searchq%'
