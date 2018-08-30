@@ -564,6 +564,7 @@ class Database {
             FROM ((logs
             INNER JOIN members ON logs.member_id = members.id)
             INNER JOIN readers ON logs.reader_id = readers.id)
+            WHERE logs.check_in = 0
             ORDER BY logs.access_date DESC";
 
             // Fetch each line and display in table.
@@ -604,7 +605,8 @@ class Database {
             FROM ((logs 
             INNER JOIN members ON logs.member_id = members.id) 
             INNER JOIN readers ON logs.reader_id = readers.id) 
-            WHERE logs.id = '$searchq'
+            WHERE logs.check_in = 0;
+            (logs.id = '$searchq'
             OR logs.member_id = '$searchq'
             OR logs.reader_id = '$searchq'
             OR members.firstname LIKE '%$searchq%'
@@ -615,7 +617,7 @@ class Database {
             XOR DATE_FORMAT(logs.access_date, '%e-%m-%Y %T') LIKE '%$searchq%'
             XOR DATE_FORMAT(logs.access_date, '%e-%m-%y %r') LIKE '%$searchq%'
             XOR DATE_FORMAT(logs.access_date, '%e-%m-%Y %T') LIKE '%$searchq%'
-            XOR DATE_FORMAT(logs.access_date, '%r %T %e %m %M %Y') LIKE '%$searchq%'
+            XOR DATE_FORMAT(logs.access_date, '%r %T %e %m %M %Y') LIKE '%$searchq%')
             ORDER BY logs.access_date DESC";
 
             // Fetch each line and display in table.
