@@ -39,8 +39,8 @@
         ?>
       </table>
     <?php
-      echo $validate->validateEmail("email@email.com")."<br>";
-      echo $validate->validateEmail("email@emailcom");
+      echo $validate->validateEmail("email@email.com")?:"False"."<br>";
+      echo $validate->validateEmail("email@emailcom")?:"False";
     ?>
   </div>
 </html>
