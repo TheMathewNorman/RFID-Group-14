@@ -79,11 +79,11 @@ body {
     margin: 0 auto;
 }
     #list-table th, #list-table td {
-        font-size: 1.1em;
         padding: 5px;
     }
     #list-table th {
         font-weight: bolder;
+        font-size: 1.1em;
     }
     #list-table td {
         /* font-weight: bold; */
