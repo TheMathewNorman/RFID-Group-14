@@ -663,8 +663,8 @@ class Database {
                     CONCAT(members.firstname, ' ', members.lastname) AS Member,
                     FLOOR(count(check_in) / 2) AS Checkins,
                     CASE
-                        when count(logs.check_in) MOD 2 = 0 then 'NO'
-                        when count(logs.check_in) MOD 2 = 1 then 'YES'
+                        when count(logs.check_in) MOD 2 = 0 then 0
+                        when count(logs.check_in) MOD 2 = 1 then 1
                     END AS Active,
                     DATE_FORMAT(last_visit.visit_date, '%e/%m/%Y at %r') AS LastCheckin,
                     TIMESTAMPDIFF(HOUR, last_visit.visit_date, NOW()) AS TimeSince
@@ -678,29 +678,29 @@ class Database {
             // Fetch each line and display in table.
             if ($result = mysqli_query($connection, $sql)) {
                 while ($row = mysqli_fetch_row($result)) {
-                    var_dump($row);
-                    echo "<br><br>";
+                    // var_dump($row);
+                    // echo "<br><br>";
 
-                    // // Highlight rows where the member is currently on site
-                    // if ($row[3] == 1 && $row[5] < 10) {
-                    //     $logHTML.= '<tr style="background-color: rgba(0,100,0,0.7)">';
-                    // } else if ($row[3] == 1 && $row[5] > 10) {
-                    //     $logHTML.= '<tr style="background-color: rgba(255,100,0,0.6)">';
-                    // } else {
-                    //     $logHTML.= '<tr style="background-color: rgba(100,0,0,0.2)">';
-                    // }
-                    // $logHTML.= "<td>".$row[0]."</td>";
-                    // $logHTML.= "<td>".$row[1]."</td>";
-                    // $logHTML.= "<td>".$row[2]."</td>";
-                    // if ($row[3] == 1 && $row[5] < 10) {
-                    //     $logHTML.= '<td>YES</td>';
-                    // } else if ($row[3] == 1 && $row[5] > 10) {
-                    //     $logHTML.= '<td>MAYBE</td>';
-                    // } else {
-                    //     $logHTML.= '<td>No</td>';
-                    // }
-                    // $logHTML.= "<td>".$row[4]."</td>";
-                    // $logHTML.= "</tr>";
+                    // Highlight rows where the member is currently on site
+                    if ($row[3] == 1 && $row[5] < 10) {
+                        $logHTML.= '<tr style="background-color: rgba(0,100,0,0.7)">';
+                    } else if ($row[3] == 1 && $row[5] > 10) {
+                        $logHTML.= '<tr style="background-color: rgba(255,100,0,0.6)">';
+                    } else {
+                        $logHTML.= '<tr style="background-color: rgba(100,0,0,0.2)">';
+                    }
+                    $logHTML.= "<td>".$row[0]."</td>";
+                    $logHTML.= "<td>".$row[1]."</td>";
+                    $logHTML.= "<td>".$row[2]."</td>";
+                    if ($row[3] == 1 && $row[5] < 10) {
+                        $logHTML.= '<td>YES</td>';
+                    } else if ($row[3] == 1 && $row[5] > 10) {
+                        $logHTML.= '<td>MAYBE</td>';
+                    } else {
+                        $logHTML.= '<td>No</td>';
+                    }
+                    $logHTML.= "<td>".$row[4]."</td>";
+                    $logHTML.= "</tr>";
                 }
             } else {
                 $logHTML.="There was an error getting log information from the database.";
