@@ -44,7 +44,8 @@ class Database {
             id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
             member_id INT(6) NOT NULL,
             reader_id INT(6) NOT NULL,
-            access_date TIMESTAMP NOT NULL
+            access_date TIMESTAMP NOT NULL,
+            check_in BOOL DEFAULT FALSE
         )";
             
         if (mysqli_multi_query($connection, $sql) === FALSE) {
@@ -512,7 +513,7 @@ class Database {
     //// LOG TABLE FUNCTIONALITY //// 
     // Functions to include
     // addLogEntry($memberid, $readerid, $datetime)
-    function addLogEntry($readerid, $key) {
+    function addLogEntry($readerid, $key, $checkin=false) {
         $keyhash = hash('sha512', $key);
 
         $return = true;
@@ -537,7 +538,7 @@ class Database {
         }
 
         // Add log entry
-        $sql = "INSERT INTO logs (member_id, reader_id) VALUES ($memberid, $readerid)";
+        $sql = "INSERT INTO logs (member_id, reader_id, check_in) VALUES ($memberid, $readerid, $checkin)";
         $connection->query($sql);
 
         // Close the connection
