@@ -5,24 +5,24 @@
   include_once '../php/validate.php';
   $validate = new Validate();
 
+  $search = "";
   if (isset($_GET['search'])) {
     $search = $validate->sanitizeString($_GET['search']);
   }
 
+  $today = "";
   if (isset($_GET['today'])) {
     $today = getdate();
     $search = $today['year'].'-'.$today['mon'].'-'.$today['mday'];
     echo $search;
   }
 
+  $checkins = false;
   if (isset($_GET['checkins'])) {
     if ($_GET['checkins']) {
       $checkins = true;
-    } else {
-      $checkins = false;
     }
   }
-
   
 ?>
 <html>
@@ -51,9 +51,9 @@
           <th>Date & Time</th>
         </tr>
         <?php
-          if (isset($_GET['search']) && $search !== "") {
+          if ($search !== "") {
             echo $database->searchLogEntries($search);
-          } else if (isset($_GET['checkins']) && $checkins == true) {
+          } else if ($checkins) {
             echo $database->getCheckinEntries();
           } else {
             echo $database->getLogEntries();
