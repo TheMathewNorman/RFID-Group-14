@@ -13,8 +13,6 @@
     <div id="content">
       <?php include "../component/header.php"; ?>
       <?php include "../component/menu.php"; ?>
-    
-      This page is still under development.
 
       <!-- Commented out until functional 
       <form action="" method="GET">

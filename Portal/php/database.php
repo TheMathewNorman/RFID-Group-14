@@ -545,7 +545,7 @@ class Database {
         // Close the connection
         $connection->close();
         
-        return $logHTML;
+        return "Hello";
     }
 
 
