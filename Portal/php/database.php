@@ -520,8 +520,7 @@ class Database {
         $logHTML = "";
 
         // Create connection
-        //$connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
-        $connection = new mysqli($GLOBALS['server'], 'test', $GLOBALS['pass'], $GLOBALS['dbname']);
+        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
 
         // Check connection.
         if ($connection->connect_error) {
@@ -530,6 +529,8 @@ class Database {
 
             // Form SQL query
             $sql = "SELECT logs.id AS ID, CONCAT(members.firstname, ' ', members.lastname) AS Member, readers.reader_name AS Reader, DATE_FORMAT(logs.access_date, '%e/%m/%Y at %r') AS Date FROM ((logs INNER JOIN members ON logs.member_id = members.id) INNER JOIN readers ON logs.reader_id = readers.id)";
+
+            echo "getting here";
 
             // Fetch each line and display in table.
             $logHTML.= "<tr>";
