@@ -8,6 +8,13 @@
   if (isset($_GET['search'])) {
     $search = $validate->sanitizeString($_GET['search']);
   }
+  if (isset($_GET['checkins'])) {
+    if ($_GET['checkins']) {
+      $checkins = true;
+    } else {
+      $checkins = false;
+    }
+  }
 
   
 ?>
@@ -37,10 +44,12 @@
           <th>Date & Time</th>
         </tr>
         <?php
-          if (!isset($_GET['search']) || $search == "") {
-            echo $database->getLogEntries();
-          } else {
+          if (isset($_GET['search']) || $search !== "") {
             echo $database->searchLogEntries($search);
+          } else if (isset($_GET['checkins']) & $checkins == true) {
+            echo $database->getCheckinEntries();
+          } else {
+            echo $database->getLogEntries();
           }
         ?>
       </table>

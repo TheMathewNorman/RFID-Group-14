@@ -512,7 +512,34 @@ class Database {
     //// LOG TABLE FUNCTIONALITY //// 
     // Functions to include
     // addLogEntry($memberid, $readerid, $datetime)
-    // searchLogEntries($searchq)
+    function addLogEntry($readerid, $key) {
+        $keyhash = hash('sha512', $key);
+
+        // Create connection
+        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+
+        // Check connection.
+        if ($connection->connect_error) {
+            die("Connection failed<br>$connection->connect_error");
+        }
+
+        // Get member id from key
+        $sql = "SELECT id FROM members WHERE cardkey = '$keyhash'";
+        if ($result = mysqli_query($connection, $sql)) {
+            if ($row = mysqli_fetch_row($result)) {
+                $memberid = $row[0];
+                
+                // Add log entry
+                $sql = "INSERT INTO logs (member_id, reader_id) VALUES ($memberid, $readerid)";
+                if (!mysqli_query($connection, $sql)) {
+                    return false;
+                }
+            }
+        }
+
+        // Close the connection
+        $connection->close();
+    }
     function getLogEntries() {
         $logHTML = "";
 
@@ -595,6 +622,45 @@ class Database {
         
         // Return table or message
         return $logHTML;
+    }
+    function getCheckinEntries() {
+        $logHTML = "";
+
+        // Create connection
+        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+
+        // Check connection.
+        if ($connection->connect_error) {
+            $logHTML.="Connection failed<br>$connection->connect_error";
+        } else {
+
+            // Form SQL query
+            $sql = "SELECT logs.id AS ID, members.id AS MID, CONCAT(members.firstname, ' ', members.lastname) AS Member, readers.id AS RID, readers.reader_name AS Reader, DATE_FORMAT(logs.access_date, '%e/%m/%Y at %r') AS Date
+            FROM ((logs
+            INNER JOIN members ON logs.member_id = members.id)
+            INNER JOIN readers ON logs.reader_id = readers.id)";
+
+            // Fetch each line and display in table.
+            if ($result = mysqli_query($connection, $sql)) {
+                while ($row = mysqli_fetch_row($result)) {
+                    $logHTML.= "<tr>";
+                    $logHTML.= "<td>".$row[0]."</td>";
+                    $logHTML.= "<td>".$row[1]."</td>";
+                    $logHTML.= "<td>".$row[2]."</td>";
+                    $logHTML.= "<td>".$row[3]."</td>";
+                    $logHTML.= "<td>".$row[4]."</td>";
+                    $logHTML.= "<td>".$row[5]."</td>";
+                    $logHTML.= "</tr>";
+                }
+            } else {
+                $logHTML.="There was an error getting log information from the database.";
+            }
+        }
+        // Close the connection
+        $connection->close();
+        
+        // Return table or message
+        return $logHTML;  
     }
 
     //// PRIVILEDGE TABLE FUNCTIONALITY //// 
