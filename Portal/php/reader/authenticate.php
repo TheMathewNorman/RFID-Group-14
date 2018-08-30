@@ -17,5 +17,6 @@
         
     }
 
+    // 0 is denied, 1 is granted access
     die($return);
 ?>
