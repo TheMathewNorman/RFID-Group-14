@@ -20,7 +20,7 @@
           <th>Member</th>
           <th># of Visits</th>
           <th>Currently Active</th>
-          <th>Hours</th>
+          <th>Hours Since Check-in</th>
           <th>Last Visit</th>
         </tr>
         <?php
