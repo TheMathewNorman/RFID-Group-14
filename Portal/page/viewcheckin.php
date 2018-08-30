@@ -13,10 +13,6 @@
     <div id="content">
       <?php include "../component/header.php"; ?>
       <?php include "../component/menu.php"; ?>
-
-      <form action="" method="GET">
-        <input type="text" <?php if (isset($_GET['search']) && $search !=="") { echo 'value="'.$search.'"'; } else { echo 'placeholder="Search..."'; } ?> name="search"> <input type="submit" value="Search">
-      </form>
       
       <table id="list-table">
         <tr>
@@ -24,6 +20,7 @@
           <th>Member</th>
           <th># of Visits</th>
           <th>Currently Active</th>
+          <th>Last Check-in</th>
         </tr>
         <?php
           echo $database->getCheckinEntries();

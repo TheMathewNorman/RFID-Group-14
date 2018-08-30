@@ -676,20 +676,35 @@ class Database {
             // Fetch each line and display in table.
             if ($result = mysqli_query($connection, $sql)) {
                 while ($row = mysqli_fetch_row($result)) {
+                    // Get last check-in & days between
+                    $sql = "SELECT access_date, TIMESTAMPDIFF(HOUR, access_date, NOW()) 
+                        FROM logs 
+                        WHERE member_id = ".$row[0]." 
+                        ORDER BY access_date DESC
+                        LIMIT 1";
+                    if ($result = mysqli_query($connection, $sql)) {
+                        $dateData = mysqli_fetch_row($result);
+                    }
+                    
                     // Highlight rows where the member is currently on site
-                    if ($row[3] == 1) {
+                    if ($row[3] == 1 && $dateData[1] < 10) {
                         $logHTML.= '<tr style="background-color: rgba(0,100,0,0.7)">';
+                    } else if ($row[3] == 1 && $dateData[1] > 10) {
+                        $logHTML.= '<tr style="background-color: rgba(255,100,0,0.6)">';
                     } else {
                         $logHTML.= '<tr style="background-color: rgba(100,0,0,0.2)">';
                     }
                     $logHTML.= "<td>".$row[0]."</td>";
                     $logHTML.= "<td>".$row[1]."</td>";
                     $logHTML.= "<td>".$row[2]."</td>";
-                    if ($row[3] == 1) {
+                    if ($row[3] == 1 && $dateData[1] < 10) {
                         $logHTML.= '<td>YES</td>';
+                    } else if ($row[3] == 1 && $dateData[1] > 10) {
+                        $logHTML.= '<td>MAYBE</td>';
                     } else {
                         $logHTML.= '<td>No</td>';
                     }
+                    $logHTML.= "<td>".$dateData[0]."</td>";
                     $logHTML.= "</tr>";
                 }
             } else {
