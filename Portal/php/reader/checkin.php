@@ -6,10 +6,11 @@
     $validate = new Validate();
     
     if (isset($_GET['key']) && isset($_GET['reader'])) {
-        $reader = $validate->sanitizeString($_GET['reader']);
+        $readerid = $validate->sanitizeString($_GET['reader']);
         $key = $validate->sanitizeString($_GET['key']);
         if ($database->addLogEntry($readerid,$key, 1)) { 
             die("1");
         }
     }
+    die("0");
 ?>
