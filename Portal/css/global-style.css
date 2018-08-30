@@ -41,8 +41,8 @@ body {
     border-radius: 0 0 15px 15px;
 }
 #content td {
-    font-size: 1.2em;
-    font-weight: bold;
+    /* font-size: 1.2em;
+    font-weight: bold; */
     color: white;
 }
 #content input[type="text"], #content input[type="email"], #content input[type="password"] {
