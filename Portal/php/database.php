@@ -513,6 +513,9 @@ class Database {
     // Functions to include
     // addLogEntry($memberid, $readerid, $datetime)
     // searchLogEntries($searchq)
+    function testLogEntries() {
+        return "Works.";
+    }
     function getLogEntries() {
         $logHTML = "";
 

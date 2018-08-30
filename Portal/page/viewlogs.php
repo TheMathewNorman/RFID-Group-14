@@ -27,6 +27,7 @@
           <th>Date & Time</th>
         </tr>
         <?php
+          echo $database->testLogEntries();
           echo $database->getLogEntries();
         ?>
       </table>
