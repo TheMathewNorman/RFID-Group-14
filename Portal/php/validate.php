@@ -1,16 +1,32 @@
 <?php
 
 class Validate {
-    // email
+    // Validate email
     function validateEmail($input) {
-        $sanInput = filter_var($input, FILTER_VALIDATE_EMAIL);
+        $result = false;
+        
+        // Remove any illegal characters
+        $email = filter_var($input, FILTER_SANITIZE_EMAIL);
 
-        return $sanInput;
+        // Validate
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $result = true;
+        }
+
+        // Return result
+        return $result;
     }
 
-    // string
-    function validateString($input) {
-
+    // Sanitize string
+    function sanitizeString($input) {
+        // Remove any illegal or uncommon characters
+        $result = filter_var($input, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
+        if ($result = "") {
+            $result = false;
+        }
+        
+        // Return result
+        return $result;
     }
 }
 

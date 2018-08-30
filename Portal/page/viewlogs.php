@@ -4,6 +4,13 @@
 
   include_once '../php/validate.php';
   $validate = new Validate();
+
+  if (isset($_GET['search'])) {
+    $search = $validate->sanitizeString($_GET['search']);
+  } else {
+    $seach = false;
+  }
+
   
 ?>
 <html>
@@ -31,25 +38,12 @@
           <th>Date & Time</th>
         </tr>
         <?php
-          if (isset($_GET['search'])) {
-            echo $database->searchLogEntries();
+          if ($search) {
+            echo $database->searchLogEntries($search);
           } else {
             echo $database->getLogEntries();
           }
         ?>
       </table>
-    <?php
-      if (!$validate->validateEmail("email@email.com")) {
-        echo "email was false";
-      } else {
-        echo "email was true";
-      }
-      if (!$validate->validateEmail("email@emailcom")) {
-        echo "bad email was false";
-      } else {
-        echo "bad email was true";
-      }
-
-    ?>
   </div>
 </html>
