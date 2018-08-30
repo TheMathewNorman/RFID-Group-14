@@ -514,12 +514,14 @@ class Database {
     // addLogEntry($memberid, $readerid, $datetime)
     // searchLogEntries($searchq)
     function logEntries() {
+        $logHTML = "";
+
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
                 
         // Check connection.
         if ($connection->connect_error) {
-            die("Connection failed<br>$connection->connect_error");
+            $logHTML.="Connection failed<br>$connection->connect_error";
         }
 
         // Form SQL query
@@ -529,7 +531,7 @@ class Database {
         INNER JOIN readers ON logs.reader_id = readers.id)";
 
         // Fetch each line and display in table.
-        $logHTML = "<tr>";
+        $logHTML.= "<tr>";
         if ($result = mysqli_query($connection, $sql)) {
             $logHTML.= "<td>".$result['ID']."</td>";
             $logHTML.= "<td>".$result['Member']."</td>";
