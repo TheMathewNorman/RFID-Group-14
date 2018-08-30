@@ -511,10 +511,9 @@ class Database {
 
     //// LOG TABLE FUNCTIONALITY //// 
     // Functions to include
-    // addEntry($memberid, $readerid, $datetime)
-    // listEntries()
-    // searchEntries($searchq)
-    function listEntries() {
+    // addLogEntry($memberid, $readerid, $datetime)
+    // searchLogEntries($searchq)
+    function logEntries() {
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
                 
@@ -524,11 +523,19 @@ class Database {
         }
 
         // Form SQL query
-        $sql = "SELECT memberid, readerid, access_date FROM logs ORDER BY id";
+        $sql = "SELECT logs.id AS ID, CONCAT(members.firstname, ' ', members.lastname) AS Member, readers.reader_name AS Reader, DATE_FORMAT(logs.access_date, '%e/%m/%Y at %r') AS Date
+        FROM ((logs
+        INNER JOIN members ON logs.member_id = members.id)
+        INNER JOIN readers ON logs.reader_id = readers.id)";
 
         // Fetch each line and display in table.
         if ($result = mysqli_query($connection, $sql)) {
-            // Output results as table rows.
+            echo "<tr>";
+            echo "<td>".$result['ID']."</td>";
+            echo "<td>".$result['Member']."</td>";
+            echo "<td>".$result['Reader']."</td>";
+            echo "<td>".$result['Date']."</td>";
+            echo "</tr>";
         } else {
             die("There was an error listing the members from the database:<br>$connection->error<br>");
         }
