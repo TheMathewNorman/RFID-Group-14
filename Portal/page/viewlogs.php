@@ -14,7 +14,6 @@
   if (isset($_GET['today'])) {
     $today = getdate();
     $search = $today['year'].'-'.$today['mon'].'-'.$today['mday'];
-    echo $search;
   }
 
   $checkins = false;
