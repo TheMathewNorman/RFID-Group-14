@@ -659,37 +659,30 @@ class Database {
 
             // Form SQL query
             $sql = "SELECT 
-                members.id AS MID, 
-                CONCAT(members.firstname, ' ', members.lastname) AS Member,
-                FLOOR(count(check_in) / 2) AS Checkins,
-                CASE
-                    when count(logs.check_in) MOD 2 = 0 then 0
-                    when count(logs.check_in) MOD 2 = 1 then 1
-                END AS Active
-            FROM ((logs
-            INNER JOIN members ON logs.member_id = members.id)
-            INNER JOIN readers ON logs.reader_id = readers.id)
-            WHERE logs.check_in = 1
-            GROUP BY logs.member_id
-            ORDER BY Active DESC";
+                    members.id AS MID, 
+                    CONCAT(members.firstname, ' ', members.lastname) AS Member,
+                    FLOOR(count(check_in) / 2) AS Checkins,
+                    CASE
+                        when count(logs.check_in) MOD 2 = 0 then 'NO'
+                        when count(logs.check_in) MOD 2 = 1 then 'YES'
+                    END AS Active,
+                    last_visit.visit_date AS LastCheckin,
+                    TIMESTAMPDIFF(HOUR, last_visit.visit_date, NOW()) AS TimeSince
+                FROM ((logs
+                INNER JOIN members ON logs.member_id = members.id)
+                INNER JOIN (SELECT member_id, MAX(access_date) as visit_date FROM logs WHERE check_in = 1 GROUP BY logs.member_id) last_visit ON logs.member_id = last_visit.member_id)
+                WHERE logs.check_in = 1
+                GROUP BY logs.member_id
+                ORDER BY Active DESC";
 
             // Fetch each line and display in table.
             if ($result = mysqli_query($connection, $sql)) {
                 while ($row = mysqli_fetch_row($result)) {
-                    // Get last check-in & days between
-                    $sql = "SELECT access_date, TIMESTAMPDIFF(HOUR, access_date, NOW()) 
-                        FROM logs 
-                        WHERE member_id = ".$row[0]." 
-                        ORDER BY access_date DESC
-                        LIMIT 1";
-                    if ($dateDataResult = mysqli_query($connection, $sql)) {
-                        $dateData = mysqli_fetch_row($dateDataResult);
-                    }
                     
                     // Highlight rows where the member is currently on site
-                    if ($row[3] == 1 && $dateData[1] < 10) {
+                    if ($row[3] == 1 && $row[5] < 10) {
                         $logHTML.= '<tr style="background-color: rgba(0,100,0,0.7)">';
-                    } else if ($row[3] == 1 && $dateData[1] > 10) {
+                    } else if ($row[3] == 1 && $row[5] > 10) {
                         $logHTML.= '<tr style="background-color: rgba(255,100,0,0.6)">';
                     } else {
                         $logHTML.= '<tr style="background-color: rgba(100,0,0,0.2)">';
@@ -697,14 +690,14 @@ class Database {
                     $logHTML.= "<td>".$row[0]."</td>";
                     $logHTML.= "<td>".$row[1]."</td>";
                     $logHTML.= "<td>".$row[2]."</td>";
-                    if ($row[3] == 1 && $dateData[1] < 10) {
+                    if ($row[3] == 1 && $row[5] < 10) {
                         $logHTML.= '<td>YES</td>';
-                    } else if ($row[3] == 1 && $dateData[1] > 10) {
+                    } else if ($row[3] == 1 && $row[5] > 10) {
                         $logHTML.= '<td>MAYBE</td>';
                     } else {
                         $logHTML.= '<td>No</td>';
                     }
-                    $logHTML.= "<td>".$dateData[0]."</td>";
+                    $logHTML.= "<td>".$row[4]."</td>";
                     $logHTML.= "</tr>";
                 }
             } else {
