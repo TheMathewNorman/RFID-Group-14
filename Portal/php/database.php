@@ -529,19 +529,21 @@ class Database {
         INNER JOIN readers ON logs.reader_id = readers.id)";
 
         // Fetch each line and display in table.
+        $logHTML = "<tr>";
         if ($result = mysqli_query($connection, $sql)) {
-            echo "<tr>";
-            echo "<td>".$result['ID']."</td>";
-            echo "<td>".$result['Member']."</td>";
-            echo "<td>".$result['Reader']."</td>";
-            echo "<td>".$result['Date']."</td>";
-            echo "</tr>";
+            $logHTML.= "<td>".$result['ID']."</td>";
+            $logHTML.= "<td>".$result['Member']."</td>";
+            $logHTML.= "<td>".$result['Reader']."</td>";
+            $logHTML.= "<td>".$result['Date']."</td>";
         } else {
-            die("There was an error listing the members from the database:<br>$connection->error<br>");
+            $logHTML.="There was an error getting log information from the database.";
         }
+        $logHTML.="</tr>";
 
         // Close the connection
         $connection->close();
+        
+        return $logHTML;
     }
 
 
