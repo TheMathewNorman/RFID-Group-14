@@ -681,7 +681,7 @@ class Database {
                     $logHTML.= "<td>".$row[1]."</td>";
                     $logHTML.= "<td>".$row[2]."</td>";
                     if ($row[3] == 1) {
-                        $logHTML.= '<td style="background-color: rgba(0,50,0,0.3)">'.$row[3].'</td>';
+                        $logHTML.= '<td style="background-color: rgba(0,50,0,0.7)">'.$row[3].'</td>';
                     } else {
                         $logHTML.= '<td style="background-color: rgba(50,0,0,0.1)">'.$row[3].'</td>';
                     }
