@@ -10,9 +10,14 @@
         $key = $_GET['key'];
         
         if ($database->checkPrivilege($readerid,$key)) {
+            echo "Permission Granted";
             if ($database->addLogEntry($readerid,$key)) { 
                 $return = "1";
+            } else {
+                echo "Log entry failed";
             }
+        } else {
+            echo "Permission Denied";
         }
         
     }
