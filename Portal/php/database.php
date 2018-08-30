@@ -522,26 +522,26 @@ class Database {
         // Check connection.
         if ($connection->connect_error) {
             $logHTML.="Connection failed<br>$connection->connect_error";
-        }
-
-        // Form SQL query
-        $sql = "SELECT logs.id AS ID, CONCAT(members.firstname, ' ', members.lastname) AS Member, readers.reader_name AS Reader, DATE_FORMAT(logs.access_date, '%e/%m/%Y at %r') AS Date
-        FROM ((logs
-        INNER JOIN members ON logs.member_id = members.id)
-        INNER JOIN readers ON logs.reader_id = readers.id)";
-
-        // Fetch each line and display in table.
-        $logHTML.= "<tr>";
-        if ($result = mysqli_query($connection, $sql)) {
-            $logHTML.= "<td>".$result['ID']."</td>";
-            $logHTML.= "<td>".$result['Member']."</td>";
-            $logHTML.= "<td>".$result['Reader']."</td>";
-            $logHTML.= "<td>".$result['Date']."</td>";
         } else {
-            $logHTML.="There was an error getting log information from the database.";
-        }
-        $logHTML.="</tr>";
 
+            // Form SQL query
+            $sql = "SELECT logs.id AS ID, CONCAT(members.firstname, ' ', members.lastname) AS Member, readers.reader_name AS Reader, DATE_FORMAT(logs.access_date, '%e/%m/%Y at %r') AS Date
+            FROM ((logs
+            INNER JOIN members ON logs.member_id = members.id)
+            INNER JOIN readers ON logs.reader_id = readers.id)";
+
+            // Fetch each line and display in table.
+            $logHTML.= "<tr>";
+            if ($result = mysqli_query($connection, $sql)) {
+                $logHTML.= "<td>".$result['ID']."</td>";
+                $logHTML.= "<td>".$result['Member']."</td>";
+                $logHTML.= "<td>".$result['Reader']."</td>";
+                $logHTML.= "<td>".$result['Date']."</td>";
+            } else {
+                $logHTML.="There was an error getting log information from the database.";
+            }
+            $logHTML.="</tr>";
+        }
         // Close the connection
         $connection->close();
         

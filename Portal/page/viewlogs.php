@@ -29,7 +29,7 @@
           <th>Date & Time</th>
         </tr>
         <?php
-          echo "getting log entried";
+          echo "getting log entries";
           echo $database->logEntries();
           echo "done";
         ?>
