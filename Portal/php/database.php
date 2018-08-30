@@ -666,7 +666,7 @@ class Database {
                         when count(logs.check_in) MOD 2 = 0 then 'NO'
                         when count(logs.check_in) MOD 2 = 1 then 'YES'
                     END AS Active,
-                    last_visit.visit_date AS LastCheckin,
+                    DATE_FORMAT(last_visit.visit_date, '%e/%m/%Y at %r') AS LastCheckin,
                     TIMESTAMPDIFF(HOUR, last_visit.visit_date, NOW()) AS TimeSince
                 FROM ((logs
                 INNER JOIN members ON logs.member_id = members.id)
