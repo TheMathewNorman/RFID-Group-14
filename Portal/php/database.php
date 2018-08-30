@@ -620,7 +620,7 @@ class Database {
                     $logHTML.= "There were no results.";
                 }
             } else {
-                $logHTML.="There was an error getting log information from the database.";
+                $logHTML.="There was an error getting log information from the database. ".mysqli_error($connection);
             }
         }
         // Close the connection
