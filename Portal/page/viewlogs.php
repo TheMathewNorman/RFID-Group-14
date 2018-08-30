@@ -5,11 +5,11 @@
   include_once '../php/validate.php';
   $validate = new Validate();
 
-  if (isset($_GET['search'])) {
-    $search = $validate->sanitizeString($_GET['search']);
-  } else {
-    $seach = false;
-  }
+  // if (isset($_GET['search'])) {
+  //   $search = $validate->sanitizeString($_GET['search']);
+  // } else {
+  //   $seach = false;
+  // }
 
   
 ?>
@@ -38,7 +38,7 @@
           <th>Date & Time</th>
         </tr>
         <?php
-          if ($search) {
+          if (isset($_GET['search'])) {
             echo $database->searchLogEntries($_GET['search']);
           } else {
             echo $database->getLogEntries();
