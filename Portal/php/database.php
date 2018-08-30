@@ -538,9 +538,7 @@ class Database {
 
         // Add log entry
         $sql = "INSERT INTO logs (member_id, reader_id) VALUES ($memberid, $readerid)";
-        if (!mysqli_query($connection, $sql)) {
-            $return = false;
-        }
+        $connection->query($sql);
 
         // Close the connection
         $connection->close();
