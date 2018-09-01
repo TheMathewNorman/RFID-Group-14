@@ -22,8 +22,13 @@
     }
     
     if (isset($_POST['reader_name']) || isset($_POST['reader_group']) || isset($_POST['approved'])) {
+        // Set approved to 0 if the value is not 1
         if ($_POST['approved'] != 1) { $_POST['approved'] = 0; }
+        
+        // Sanitize the reader_name input
         $_POST['reader_name'] = $validate->sanitizeString($_POST['reader_name']);
+        
+        // Update the reader information and redirect
         $database->updateReader($_GET['id'], $_POST['reader_name'], $_POST['reader_group'], $_POST['approved']);
         header("Location: listreaders.php");
     } 

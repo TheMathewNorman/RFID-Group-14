@@ -725,7 +725,39 @@ class Database {
     // addPriviledge($memberid,$readerid,$readergroup)
     // removePriviledge($id)
     // modifyPriviledge($id,$memberid,$readerid,$readergroup)
-    // listPriviledges()
+    
+    function listPrivilegeMembers() {
+        // Create connection
+        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+                
+        // Check connection.
+        if ($connection->connect_error) {
+            die("Connection failed<br>$connection->connect_error");
+        }
+
+        // Form SQL query
+        $sql = "SELECT id, CONCAT(firstname, ' ', lastname) as name FROM members";
+
+        // Fetch each line and display in table.
+        $memberPrivilegeInformation;
+        if ($result = mysqli_query($connection, $sql)) {
+            if (mysqli_num_rows($result) === 0) {
+                echo "The privilege table is empty.<br>";
+            } else {
+                while ($row=mysqli_fetch_row($result)) {
+                    array_push($row);
+                }
+            }
+            mysqli_free_result($result);
+        } else {
+            die("There was an error listing the data in the privilege table:<br>$connection->error<br>");
+        }
+
+        var_dump($memberPrivilegeInformation);
+
+        // Close the connection
+        $connection->close();
+    }
     
     // Check if member associated with key has been given access to the reader.
     function checkPrivilege($signature, $key) {
