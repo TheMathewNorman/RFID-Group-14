@@ -8,13 +8,14 @@
     <div class="dropdown-content">
         <a href="addmember.php">Add</a>
         <a href="listmember.php">List</a>
+        <a href="memberaccess.php">Access</a>
     </div>
     </div>
     <div class="dropdown">
-    <button class="dropbtn" onclick="location.href='../page/listreaders.php';">Readers</button>
+    <button class="dropbtn" onclick="location.href='listreaders.php';">Readers</button>
     <div class="dropdown-content">
-        <a href="../page/listpending.php">List Pending</a>
-        <a href="../page/memberaccess.php">Member Access</a>
+        <a href="listpending.php">Pending</a>
+        <a href="listreaders.php">List</a>
     </div>
     </div>    
     <div class="dropdown">
