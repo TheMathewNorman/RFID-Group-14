@@ -721,11 +721,7 @@ class Database {
     }
 
     //// PRIVILEDGE TABLE FUNCTIONALITY //// 
-    // Functions to include
-    // addPriviledge($memberid,$readerid,$readergroup)
-    // removePriviledge($id)
-    // modifyPriviledge($id,$memberid,$readerid,$readergroup)
-    
+    // Add member privilege
     function addPrivilege($id, $readerid, $readergroup = "") {
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
@@ -738,8 +734,9 @@ class Database {
         // Form SQL query
         $sql = "SELECT * FROM privilege WHERE reader_id = $readerid AND member_id = $id";
 
-        // Add access to the privilege table
+        // Check for any existing entry
         if ($result = mysqli_query($connection, $sql)) {
+            // If new entry is to be unique, create entry
             if (mysqli_num_rows($result) == 0) {
                 $sql = "INSERT INTO privilege(member_id, reader_id) VALUES ($id, $readerid)";
                 if (!mysqli_query($connection, $sql)) {
@@ -753,7 +750,7 @@ class Database {
         // Close the connection
         $connection->close();
     }
-
+    // List all members
     function listPrivilegeMembers() {
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
@@ -789,6 +786,7 @@ class Database {
         $connection->close();
     }
     
+    // List all privileges associated with a member
     function listMemberPrivilege($id) {
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
@@ -828,6 +826,7 @@ class Database {
         $connection->close();
     }
     
+    // List all readers that can be assigned to a member
     function listPrivilegeReaders() {
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
@@ -862,6 +861,7 @@ class Database {
         $connection->close();
     }
 
+    // Revoke a member's privilege
     function removePrivilege($id) {
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
