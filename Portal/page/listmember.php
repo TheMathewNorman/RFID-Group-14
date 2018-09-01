@@ -1,8 +1,7 @@
 <?php
     // List members code goes here
     include_once "../php/database.php";
-    // $database = new Database();
-    $members = new Members();
+    $database = new Database();
 ?>
 <html>
 <head>
@@ -33,16 +32,10 @@
         <th>Delete</th>
       </tr>
       <?php
-          // if (isset($_GET['searchInput'])) {
-          //   $database->searchMembers($_GET['searchInput']);
-          // } else {
-          //   $database->listMembers();
-          // }
-
           if (isset($_GET['searchInput'])) {
-            $members->searchMembers($_GET['searchInput']);
+            $database->searchMembers($_GET['searchInput']);
           } else {
-            $members->listMembers();
+            $database->listMembers();
           }
       ?>
     </table>
