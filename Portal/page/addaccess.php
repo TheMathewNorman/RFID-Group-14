@@ -8,7 +8,7 @@
     }
 
     foreach ($_POST as $postItem) {
-        echo $postItem."<br>";
+        $database->addPrivilege($_GET['id'], $postItem);
     }
   
 ?>
