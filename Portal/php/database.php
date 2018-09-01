@@ -357,9 +357,9 @@ class Database {
             die("There was an error retreiving a list of admins from the database:<br>$connection->error<br>");
         }
 
-        return $userInfo;
-
         $connection->close();
+
+        return $userInfo;
     }
 
     // List all members
@@ -867,16 +867,16 @@ class Database {
         if ($result = mysqli_query($connection, $sql)) {
             $row=mysqli_fetch_row($result);
             
-            $userInfo = array("reader_name"=>$row[0], "reader_group"=>$row[1], "approved"=>$row[2], "signature"=>$row[3]);
+            $readerInfo = array("reader_name"=>$row[0], "reader_group"=>$row[1], "approved"=>$row[2], "signature"=>$row[3]);
 
             mysqli_free_result($result);
         } else {
             die("There was an error retreiving a list of admins from the database:<br>$connection->error<br>");
         }
-
-        return $readerInfo;
-
+        
         $connection->close();
+        
+        return $readerInfo;
     }
 
     // List all readers pending approval
