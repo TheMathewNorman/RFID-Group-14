@@ -40,7 +40,7 @@
             <form action="" method="POST">
                 <table class="form-table">
                 <tr><td style="text-align:right">Reader name: </td><td><input type="text" name="reader_name" placeholder="<?php echo $readerInfo['reader_name']; ?>"></td></tr>
-                <tr><td style="text-align:right">Reader group: </td><td><input type="number" name="reader_group" min="1" max="99" placeholder="<?php echo $readerInfo['reader_group']; ?>"></td></tr>
+                <tr><td style="text-align:right">Reader group: </td><td><input type="number" name="reader_group" min="1" max="99" value="<?php echo $readerInfo['reader_group']; ?>"></td></tr>
                 <tr><td style="text-align:right">Approved:</td><td><input type="checkbox" name="approved" value="true" <?php echo $approved; ?>></td></tr>
                 <tr><td></td></tr>
                 <tr><td style="text-align:right">Delete:</td><td><input type="checkbox" name="delete" value="true"></td></tr>
