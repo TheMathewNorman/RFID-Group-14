@@ -7,7 +7,9 @@
         header('Location: memberaccess.php');
     }
 
-    
+    foreach ($_POST as $postItem) {
+        echo $postItem."<br>";
+    }
   
 ?>
 <html>
