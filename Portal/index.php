@@ -36,6 +36,11 @@
         }        
     }
 
+    // Redirect if already logged in
+    if (isset($_SESSION['userid'])) {
+        $location = "./page/index.php";
+    }
+
     if ($location !== "") {
         header("Location: $location");
     }
