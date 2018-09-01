@@ -736,7 +736,7 @@ class Database {
         }
 
         // Form SQL query
-        $sql = "SELECT * FROM privilege WHERE reader_id = $readerid AND member_id = $memberid";
+        $sql = "SELECT * FROM privilege WHERE reader_id = $readerid AND member_id = $id";
 
         // Add access to the privilege table
         if ($result = mysqli_query($connection, $sql)) {
