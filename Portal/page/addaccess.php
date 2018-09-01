@@ -7,7 +7,7 @@
         header('Location: memberaccess.php');
     }
 
-    var_dump($_POST);
+    
   
 ?>
 <html>
