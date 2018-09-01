@@ -6,7 +6,7 @@
 
     if (isset($_GET['reader'])) {
         $readerid = $_GET['reader'];
-
+        // Check if reader is approved
         if ($database->checkReaderApproved($readerid)) {
             $return = '1';
         }

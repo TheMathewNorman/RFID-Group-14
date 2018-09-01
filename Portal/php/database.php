@@ -747,8 +747,6 @@ class Database {
 
     
     //// READER TABLE FUNCTIONALITY //// 
-    // Functions to include
-    // updateReader($name,$group,$timeout)
     function updateReader($readerid, $name,$group) {
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
@@ -792,7 +790,7 @@ class Database {
                 // Check if reader is in approved
                 if ($result = mysqli_query($connection, $sql)) {
                     if (mysqli_num_rows($result) === 0) {
-                        
+                        // Add to pending readers
                         $sql = "INSERT INTO readers(reader_name, reader_group, approved, signature) VALUES ('', 0, 0, '$id')";
                         if (!mysqli_query($connection, $sql)) {
                             die("There was an error adding the reader to pending. ".mysqli_error());
@@ -810,6 +808,34 @@ class Database {
          
         $connection->close();
         return $return;
+    }
+
+    function getPendingCount() {
+        $pendingCount = 0;
+        
+        // Create connection
+        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+                
+        // Check connection.
+        if ($connection->connect_error) {
+            die("Connection failed<br>$connection->connect_error");
+        }
+
+        // Form SQL query
+        $sql = "SELECT count(*) FROM readers WHERE approved = 0";
+
+        // Get number of pending readers
+        if ($result = mysqli_query($connection, $sql)) {
+            $pendingCount = mysqli_fetch_row($result)[0][0];
+        } else {
+            die("Failed to get pending count");
+        }
+
+        // Close connection
+        $connection->close();
+
+        // Return number of pending readers
+        return $pendingCount;
     }
 
     function listPending() {
