@@ -21,8 +21,8 @@
     
     if (isset($_POST['reader_name']) || isset($_POST['reader_group']) || isset($_POST['approved'])) {
         echo $_POST['approved']."<br>";        
-        $database->updateReader($_GET['id'], $_POST['reader_name'], $_POST['reader_group'], $_POST['approved']);
-        header("Location: listreaders.php");
+        //$database->updateReader($_GET['id'], $_POST['reader_name'], $_POST['reader_group'], $_POST['approved']);
+        //header("Location: listreaders.php");
     } 
 ?>
 <html>
