@@ -763,7 +763,7 @@ class Database {
         }
 
         // Form SQL query
-        $sql = "SELECT id, reader_name, reader_group, approved FROM readers WHERE approved = 1 ORDER BY id";
+        $sql = "SELECT id, reader_name, reader_group, signature FROM readers WHERE approved = 1 ORDER BY id";
 
         // Fetch each line and display in table.
         if ($result = mysqli_query($connection, $sql)) {
@@ -775,6 +775,7 @@ class Database {
                     <td>$row[0]</td>
                     <td>$row[1]</td>
                     <td>$row[2]</td>
+                    <td>$row[3]</td>
                     <td><a href=\"updatereader.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td>
                     <td><a href=\"../php/deletereader.php?table=member&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td>
                     </tr>";

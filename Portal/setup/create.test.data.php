@@ -42,11 +42,11 @@ if ($connection->connect_error) {
     echo "Members successful.<br>";
 
     // Populate readers
-    $sql = "INSERT INTO readers (id, reader_name, reader_group, approved) VALUES (1, 'Door', 1, 1)";
+    $sql = "INSERT INTO readers (id, reader_name, reader_group, signature, approved) VALUES (1, 'Door', 1, 1, 1)";
     if (!mysqli_query($connection, $sql)) { die("Error running readers.".mysqli_error($connection)); }
-    $sql = "INSERT INTO readers (id, reader_name, reader_group, approved) VALUES (2, '3D Printer', 2, 1)";
+    $sql = "INSERT INTO readers (id, reader_name, reader_group, signature, approved) VALUES (2, '3D Printer', 2, 2, 1)";
     if (!mysqli_query($connection, $sql)) { die("Error running readers.".mysqli_error($connection)); }
-    $sql = "INSERT INTO readers (id, reader_name, reader_group, approved) VALUES (3, 'CNC Machine', 2, 1)";
+    $sql = "INSERT INTO readers (id, reader_name, reader_group, signature, approved) VALUES (3, 'CNC Machine', 2, 3, 1)";
     if (!mysqli_query($connection, $sql)) { die("Error running readers.".mysqli_error($connection)); }
     echo "Readers successful.<br>";
 

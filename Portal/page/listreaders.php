@@ -24,6 +24,7 @@
             <th>Reader ID</th>
             <th>Reader Name</th>
             <th>Reader Group</th>
+            <th>Signature</th>
             <th>Update</th>
             <th>Remove</th>
           </tr>
