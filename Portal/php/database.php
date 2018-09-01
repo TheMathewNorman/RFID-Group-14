@@ -796,7 +796,7 @@ class Database {
         }
 
         // Form SQL query
-        $sql = "INSERT INTO readers(reader_name, reader_group, approved, signature) VALUES ('', 0, 0, $signature)";
+        $sql = "INSERT INTO readers(reader_name, reader_group, approved, signature) VALUES ('', 0, 0, '$signature')";
         
         // Check if reader is in pending
         if (!mysqli_query($connection, $sql)) {
