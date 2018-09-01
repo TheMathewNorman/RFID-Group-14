@@ -31,11 +31,10 @@
       <?php
         $database->listMemberPrivilege($_GET['id']);
       ?>
-    <tr style="border-left:0">
-        <td colspan="3" style="border-left:0px solid black;border-bottom:0px solid black;"></td><td><a href="../php/addaccess.php?id="<?php echo $_GET['id']; ?>"><i class="fas fa-plus-circle fa-lg"></i></a></td>
-    </tr>
     </table>
-
+    <div style="text-align: right">
+        <a href="../php/addaccess.php?id="<?php echo $_GET['id']; ?>"><i class="fas fa-plus-circle fa-lg"></i></a>
+    </div>
     
   
       </div>
