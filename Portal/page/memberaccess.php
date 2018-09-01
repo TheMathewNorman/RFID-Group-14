@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Settings</title>
+    <title>Member Access</title>
     <link rel="stylesheet" type="text/css" href="../css/global-style.css">
     <link rel="stylesheet" type="text/css" href="../css/header.css">
     <link rel="stylesheet" type="text/css" href="../css/menu.css">
@@ -10,8 +10,18 @@
     <?php include "../component/header.php"; ?>
     <?php include "../component/menu.php"; ?>
     
-    
-    <------------- Your design goes here --------------------->
+    <form action="" method="GET" name="search" onsubmit="validateInput()">
+        <input type="text" placeholder="Search..." name="searchInput"> <input type="submit" value="Search">
+      </form>
+
+    <table id="list-table">
+      <tr>
+        <th>Member ID</th>
+        <th> Name</th>
+        <th>Modify</th>
+  
+      </tr>
+    </table>
 
 
 </div>
