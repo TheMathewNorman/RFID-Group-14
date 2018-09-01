@@ -33,7 +33,7 @@
       ?>
     </table>
     <div id="add-new-button">  
-        <a href="../php/addaccess.php?id=<?php echo $_GET['id']; ?>"><i class="fas fa-plus-circle fa-lg"></i></a>
+        <a href="addaccess.php?id=<?php echo $_GET['id']; ?>"><i class="fas fa-plus-circle fa-lg"></i></a>
 
     </div>
   
