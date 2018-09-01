@@ -118,3 +118,12 @@ body {
     #about-text ul {
         margin-left: 20px;
     }
+
+#add-new-button {
+    text-align: center;
+    color: white;
+}
+    #add-new-button a {
+        color: white;
+        font-size: 1.5em;
+    }
