@@ -11,7 +11,7 @@
     </div>
     </div>
     <div class="dropdown">
-    <button class="dropbtn" onclick="location.href='../page/listreaders.php';">List Readers</button>
+    <button class="dropbtn" onclick="location.href='../page/listreaders.php';">Readers</button>
     <div class="dropdown-content">
         <a href="../page/listpending.php">List Pending</a>
         <a href="../page/memberaccess.php">Member Access</a>
