@@ -726,6 +726,27 @@ class Database {
     // removePriviledge($id)
     // modifyPriviledge($id,$memberid,$readerid,$readergroup)
     
+    function addPrivilege($id, $readerid, $readergroup = "") {
+        // Create connection
+        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+                
+        // Check connection.
+        if ($connection->connect_error) {
+            die("Connection failed<br>$connection->connect_error");
+        }
+
+        // Form SQL query
+        $sql = "INSERT INTO privilege(member_id, reader_id) VALUES ($id, $readerid)";
+
+        // Add access to the privilege table
+        if (!mysqli_query($connection, $sql)) {
+            die("There was an error adding data to the privilege table:<br>$connection->error<br>");
+        }
+
+        // Close the connection
+        $connection->close();
+    }
+
     function listPrivilegeMembers() {
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
