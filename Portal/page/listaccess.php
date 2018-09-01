@@ -32,7 +32,7 @@
         $database->listMemberPrivilege($_GET['id']);
       ?>
     <tr>
-        <td colspan="3"></td><td><a href="../php/addaccess.php?id="<?php echo $_GET['id']; ?>"><i class="fas fa-plus-circle fa-lg"></i></a></td>
+        <td colspan="3" style="border-left:0px;border-bottom:0px;"></td><td><a href="../php/addaccess.php?id="<?php echo $_GET['id']; ?>"><i class="fas fa-plus-circle fa-lg"></i></a></td>
     </tr>
     </table>
 
