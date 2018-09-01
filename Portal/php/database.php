@@ -771,13 +771,15 @@ class Database {
             // Check if reader is in approved
             if ($result = mysqli_query($connection, $sql)) {
                 if (mysqli_num_rows($result) == 0) {
-                    $connection->close();
-                    addPending($id);
+                    $sql = "INSERT INTO readers(reader_name, reader_group, approved, signature) VALUES ('', 0, 0, '$id')";
+                    if (!mysqli_query($connection, $sql)) {
+                        die("There was an error adding the reader to pending. ".mysqli_error());
+                    }
                 } else {
                     $return = true;
                 }
             } else {
-                die("Error adding reader to pending. ".mysqli_error());
+                die("Error accessing readers. ".mysqli_error());
             }
         } else {
             die("There was an error running the query. ".mysqli_error());
@@ -787,7 +789,7 @@ class Database {
         return $return;
     }
 
-    function addPending($signature) {
+    function addPending($signature, $connection) {
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
                         
@@ -799,7 +801,7 @@ class Database {
         // Form SQL query
         $sql = "INSERT INTO readers(reader_name, reader_group, approved, signature) VALUES ('', 0, 0, '$signature')";
         
-        // Check if reader is in pending
+        // Add reader to the readers list
         if (!mysqli_query($connection, $sql)) {
             die("There was an error adding the reader to pending . ".mysqli_error());
         }
