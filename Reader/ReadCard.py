@@ -39,7 +39,7 @@ reader = SimpleMFRC522.SimpleMFRC522()
 
 # Read card reader input
 while True:
-	print("Ready to read...")
-	id, time = reader.read()
+    print("Ready to read...")
+    id, time = reader.read()
     print(id);
 	
