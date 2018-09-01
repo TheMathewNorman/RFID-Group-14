@@ -750,8 +750,10 @@ class Database {
     // approveReader($id)
     // updateReader($name,$group,$timeout)
     // removeReader($readerid)
-    // listReaders()
     // searchReaders($searchq)
+    function listReaders() {
+
+    }
 
     
 

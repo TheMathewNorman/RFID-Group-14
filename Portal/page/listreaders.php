@@ -1,3 +1,7 @@
+<?php
+    include_once "../php/database.php";
+    $database = new Database();
+?>
 <html>
 <head>
     <title>Readers</title>
@@ -23,6 +27,7 @@
             <th>Update</th>
             <th>Remove</th>
           </tr>
+          <?php echo $database->listReaders(); ?>
         </table>
 
 
