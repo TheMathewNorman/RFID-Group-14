@@ -769,10 +769,14 @@ class Database {
         if (mysqli_num_rows(mysqli_query($connection, $sql)) == 0) {
             $sql = "SELECT * FROM readers WHERE approved = 1 AND signature = '$id' ORDER BY id";
             // Check if reader is in approved
-            if (mysqli_num_rows(mysqli_query($connection, $sql)) == 0) {
-                addPending($id);
+            if ($result = mysqli_query($connection, $sql)) {
+                if (mysqli_num_rows($result) == 0) {
+                    addPending($id);
+                } else {
+                    $return = true;
+                }
             } else {
-                $return = true;
+                die("Error adding reader to pending. ".mysqli_error());
             }
         } else {
             die("There was an error running the query. ".mysqli_error());
