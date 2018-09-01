@@ -9,7 +9,7 @@
 ?>
 <html>
 <head>
-  <title>List Admins</title>
+  <title>List Access</title>
   <link rel="stylesheet" type="text/css" href="../css/global-style.css">
   <link rel="stylesheet" type="text/css" href="../css/header.css">
   <link rel="stylesheet" type="text/css" href="../css/menu.css">
@@ -33,7 +33,7 @@
       ?>
     </table>
     <div id="add-new-button">  
-        <a href="../php/addaccess.php?id="<?php echo $_GET['id']; ?>">Add New <i class="fas fa-plus-circle fa-lg"></i></a>
+        <a href="../php/addaccess.php?id="<?php echo $_GET['id']; ?>"><i class="fas fa-plus-circle fa-lg"></i></a>
 
     </div>
   

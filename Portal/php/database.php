@@ -799,6 +799,40 @@ class Database {
         // Close the connection
         $connection->close();
     }
+    
+    function listPrivilegeReaders() {
+        // Create connection
+        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+        
+        // Check connection.
+        if ($connection->connect_error) {
+            die("Connection failed<br>$connection->connect_error");
+        }
+
+        // Form SQL query
+        $sql = "SELECT id, reader_name FROM readers";
+
+        // Fetch each line and display in table.
+        if ($result = mysqli_query($connection, $sql)) {
+            if (mysqli_num_rows($result) === 0) {
+                echo "There are no readers.<br>";
+            } else {
+                while ($row=mysqli_fetch_row($result)) {
+                    echo "<tr>
+                    <td>$row[0]</td>
+                    <td>$row[1]</td>
+                    <td><input type=\"checkbox\" name=\"reader".$row[0]."\" value=\"1\"></td>
+                    </tr>";
+                }
+            }
+            mysqli_free_result($result);
+        } else {
+            die("There was an error listing the data in the readers table:<br>$connection->error<br>");
+        }
+
+        // Close the connection
+        $connection->close();
+    }
 
     function removePrivilege($id) {
         // Create connection

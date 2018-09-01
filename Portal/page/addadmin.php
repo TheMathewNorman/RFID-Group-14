@@ -26,7 +26,7 @@
         <link rel="stylesheet" type="text/css" href="../css/header.css">
         <link rel="stylesheet" type="text/css" href="../css/menu.css">
     </head>
-    <body bgcolor="#f5f5f5">
+    <body>
         <div id="content">
         <?php include "../component/header.php"; ?>
         <?php include "../component/menu.php"; ?>
