@@ -736,7 +736,7 @@ class Database {
         }
 
         // Form SQL query
-        $sql = "SELECT id, CONCAT(firstname, ' ', lastname) as name FROM members";
+        $sql = "SELECT id, CONCAT(firstname, ' ', lastname) as Name FROM members";
 
         // Fetch each line and display in table.
         $memberPrivilegeInformation;
@@ -745,15 +745,13 @@ class Database {
                 echo "The privilege table is empty.<br>";
             } else {
                 while ($row=mysqli_fetch_row($result)) {
-                    array_push($memberPrivilegeInformation, $row);
+                    echo $row[0].' '.$row[1];
                 }
             }
             mysqli_free_result($result);
         } else {
             die("There was an error listing the data in the privilege table:<br>$connection->error<br>");
         }
-
-        var_dump($memberPrivilegeInformation);
 
         // Close the connection
         $connection->close();
