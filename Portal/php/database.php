@@ -736,11 +736,18 @@ class Database {
         }
 
         // Form SQL query
-        $sql = "INSERT INTO privilege(member_id, reader_id) VALUES ($id, $readerid)";
+        $sql = "SELECT * FROM privilege WHERE reader_id = $readerid AND member_id = $memberid";
 
         // Add access to the privilege table
-        if (!mysqli_query($connection, $sql)) {
-            die("There was an error adding data to the privilege table:<br>$connection->error<br>");
+        if ($result = mysqli_query($connection, $sql)) {
+            if (mysqli_num_rows($result) == 0) {
+                $sql = "INSERT INTO privilege(member_id, reader_id) VALUES ($id, $readerid)";
+                if (!mysqli_query($connection, $sql)) {
+                    die("There was an error adding data to the privilege table.");
+                }
+            }
+        } else {
+            die("There was an error reading data from the privilege table:<br>$connection->error<br>");
         }
 
         // Close the connection
