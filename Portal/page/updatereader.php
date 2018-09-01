@@ -4,7 +4,9 @@
     }
 
     include_once "../php/database.php";
+    include_once "../php/validate.php";
     $database = new Database();
+    $validate = new Validate();
 
     // Used form with information as placeholder text.
     $readerInfo = $database->fetchReaderInfo($_GET['id']);
@@ -21,6 +23,7 @@
     
     if (isset($_POST['reader_name']) || isset($_POST['reader_group']) || isset($_POST['approved'])) {
         if ($_POST['approved'] != 1) { $_POST['approved'] = 0; }
+        $_POST['reader_name'] = $validate->sanitizeString($_POST['reader_name']);
         $database->updateReader($_GET['id'], $_POST['reader_name'], $_POST['reader_group'], $_POST['approved']);
         header("Location: listreaders.php");
     } 
