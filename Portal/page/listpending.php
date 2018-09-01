@@ -1,3 +1,8 @@
+<?php
+    include_once "../php/database.php;
+    $database = new Database();
+ ?>
+
 <html>
 <head>
     <title>Pending Readers</title>
@@ -22,6 +27,7 @@
             <th>Approve</th>
       
           </tr>
+          <?php echo $database ->listPending();?>
         </table>
 
 
