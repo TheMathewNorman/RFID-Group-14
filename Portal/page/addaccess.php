@@ -3,12 +3,21 @@
     include_once "../php/database.php";
     $database = new Database();
 
+    $location = "";
+
     if (!isset($_GET['id'])) {
-        header('Location: memberaccess.php');
+        $location = "memberaccess.php";
     }
 
-    foreach ($_POST as $postItem) {
-        $database->addPrivilege($_GET['id'], $postItem);
+    if (count($_POST) > 0) {
+        foreach ($_POST as $postItem) {
+            $database->addPrivilege($_GET['id'], $postItem);
+        }
+        $location = "listaccess.php?id=".$_GET['id'];
+    }
+
+    if ($location != "") {
+        header("Location: $location");
     }
   
 ?>
