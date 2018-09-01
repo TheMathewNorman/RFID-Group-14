@@ -978,10 +978,10 @@ class Database {
         }
 
         // Form SQL query
-        $sql = "DELETE FROM readers WHERE id = $readerid";
+        $sql = "DELETE FROM readers WHERE id = $readerid; DELETE FROM privilege WHERE reader_id = $readerid";
 
         // Remove the reader.
-        if (!mysqli_query($connection, $sql)) {
+        if (!mysqli_multi_query($connection, $sql)) {
             die("There was an error removing the reader from the database:<br>$connection->error<br>");
         }
 
