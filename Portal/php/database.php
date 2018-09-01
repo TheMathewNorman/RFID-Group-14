@@ -755,7 +755,7 @@ class Database {
     }
     
     //// READER TABLE FUNCTIONALITY //// 
-    function updateReader($readerid, $name,$group) {
+    function updateReader($readerid, $name = "", $group = "", $approved = "") {
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
                 
@@ -765,10 +765,14 @@ class Database {
         }
 
         // Form SQL query
-        $sql = "UPDATE readers SET reader_name = '$name', reader_group = $group, approved = 1 WHERE id = $readerid";
+        $sql = "";
 
-        // Remove the reader.
-        if (!mysqli_query($connection, $sql)) {
+        if ($name !== "") { $sql.= "UPDATE readers SET reader_name = '$name' WHERE id = $readerid;"; }
+        if ($group !== "") { $sql.= "UPDATE readers SET reader_group = $group WHERE id = $readerid;"; }
+        if ($approved !== "") { $sql.= "UPDATE readers SET approved = $approved WHERE id = $readerid;"; }
+
+        // Update the reader.
+        if (!mysqli_multi_query($connection, $sql)) {
             die("There was an error updating the reader:<br>$connection->error<br>");
         }
 

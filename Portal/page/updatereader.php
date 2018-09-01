@@ -44,7 +44,7 @@
                 <tr><td style="text-align:right">Approved:</td><td><input type="checkbox" name="approved" value="true" <?php echo $approved; ?>></td></tr>
                 <tr><td></td></tr>
                 <tr><td style="text-align:right">Delete:</td><td><input type="checkbox" name="delete" value="true"></td></tr>
-                <tr><td colspan="2" style="text-align:right"><input type="submit" value="Update Member"> <input type="reset" value="Clear"></td></tr>
+                <tr><td colspan="2" style="text-align:right"><input type="submit" value="Update Reader"> <input type="reset" value="Clear"></td></tr>
                 </table>
             </form>
         </div>
