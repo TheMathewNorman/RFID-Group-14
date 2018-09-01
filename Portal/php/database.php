@@ -39,11 +39,8 @@ class Database {
             id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
             reader_name VARCHAR(30) NOT NULL,
             reader_group INT(6) NOT NULL,
-            approved BOOL NOT NULL
-        ); CREATE TABLE pending (
-           id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-           reader_id INT(6) NOT NULL,
-           request_date TIMESTAMP NOT NULL
+            signature VARCHAR(60) NOT NULL,
+            approved BOOLEAN NOT NULL
         ); CREATE TABLE logs (
             id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
             member_id INT(6) NOT NULL,
@@ -803,7 +800,7 @@ class Database {
         }
 
         // Form SQL query
-        $sql = "SELECT id, reader_name, date, approved FROM readers ORDER BY id";
+        $sql = "SELECT id, signature, request_date FROM pending ORDER BY id";
 
         // Fetch each line and display in table.
         if ($result = mysqli_query($connection, $sql)) {
@@ -815,9 +812,8 @@ class Database {
                     <td>$row[0]</td>
                     <td>$row[1]</td> 
                     <td>$row[2]</td>
-                    <td>
-                    <a href=\"updatereader.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td>
-                    <a href=\"../php/deletereader.php?table=member&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>";
+                    <td><a href=\"approvereader.php?id=".$row[0]."\"><i class=\"fas fa-check fa-lg\"></i></a></td>
+                    </tr>";
                 }
             }
             mysqli_free_result($result);

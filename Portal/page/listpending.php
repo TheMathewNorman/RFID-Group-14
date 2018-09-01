@@ -22,7 +22,8 @@
       
           <table id="list-table">
           <tr>
-            <th>Reader ID</th>
+            <th>ID</th>
+            <th>Reader Code</th>
             <th>Date</th>
             <th>Approve</th>
           </tr>
