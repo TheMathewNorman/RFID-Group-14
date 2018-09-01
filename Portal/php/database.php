@@ -810,7 +810,7 @@ class Database {
         }
 
         // Form SQL query
-        $sql = "SELECT id, reader_name FROM readers";
+        $sql = "SELECT id, reader_name FROM readers WHERE approved = 1";
 
         // Fetch each line and display in table.
         if ($result = mysqli_query($connection, $sql)) {
