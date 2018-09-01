@@ -9,11 +9,12 @@
     if (!isset($_SESSION['userid'])) {
         $redirect = "../index.php";
     } else {
-        if (isset($_GET['id'])) {
+        if (isset($_GET['id']) && isset($_GET['member'])) {
             $id = $_GET['id'];
+            $memberid = $_GET['member'];
 
             $database->removePrivilege($id);
-            $redirect = "../page/listaccess.php?id=$id";
+            $redirect = "../page/listaccess.php?id=$memberid";
         }
     }
 

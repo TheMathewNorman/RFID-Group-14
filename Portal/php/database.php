@@ -808,7 +808,7 @@ class Database {
                     <td>$row[0]</td>
                     <td>$row[1]</td>
                     <td>$row[2]</td>
-                    <td><a href=\"../php/deleteaccess.php?id=".$row[0]."\"><i class=\"fas fa-minus-circle fa-lg\"></i></a></td>
+                    <td><a href=\"../php/deleteaccess.php?id=".$row[0]."&member=$id\"><i class=\"fas fa-minus-circle fa-lg\"></i></a></td>
                     </tr>";
                 }
             }
