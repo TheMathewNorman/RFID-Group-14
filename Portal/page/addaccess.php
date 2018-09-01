@@ -33,7 +33,9 @@
                     $database->listPrivilegeReaders();
                 ?>
             </table>
-            <input type="Submit" value="Submit">
+            <div style="text-align:center;margin-top:10px;">
+                <input type="Submit" value="Submit">
+            </div>
             </form>
 
         </div>

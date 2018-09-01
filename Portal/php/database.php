@@ -821,7 +821,7 @@ class Database {
                     echo "<tr>
                     <td>$row[0]</td>
                     <td>$row[1]</td>
-                    <td><input type=\"checkbox\" name=\"reader".$row[0]."\" value=\"1\"></td>
+                    <td><input type=\"checkbox\" name=\"".$row[0]."\" value=\"1\"></td>
                     </tr>";
                 }
             }
