@@ -785,20 +785,24 @@ class Database {
         $sql = "SELECT * FROM readers WHERE approved = 0 AND signature = '$id' ORDER BY id";
          
         // Check if reader is in pending
-        if (mysqli_num_rows(mysqli_query($connection, $sql)) == 0) {
-            $sql = "SELECT * FROM readers WHERE approved = 1 AND signature = '$id' ORDER BY id";
-            // Check if reader is in approved
-            if ($result = mysqli_query($connection, $sql)) {
-                if (mysqli_num_rows($result) == 0) {
-                    $sql = "INSERT INTO readers(reader_name, reader_group, approved, signature) VALUES ('', 0, 0, '$id')";
-                    if (!mysqli_query($connection, $sql)) {
-                        die("There was an error adding the reader to pending. ".mysqli_error());
+        if ($result = mysqli_query($connection, $sql)) {
+            if (mysqli_num_rows($result) === 0) {
+
+                $sql = "SELECT * FROM readers WHERE approved = 1 AND signature = '$id' ORDER BY id";
+                // Check if reader is in approved
+                if ($result = mysqli_query($connection, $sql)) {
+                    if (mysqli_num_rows($result) === 0) {
+                        
+                        $sql = "INSERT INTO readers(reader_name, reader_group, approved, signature) VALUES ('', 0, 0, '$id')";
+                        if (!mysqli_query($connection, $sql)) {
+                            die("There was an error adding the reader to pending. ".mysqli_error());
+                        }
+                    } else {
+                        $return = true;
                     }
                 } else {
-                    $return = true;
+                    die("Error accessing readers. ".mysqli_error());
                 }
-            } else {
-                die("Error accessing readers. ".mysqli_error());
             }
         } else {
             die("There was an error running the query. ".mysqli_error());
