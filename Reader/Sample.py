@@ -39,12 +39,12 @@ def accessDenied():
 
 # Read card reader input
 while True:
-	print("Ready to read...")
-	status.blue_on()
-	id, time = reader.read()
-	status.blue_off()
-	if (validate.card(id)):
-		accessGranted()
-	else:
-		accessDenied()
+    print("Ready to read...")
+    status.blue_on()
+    id, time = reader.read()
+    status.blue_off()
+    if (validate.card(id)):
+        accessGranted()
+    else:
+        accessDenied()
 	

@@ -2,9 +2,6 @@
 import requests
 
 # Example verification of card "987654321" by reader "12345"
-r = reponse.get("therfid.men/reader/verify.request.php?readerid=12345&cardid=987654321");
+r = requests.get("http://therfid.men/php/reader/authenticate.php?key=662766669539&reader=1")
 
-if r.status_code == 200: # r.status_code = 200 on success.
-    # Unlock
-else # r.status_code = 403 on failure.
-    # Keep locked
+print(r.test)
