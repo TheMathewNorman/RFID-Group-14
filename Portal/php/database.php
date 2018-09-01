@@ -745,7 +745,7 @@ class Database {
                 echo "The privilege table is empty.<br>";
             } else {
                 while ($row=mysqli_fetch_row($result)) {
-                    array_push($row);
+                    array_push($memberPrivilegeInformation, $row);
                 }
             }
             mysqli_free_result($result);
