@@ -799,7 +799,7 @@ class Database {
         // Fetch each line and display in table.
         if ($result = mysqli_query($connection, $sql)) {
             if (mysqli_num_rows($result) === 0) {
-                echo "The readers table is empty.<br>";
+                echo "The pending readers table is empty.<br>";
             } else {
                 while ($row=mysqli_fetch_row($result)) {
                     echo "<tr>
