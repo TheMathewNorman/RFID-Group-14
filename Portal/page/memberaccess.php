@@ -1,3 +1,8 @@
+<?php
+    include_once "../php/database.php";
+    $database = new Database();
+?>
+
 <html>
 <head>
     <title>Member Access</title>
@@ -20,6 +25,7 @@
         <th>Name</th>
         <th>Modify Access</th>
       </tr>
+      <?php echo $database->memberAccess();?>
     </table>
 
 
