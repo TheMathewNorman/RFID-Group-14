@@ -755,6 +755,7 @@ class Database {
     }
     
     //// READER TABLE FUNCTIONALITY //// 
+    // Update a reader
     function updateReader($readerid, $name = "", $group = "", $approved = "") {
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
@@ -821,6 +822,28 @@ class Database {
          
         $connection->close();
         return $return;
+    }
+
+    // Approve a reader
+    function approveReader($id) {
+        // Create connection
+        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+                        
+        // Check connection.
+        if ($connection->connect_error) {
+            die("Connection failed<br>$connection->connect_error");
+        }
+
+        // Form SQL query
+        $sql = "UPDATE readers SET approved = 1 WHERE id = $id";
+
+        // Remove the reader.
+        if (!mysqli_query($connection, $sql)) {
+            die("There was an error approving the reader:<br>$connection->error<br>");
+        }
+
+        // Close the connection
+        $connection->close();
     }
 
     // Get number of pending readers
@@ -905,7 +928,7 @@ class Database {
                     echo "<tr>
                     <td>$row[0]</td>
                     <td>$row[1]</td>
-                    <td><a href=\"approvereader.php?id=".$row[0]."\"><i class=\"fas fa-check fa-lg\"></i></a></td>
+                    <td><a href=\"../php/approvereader.php?id=".$row[0]."\"><i class=\"fas fa-check fa-lg\"></i></a></td>
                     </tr>";
                 }
             }
