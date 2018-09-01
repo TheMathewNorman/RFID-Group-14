@@ -11,7 +11,7 @@
     <div class="dropdown-content">
         <a href="addmember.php">Add</a>
         <a href="listmember.php">List</a>
-        <a href="memberaccess.php">Access</a>
+        <a href="memberaccess.php">Manage Access</a>
     </div>
     </div>
     <div class="dropdown">
