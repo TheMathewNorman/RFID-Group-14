@@ -17,7 +17,7 @@
       
           <table id="list-table">
           <tr>
-            <th>Member ID</th>
+            <th>Reader ID</th>
             <th>Reader Name</th>
             <th>Reader Group</th>
             <th>Update</th>

@@ -17,9 +17,8 @@
     <table id="list-table">
       <tr>
         <th>Member ID</th>
-        <th> Name</th>
-        <th>Modify</th>
-  
+        <th>Name</th>
+        <th>Modify Access</th>
       </tr>
     </table>
 

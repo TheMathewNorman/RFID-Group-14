@@ -17,8 +17,8 @@
       
           <table id="list-table">
           <tr>
-            <th>Member ID</th>
-            <th> Data</th>
+            <th>Reader ID</th>
+            <th>Date</th>
             <th>Approve</th>
       
           </tr>
