@@ -123,8 +123,8 @@ body {
     margin-top: 10px;
     text-align: center;
     color: white;
+    font-size: 1.2em;
 }
     #add-new-button a {
         color: white;
-        font-size: 1.2em;
     }
