@@ -771,7 +771,7 @@ class Database {
             // Check if reader is in approved
             if ($result = mysqli_query($connection, $sql)) {
                 if (mysqli_num_rows($result) == 0) {
-                    addPending($id);
+                    echo "Testing to see if this is where it gets to.";//addPending($id);
                 } else {
                     $return = true;
                 }
