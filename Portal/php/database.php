@@ -719,7 +719,7 @@ class Database {
     // removePriviledge($id)
     // modifyPriviledge($id,$memberid,$readerid,$readergroup)
     // listPriviledges()
-    function checkPrivilege($readerid, $key) {
+    function checkPrivilege($signature, $key) {
         $keyhash = hash('sha512', $key);
         
         // Create connection
@@ -748,10 +748,60 @@ class Database {
     
     //// READER TABLE FUNCTIONALITY //// 
     // Functions to include
-    // approveReader($id)
     // updateReader($name,$group,$timeout)
     // removeReader($readerid)    
     // searchReaders($searchq)
+    function approveReader($id) {
+        $return = false; 
+        
+        // Create connection
+        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+                
+        // Check connection.
+        if ($connection->connect_error) {
+            die("Connection failed<br>$connection->connect_error");
+        }
+ 
+        // Form SQL query
+        $sql = "SELECT * FROM readers WHERE approved = 0 AND signature = '$id' ORDER BY id";
+         
+        // Check if reader is in pending
+        if (mysqli_num_rows(mysqli_query($connection, $sql)) == 0) {
+            $sql = "SELECT * FROM readers WHERE approved = 1 AND signature = '$id' ORDER BY id";
+            // Check if reader is in approved
+            if (mysqli_num_rows(mysqli_query($connection, $sql)) == 0) {
+                addPending($id);
+            } else {
+                $return = true;
+            }
+        } else {
+            die("There was an error running the query. ".mysqli_error());
+        }
+         
+        $connection->close();
+        return $return;
+    }
+
+    function addPending($signature) {
+        // Create connection
+        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+                        
+        // Check connection.
+        if ($connection->connect_error) {
+            die("Connection failed<br>$connection->connect_error");
+        }
+
+        // Form SQL query
+        $sql = "INSERT INTO readers(reader_name, reader_group, approved, signature) VALUES ('', 0, 0, $signature)";
+        
+        // Check if reader is in pending
+        if (!mysqli_query($connection, $sql)) {
+            die("There was an error adding the reader to pending . ".mysqli_error());
+        }
+
+        // Close the connection
+        $connection->close();
+    }
 
     function listReaders() {
         // Create connection
@@ -790,6 +840,49 @@ class Database {
         $connection->close();
     }
 
+    function searchReaders($searchq) {
+        // Create connection
+        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+                        
+        // Check connection.
+        if ($connection->connect_error) {
+            die("Connection failed<br>$connection->connect_error");
+        }
+
+        // Form SQL query
+        $sql = "SELECT id, reader_name, reader_group, signature
+                FROM readers
+                WHERE approved = 1
+                AND (
+                    reader_name LIKE '%$searchq%'
+                    OR id LIKE '%$searchq%'
+                )
+                ORDER BY id";
+
+        // Fetch each line and display in table.
+        if ($result = mysqli_query($connection, $sql)) {
+            if (mysqli_num_rows($result) === 0) {
+                echo "The readers table is empty.<br>";
+            } else {
+                while ($row=mysqli_fetch_row($result)) {
+                    echo "<tr>
+                    <td>$row[0]</td>
+                    <td>$row[1]</td>
+                    <td>$row[2]</td>
+                    <td>$row[3]</td>
+                    <td><a href=\"updatereader.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td>
+                    <td><a href=\"../php/deletereader.php?table=member&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td>
+                    </tr>";
+                }
+            }
+            mysqli_free_result($result);
+        } else {
+            die("There was an error listing the readers from the database:<br>$connection->error<br>");
+        }
+
+        // Close the connection
+        $connection->close();
+    }
 
     function listPending() {
         // Create connection
@@ -801,7 +894,7 @@ class Database {
         }
 
         // Form SQL query
-        $sql = "SELECT id, signature, request_date FROM pending ORDER BY id";
+        $sql = "SELECT id, signature FROM readers WHERE approved = 0 ORDER BY id";
 
         // Fetch each line and display in table.
         if ($result = mysqli_query($connection, $sql)) {
@@ -811,8 +904,7 @@ class Database {
                 while ($row=mysqli_fetch_row($result)) {
                     echo "<tr>
                     <td>$row[0]</td>
-                    <td>$row[1]</td> 
-                    <td>$row[2]</td>
+                    <td>$row[1]</td>
                     <td><a href=\"approvereader.php?id=".$row[0]."\"><i class=\"fas fa-check fa-lg\"></i></a></td>
                     </tr>";
                 }

@@ -24,7 +24,6 @@
           <tr>
             <th>ID</th>
             <th>Reader Code</th>
-            <th>Date</th>
             <th>Approve</th>
           </tr>
           <?php echo $database->listPending(); ?>
