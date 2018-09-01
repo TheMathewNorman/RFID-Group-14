@@ -1,4 +1,7 @@
-
+<?php
+    include_once '../php/database.php';
+    $database = new Database();
+?>
 <div id="menu">
     <div class="dropdown">
     <button class="dropbtn" onclick="location.href='index.php';">Home</button>
@@ -14,7 +17,7 @@
     <div class="dropdown">
     <button class="dropbtn" onclick="location.href='listreaders.php';">Readers</button>
     <div class="dropdown-content">
-        <a href="listpending.php">Pending</a>
+        <a href="listpending.php">Pending (<?php echo $database->getPendingCount(); ?>)</a>
         <a href="listreaders.php">List</a>
     </div>
     </div>    
