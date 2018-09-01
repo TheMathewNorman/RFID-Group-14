@@ -793,7 +793,7 @@ class Database {
     }
 
 
-    function listpending() {
+    function listPending() {
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
                 
