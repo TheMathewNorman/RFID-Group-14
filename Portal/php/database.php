@@ -736,16 +736,20 @@ class Database {
         }
 
         // Form SQL query
-        $sql = "SELECT id, CONCAT(firstname, ' ', lastname) as Name FROM members";
+        $sql = "SELECT id, CONCAT(firstname, ' ', lastname) AS MemberName FROM members ORDER BY id";
 
         // Fetch each line and display in table.
-        $memberPrivilegeInformation;
+        $memberAccessInfo;
         if ($result = mysqli_query($connection, $sql)) {
             if (mysqli_num_rows($result) === 0) {
                 echo "The privilege table is empty.<br>";
             } else {
                 while ($row=mysqli_fetch_row($result)) {
-                    echo $row[0].' '.$row[1];
+                    echo "<tr>
+                    <td>$row[0]</td>
+                    <td>$row[1]</td>
+                    <td><a href=\"listaccess.php?id=".$row[0]."\"><i class=\"fas fa-edit fa-lg\"></i></a></td>
+                    </tr>";
                 }
             }
             mysqli_free_result($result);
@@ -757,6 +761,66 @@ class Database {
         $connection->close();
     }
     
+    function listMemberPrivilege($id) {
+        // Create connection
+        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+        
+        // Check connection.
+        if ($connection->connect_error) {
+            die("Connection failed<br>$connection->connect_error");
+        }
+
+        // Form SQL query
+        $sql = "SELECT privilege.id AS PID, readers.id AS RID, readers.reader_name AS ReaderName
+                FROM (privilege 
+                INNER JOIN readers ON privilege.reader_id = readers.id)
+                WHERE privilege.member_id = $id";
+
+        // Fetch each line and display in table.
+        $memberAccessInfo;
+        if ($result = mysqli_query($connection, $sql)) {
+            if (mysqli_num_rows($result) === 0) {
+                echo "The privilege table is empty.<br>";
+            } else {
+                while ($row=mysqli_fetch_row($result)) {
+                    echo "<tr>
+                    <td>$row[0]</td>
+                    <td>$row[1]</td>
+                    <td>$row[2]</td>
+                    <td><a href=\"removeaccess.php?id=".$row[0]."\"><i class=\"fas fa-edit fa-lg\"></i></a></td>
+                    </tr>";
+                }
+            }
+            mysqli_free_result($result);
+        } else {
+            die("There was an error listing the data in the privilege table:<br>$connection->error<br>");
+        }
+
+        // Close the connection
+        $connection->close();
+    }
+
+    function removePrivilege($id) {
+        // Create connection
+        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+                        
+        // Check connection.
+        if ($connection->connect_error) {
+            die("Connection failed<br>$connection->connect_error");
+        }
+
+        // Form SQL query
+        $sql = "DELETE FROM privilege WHERE id = $id";
+
+        // Remove the reader.
+        if (!mysqli_query($connection, $sql)) {
+            die("There was an error removing the reader from the database:<br>$connection->error<br>");
+        }
+
+        // Close the connection
+        $connection->close();
+    }
+
     // Check if member associated with key has been given access to the reader.
     function checkPrivilege($signature, $key) {
         $keyhash = hash('sha512', $key);

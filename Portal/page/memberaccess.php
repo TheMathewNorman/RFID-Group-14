@@ -26,7 +26,7 @@
         <th>Reader Access</th>
         <th>Modify Access</th>
       </tr>
-      <?php echo $database->memberAccess();?>
+      <?php echo $database->listPrivilegeMembers(); ?>
     </table>
 
 
