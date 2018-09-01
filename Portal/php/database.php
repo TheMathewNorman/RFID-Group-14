@@ -40,6 +40,10 @@ class Database {
             reader_name VARCHAR(30) NOT NULL,
             reader_group INT(6) NOT NULL,
             approved BOOL NOT NULL
+        ); CREATE TABLE pending (
+           id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+           reader_id INT(6) NOT NULL,
+           request_date TIMESTAMP NOT NULL
         ); CREATE TABLE logs (
             id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
             member_id INT(6) NOT NULL,
@@ -744,9 +748,14 @@ class Database {
         }
     }
 
-
     
-    // listReaders()
+    //// READER TABLE FUNCTIONALITY //// 
+    // Functions to include
+    // approveReader($id)
+    // updateReader($name,$group,$timeout)
+    // removeReader($readerid)    
+    // searchReaders($searchq)
+
     function listReaders() {
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
@@ -775,15 +784,15 @@ class Database {
                 }
             }
             mysqli_free_result($result);
-         } else {
+        } else {
             die("There was an error listing the readers from the database:<br>$connection->error<br>");
-         }
+        }
 
-         // Close the connection
-         $connection->close();
+        // Close the connection
+        $connection->close();
     }
-    
-    // listpending.php
+
+
     function listpending() {
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
@@ -794,7 +803,7 @@ class Database {
         }
 
         // Form SQL query
-        $sql = "SELECT id, reader_name, date, approved, FROM readers ORDER BY id";
+        $sql = "SELECT id, reader_name, date, approved FROM readers ORDER BY id";
 
         // Fetch each line and display in table.
         if ($result = mysqli_query($connection, $sql)) {
@@ -812,22 +821,13 @@ class Database {
                 }
             }
             mysqli_free_result($result);
-         } else {
+        } else {
             die("There was an error listing the readers from the database:<br>$connection->error<br>");
-         }
+        }
 
-         // Close the connection
-         $connection->close();
+        // Close the connection
+        $connection->close();
     }
-    
-    //// READER TABLE FUNCTIONALITY //// 
-    // Functions to include
-    // addReader($name,$group,$timeout)
-    // approveReader($id)
-    // updateReader($name,$group,$timeout)
-    // removeReader($readerid)    
-    // searchReaders($searchq)
-
     
 
 }

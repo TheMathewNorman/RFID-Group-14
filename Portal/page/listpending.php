@@ -1,5 +1,5 @@
 <?php
-    include_once "../php/database.php;
+    include_once "../php/database.php";
     $database = new Database();
  ?>
 
@@ -27,7 +27,7 @@
             <th>Approve</th>
       
           </tr>
-          <?php echo $database ->listPending();?>
+          <?php echo $database->listPending(); ?>
         </table>
 
 
