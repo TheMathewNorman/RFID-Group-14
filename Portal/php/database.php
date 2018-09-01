@@ -750,10 +750,47 @@ class Database {
     // approveReader($id)
     // updateReader($name,$group,$timeout)
     // removeReader($readerid)
-    // searchReaders($searchq)
+    
+    // listReaders()
     function listReaders() {
+        // Create connection
+        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+                
+        // Check connection.
+        if ($connection->connect_error) {
+            die("Connection failed<br>$connection->connect_error");
+        }
 
+        // Form SQL query
+        $sql = "SELECT id, reader_name, reader_group, approved, FROM readers ORDER BY id";
+
+        // Fetch each line and display in table.
+        if ($result = mysqli_query($connection, $sql)) {
+            if (mysqli_num_rows($result) === 0) {
+                echo "The readers table is empty.<br>";
+            } else {
+                while ($row=mysqli_fetch_row($result)) {
+                    echo "<tr>
+                    <td>$row[0]</td>
+                    <td>$row[1]</td>
+                    <td>$row[2]</td>
+                    <td>$row[3]</td>
+                    <td>$row[4]</td>                    
+                    <td>
+                    <a href=\"updatereader.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td>
+                    <a href=\"../php/deletereader.php?table=member&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>";
+                }
+            }
+            mysqli_free_result($result);
+         } else {
+            die("There was an error listing the readers from the database:<br>$connection->error<br>");
+         }
+
+         // Close the connection
+         $connection->close();
     }
+    
+    // searchReaders($searchq)
 
     
 
