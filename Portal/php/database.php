@@ -753,7 +753,6 @@ class Database {
             return false;
         }
     }
-
     
     //// READER TABLE FUNCTIONALITY //// 
     function updateReader($readerid, $name,$group) {
@@ -847,6 +846,37 @@ class Database {
 
         // Return number of pending readers
         return $pendingCount;
+    }
+
+    // Get reader information
+    function fetchReaderInfo($readerid) {
+        // Create connection
+        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+                        
+        // Check connection
+        if ($connection->connect_error) {
+            die("Connection failed<br>$connection->connect_error");
+        }
+
+        // Form SQL query
+        $sql = "SELECT reader_name, reader_group, approved, signature FROM readers WHERE id = '$readerid'";
+
+        $readerinfo;
+
+        // Fetch each line and display in table
+        if ($result = mysqli_query($connection, $sql)) {
+            $row=mysqli_fetch_row($result);
+            
+            $userInfo = array("reader_name"=>$row[0], "reader_group"=>$row[1], "approved"=>$row[2], "signature"=>$row[3]);
+
+            mysqli_free_result($result);
+        } else {
+            die("There was an error retreiving a list of admins from the database:<br>$connection->error<br>");
+        }
+
+        return $readerInfo;
+
+        $connection->close();
     }
 
     // List all readers pending approval
