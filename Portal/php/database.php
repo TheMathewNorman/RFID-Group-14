@@ -909,7 +909,7 @@ class Database {
                     <td>$row[2]</td>
                     <td>$row[3]</td>
                     <td><a href=\"updatereader.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td>
-                    <td><a href=\"../php/deletereader.php?table=member&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td>
+                    <td><a href=\"../php/deletereader.php?id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td>
                     </tr>";
                 }
             }
@@ -954,7 +954,7 @@ class Database {
                     <td>$row[2]</td>
                     <td>$row[3]</td>
                     <td><a href=\"updatereader.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td>
-                    <td><a href=\"../php/deletereader.php?table=member&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td>
+                    <td><a href=\"../php/deletereader.php?id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td>
                     </tr>";
                 }
             }
