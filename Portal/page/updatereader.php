@@ -1,9 +1,9 @@
 <?php 
-  if (!isset($GET'id')) {
+  if (!isset($GET_['id'])) {
     header("location: listreaders.php");
   }
 
-  include_once "../php/database.php
+  include_once "../php/database.php";
   $database = new Database();
 
 ?>

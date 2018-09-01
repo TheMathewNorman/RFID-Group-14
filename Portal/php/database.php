@@ -731,7 +731,7 @@ class Database {
         }
 
         // Find any results for given member and reader combination in the privilege table
-        $sql = "SELECT privilege.id FROM ((privilege INNER JOIN members ON privilege.member_id = members.id) INNER JOIN readers ON privilege.reader_id = readers.id) WHERE readers.id = $readerid AND members.cardkey = '$keyhash'";
+        $sql = "SELECT privilege.id FROM ((privilege INNER JOIN members ON privilege.member_id = members.id) INNER JOIN readers ON privilege.reader_id = readers.id) WHERE readers.signature = '$readerid' AND readers.approved = 1 AND members.cardkey = '$keyhash'";
 
         if (!($result = mysqli_query($connection, $sql))) {
             die(mysqli_error($connection));
