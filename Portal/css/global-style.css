@@ -51,6 +51,9 @@ body {
     padding: 5px;
     width: 500px;
 }
+#content input[type="number"] {
+    width: 50px;
+}
 #content input[type="submit"], #content input[type="reset"] {
     background-color: #24B476;
     color: white;
