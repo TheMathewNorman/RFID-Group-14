@@ -749,9 +749,28 @@ class Database {
     //// READER TABLE FUNCTIONALITY //// 
     // Functions to include
     // updateReader($name,$group,$timeout)
-    // removeReader($readerid)    
-    // searchReaders($searchq)
-    function approveReader($id) {
+    function updateReader($readerid, $name,$group) {
+        // Create connection
+        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+                
+        // Check connection.
+        if ($connection->connect_error) {
+            die("Connection failed<br>$connection->connect_error");
+        }
+
+        // Form SQL query
+        $sql = "UPDATE readers SET reader_name = '$name', reader_group = $group, approved = 1 WHERE id = $readerid";
+
+        // Remove the reader.
+        if (!mysqli_query($connection, $sql)) {
+            die("There was an error updating the reader:<br>$connection->error<br>");
+        }
+
+        // Close the connection
+        $connection->close();
+    }
+
+    function checkReaderApproved($id) {
         $return = false; 
         
         // Create connection
@@ -789,21 +808,34 @@ class Database {
         return $return;
     }
 
-    function addPending($signature, $connection) {
+    function listPending() {
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
-                        
+                
         // Check connection.
         if ($connection->connect_error) {
             die("Connection failed<br>$connection->connect_error");
         }
 
         // Form SQL query
-        $sql = "INSERT INTO readers(reader_name, reader_group, approved, signature) VALUES ('', 0, 0, '$signature')";
-        
-        // Add reader to the readers list
-        if (!mysqli_query($connection, $sql)) {
-            die("There was an error adding the reader to pending . ".mysqli_error());
+        $sql = "SELECT id, signature FROM readers WHERE approved = 0 ORDER BY id";
+
+        // Fetch each line and display in table.
+        if ($result = mysqli_query($connection, $sql)) {
+            if (mysqli_num_rows($result) === 0) {
+                echo "The pending readers table is empty.<br>";
+            } else {
+                while ($row=mysqli_fetch_row($result)) {
+                    echo "<tr>
+                    <td>$row[0]</td>
+                    <td>$row[1]</td>
+                    <td><a href=\"approvereader.php?id=".$row[0]."\"><i class=\"fas fa-check fa-lg\"></i></a></td>
+                    </tr>";
+                }
+            }
+            mysqli_free_result($result);
+        } else {
+            die("There was an error listing the readers from the database:<br>$connection->error<br>");
         }
 
         // Close the connection
@@ -891,40 +923,26 @@ class Database {
         $connection->close();
     }
 
-    function listPending() {
+    function removeReader($readerid) {
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
-                
+                        
         // Check connection.
         if ($connection->connect_error) {
             die("Connection failed<br>$connection->connect_error");
         }
 
         // Form SQL query
-        $sql = "SELECT id, signature FROM readers WHERE approved = 0 ORDER BY id";
+        $sql = "DELETE FROM readers WHERE id = $readerid";
 
-        // Fetch each line and display in table.
-        if ($result = mysqli_query($connection, $sql)) {
-            if (mysqli_num_rows($result) === 0) {
-                echo "The pending readers table is empty.<br>";
-            } else {
-                while ($row=mysqli_fetch_row($result)) {
-                    echo "<tr>
-                    <td>$row[0]</td>
-                    <td>$row[1]</td>
-                    <td><a href=\"approvereader.php?id=".$row[0]."\"><i class=\"fas fa-check fa-lg\"></i></a></td>
-                    </tr>";
-                }
-            }
-            mysqli_free_result($result);
-        } else {
-            die("There was an error listing the readers from the database:<br>$connection->error<br>");
+        // Remove the reader.
+        if (!mysqli_query($connection, $sql)) {
+            die("There was an error removing the reader from the database:<br>$connection->error<br>");
         }
 
         // Close the connection
         $connection->close();
     }
-    
 
 }
 ?>

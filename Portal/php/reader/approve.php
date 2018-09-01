@@ -7,7 +7,7 @@
     if (isset($_GET['reader'])) {
         $readerid = $_GET['reader'];
 
-        if ($database->approveReader($readerid)) {
+        if ($database->checkReaderApproved($readerid)) {
             $return = '1';
         }
     }
