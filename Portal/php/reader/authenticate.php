@@ -8,13 +8,14 @@
     if (isset($_GET['reader']) && isset($_GET['key'])) {
         $readerid = $_GET['reader'];
         $key = $_GET['key'];
+
+        echo "Reader: $readerid<br>Key: $key";
         
         if ($database->checkPrivilege($readerid,$key)) {
             if ($database->addLogEntry($readerid,$key)) { 
                 $return = "1";
             }
-        }
-        
+        }   
     }
 
     // 0 is denied, 1 is granted access
