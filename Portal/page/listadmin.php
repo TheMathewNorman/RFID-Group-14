@@ -35,7 +35,7 @@
         if (isset($_GET['searchInput'])) {
           $database->searchAdmins($_GET['searchInput']);
         } else {
-          $database->listAdmins();
+          $database->listAdmins($_SESSION['userid']);
         }
       ?>
     </table>
