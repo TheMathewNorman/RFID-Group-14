@@ -12,6 +12,7 @@
         echo "Reader: $readerid<br>Key: $key";
         
         if ($database->checkPrivilege($readerid,$key)) {
+            $return = "Checked priv";
             if ($database->addLogEntry($readerid,$key)) { 
                 $return = "1";
             }
@@ -19,5 +20,6 @@
     }
 
     // 0 is denied, 1 is granted access
+    echo "<br>";
     die($return);
 ?>
