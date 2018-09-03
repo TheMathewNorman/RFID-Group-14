@@ -902,11 +902,10 @@ class Database {
 
         if ($result = mysqli_query($connection, $sql)) {
             // Return true or false
+            echo "Number of rows: ".mysqli_num_rows($result)."<br>";
             if (mysqli_num_rows($result) > 0) {
-                echo "Number of rows: ".mysqli_num_rows($result);
                 $return = true;
             } else {
-                echo "Number of rows: ".mysqli_num_rows($results);
                 $return = false;
             }
         } else {
