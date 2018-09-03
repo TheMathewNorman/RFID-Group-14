@@ -38,7 +38,13 @@
                 <tr><td style="text-align:right">Email: </td><td><input type="email" name="email"  placeholder="<?php echo $userInfo['email']; ?>"></td></tr>
                 <tr><td style="text-align:right">Phone: </td><td><input type="text" name="phone" placeholder="<?php echo $userInfo['phone']; ?>"></td></tr>
                 <tr><td style="text-align:right">Password: </td><td><input type="password" name="password"></td></tr>
+                <?php
+                if (($_SESSION['userid'] != $_GET['id']) && ($_GET['id'] != '1'))
+                ?>
                 <tr><td style="text-align:right">Delete:</td><td><input type="checkbox" name="delete" value="true"></td></tr>
+                <?php
+                }
+                ?>
                 <tr><td colspan="2" style="text-align:right"><input type="submit" value="Update Member"> <input type="reset" value="Clear"></td></tr>
                 </table>
             </form>
