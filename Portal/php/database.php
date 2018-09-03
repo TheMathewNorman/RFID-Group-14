@@ -515,7 +515,7 @@ class Database {
 
     //// LOG TABLE FUNCTIONALITY //// 
     // Add a new entry to the Log
-    function addLogEntry($readerid, $key, $checkin=0) {
+    function addLogEntry($signature, $key, $checkin=0) {
         $keyhash = hash('sha512', $key);
 
         $return = true;
@@ -534,6 +534,17 @@ class Database {
         if ($result = mysqli_query($connection, $sql)) {
             if ($row = mysqli_fetch_row($result)) {
                 $memberid = $row[0];
+            }
+        } else {
+            $return = false;
+        }
+
+        // Get member id from key
+        $readerid;
+        $sql = "SELECT id FROM readers WHERE signature = '$signature'";
+        if ($result = mysqli_query($connection, $sql)) {
+            if ($row = mysqli_fetch_row($result)) {
+                $readerid = $row[0];
             }
         } else {
             $return = false;
