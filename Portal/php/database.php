@@ -887,6 +887,8 @@ class Database {
     function checkPrivilege($signature, $key) {
         $keyhash = hash('sha512', $key);
         
+        $return = false;
+
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
                 
@@ -898,16 +900,20 @@ class Database {
         // Find any results for given member and reader combination in the privilege table
         $sql = "SELECT privilege.id FROM ((privilege INNER JOIN members ON privilege.member_id = members.id) INNER JOIN readers ON privilege.reader_id = readers.id) WHERE readers.signature = '$readerid' AND readers.approved = 1 AND members.cardkey = '$keyhash'";
 
-        if (!($result = mysqli_query($connection, $sql))) {
+        if ($result = mysqli_query($connection, $sql)) {
+            // Return true or false
+            if (mysqli_num_rows($result) > 0) {
+                echo "Number of rows: ".mysqli_num_rows($result);
+                $return = true;
+            } else {
+                echo "Number of rows: ".mysqli_num_rows($results);
+                $return = false;
+            }
+        } else {
             die(mysqli_error($connection));
         }
 
-        // Return true or false
-        if (mysqli_num_rows($result) > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return $return;
     }
     
     //// READER TABLE FUNCTIONALITY //// 
