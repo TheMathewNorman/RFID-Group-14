@@ -10,8 +10,10 @@
         $key = $_GET['key'];
         
         if ($database->checkPrivilege($readerid,$key)) {
+            $return = "Checked priv";
             if ($database->addLogEntry($readerid,$key)) { 
-                $return = "1";
+                //$return = "1";
+                $return = "Added log entry";
             }
         }
         
