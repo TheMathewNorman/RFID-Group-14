@@ -4,6 +4,13 @@ include 'sqlcreds.php';
 class Database {
 
     //// GENERAL FUNCTIONALITY //// 
+    function getConnection() {
+        $server = $_GLOBALS['server'];
+        $dbname = $_GLOBALS['dbname'];
+        $dbuser = $_GLOBALS['dbuser'];
+        $dbpass = $_GLOBALS['dbpass'];
+        return new PDO("mysql:host=$server;dbname=$dbname", $dbuser, $dbpass);
+    }
     // Create the tables.
     function createTables() {
 
@@ -89,35 +96,33 @@ class Database {
     // List all admins in the admin table.
     function listAdmins($id) {
         // Create connection
-        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
-        
-        // Check connection
-        if ($connection->connect_error) {
-            die("Connection failed<br>$connection->connect_error");
+        try {
+            $conn = getConnection();
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            die("Connection failed<br>".$e->getMessage());
         }
 
         // Form SQL query
         $sql = "SELECT id, firstname, lastname, email, phone FROM admins ORDER BY id";
+        $stmt = $conn->prepare($sql);
 
-        // Fetch each line and display in table
-        if ($result = mysqli_query($connection, $sql)) {
-            if (mysqli_num_rows($result) === 0) {
+        // Run query and form table
+        if ($stmt->execute()) {
+            $data = $stmt->fetchAll();
+            if (count($data) === 0) {
                 echo "The admins table is empty.";
             } else {
-                while ($row=mysqli_fetch_row($result)) {
+                foreach($data as $row) {
                     // Replace and remove the delete button functionality for the key admin.
                     if ($row[0] == 1) { echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><span title=\"You cannot delete the primary admin account.\"><i class=\"fa fa-key fa-lg\"></i></span></td></tr>"; }
                     else if ($row[0] == $id) { echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><span title=\"You cannot delete your own account.\"><i class=\"fa fa-ban fa-lg\"></i></span></td></tr>"; }
                     else { echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=admin&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>"; }
                 }
             }
-            mysqli_free_result($result);
-        } else {
-            die("There was an error retreiving a list of admins from the database:<br>$connection->error<br>");
-        }
+        } else { die("There was an error retreiving a list of admins from the database."); }
 
-        // Close the connection
-        $connection->close();
+        $conn = null;
     }
     
     // Search the admins table.
