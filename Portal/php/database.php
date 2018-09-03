@@ -897,6 +897,8 @@ class Database {
             die('Connection failed:<br>'.$connection->connect_error);
         }
 
+        echo "Reader ID: $readerid<br>Key: $key<br>Key Hash: $keyhash<br>";
+
         // Find any results for given member and reader combination in the privilege table
         $sql = "SELECT privilege.id FROM ((privilege INNER JOIN members ON privilege.member_id = members.id) INNER JOIN readers ON privilege.reader_id = readers.id) WHERE readers.signature = '$readerid' AND readers.approved = 1 AND members.cardkey = '$keyhash'";
 
