@@ -913,6 +913,8 @@ class Database {
             die(mysqli_error($connection));
         }
 
+        $connection->close();
+
         return $return;
     }
     
