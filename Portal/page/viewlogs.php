@@ -34,10 +34,16 @@
       <?php include "../component/header.php"; ?>
       <?php include "../component/menu.php"; ?>
 
+      <?php
+        if (!isset($_GET['today'])) {
+      ?>
       <form action="" method="GET">
         <input type="text" <?php if (isset($_GET['search']) && $search !=="") { echo 'value="'.$search.'"'; } else { echo 'placeholder="Search..."'; } ?> name="search"> <input type="submit" value="Search">
       </form>
-      
+      <?php
+        }
+      ?>
+
       <table id="list-table">
         <tr>
           <th>#</th>
