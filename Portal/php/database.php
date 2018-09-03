@@ -897,14 +897,11 @@ class Database {
             die('Connection failed:<br>'.$connection->connect_error);
         }
 
-        echo "Reader ID: $readerid<br>Key: $key<br>Key Hash: $keyhash<br>";
-
         // Find any results for given member and reader combination in the privilege table
-        $sql = "SELECT privilege.id FROM ((privilege INNER JOIN members ON privilege.member_id = members.id) INNER JOIN readers ON privilege.reader_id = readers.id) WHERE readers.signature = '$readerid' AND readers.approved = 1 AND members.cardkey = '$keyhash'";
+        $sql = "SELECT privilege.id FROM ((privilege INNER JOIN members ON privilege.member_id = members.id) INNER JOIN readers ON privilege.reader_id = readers.id) WHERE readers.signature = '$signature' AND readers.approved = 1 AND members.cardkey = '$keyhash'";
 
         if ($result = mysqli_query($connection, $sql)) {
             // Return true or false
-            echo "Number of rows: ".mysqli_num_rows($result)."<br>";
             if (mysqli_num_rows($result) > 0) {
                 $return = true;
             } else {

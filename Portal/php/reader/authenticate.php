@@ -2,8 +2,7 @@
     include_once('../database.php');
     $database = new Database();
 
-    // $return = "0";
-    $return = "Not working";
+    $return = "0";
 
     // Readers will validate cards here.
     if (isset($_GET['reader']) && isset($_GET['key'])) {
@@ -11,10 +10,8 @@
         $key = $_GET['key'];
         
         if ($database->checkPrivilege($readerid,$key)) {
-            $return = "Checked priv";
             if ($database->addLogEntry($readerid,$key)) { 
-                //$return = "1";
-                $return = "Added log entry";
+                $return = "1";
             }
         }
         
