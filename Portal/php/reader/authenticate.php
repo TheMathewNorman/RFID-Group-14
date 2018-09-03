@@ -2,7 +2,8 @@
     include_once('../database.php');
     $database = new Database();
 
-    $return = "0";
+    // $return = "0";
+    $return = "Not working";
 
     // Readers will validate cards here.
     if (isset($_GET['reader']) && isset($_GET['key'])) {
