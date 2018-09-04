@@ -132,7 +132,7 @@ class Database {
         // Testing mysqli
         echo "<b>Testing MYSQLi connection</b>";
         if ($result = ($this->_mysqli->query("SELECT * FROM admins"))) {
-            while ($row=mysqli_fetch_row($result)) {
+            while ($row=mysqli_fetch_assoc($result)) {
                 var_dump($row);
                 echo "<br><br>";
             }
