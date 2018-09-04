@@ -3,14 +3,20 @@ include 'sqlcreds.php';
 
 class Database {
 
-    private $pdo;
+    private $mysqli;
     
     function __construct() {
-        try {
-            $this->pdo = new PDO("mysql:host=".$GLOBALS['server'].";dbname=".$GLOBALS['dbname'], $GLOBALS['user'], $GLOBALS['pass']);
-        } catch (PDOException $e) {
-            die($e->getMessage());
+        $this->mysqli = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+        
+        if (mysqli_connect_error($this->mysqli)) {
+            die("Connection failed<br>".mysqli_connect_error($this->mysqli));
         }
+
+        // try {
+        //     $this->pdo = new PDO("mysql:host=".$GLOBALS['server'].";dbname=".$GLOBALS['dbname'], $GLOBALS['user'], $GLOBALS['pass']);
+        // } catch (PDOException $e) {
+        //     die($e->getMessage());
+        // }
     }
 
     //// GENERAL FUNCTIONALITY //// 
