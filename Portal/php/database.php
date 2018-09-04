@@ -4,15 +4,6 @@ include 'sqlcreds.php';
 class Database {
 
     //// GENERAL FUNCTIONALITY //// 
-    function getConnection() {
-        $server = $GLOBALS['server'];
-        $dbname = $GLOBALS['dbname'];
-        $dbuser = $GLOBALS['user'];
-        $dbpass = $GLOBALS['pass'];
-        $dbconn = new mysqli($server, $dbuser, $dbpass, $dbname);
-        
-        return $dbconn;
-    }
     // Create the tables.
     function createTables() {
 
@@ -98,15 +89,16 @@ class Database {
     // List all admins in the admin table.
     function listAdmins($id) {
         // Create connection
-        $conn = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);//getConnection();
+        $conn = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
         // Check connection
         if ($conn->connect_error) {
-            die("Unable to connect to the database.");
+            die("Unable to connect to the database: ".$conn->connect_error);
         }
 
         // Form SQL query
         $sql = "SELECT id, firstname, lastname, email, phone FROM admins ORDER BY id";
 
+        // Run query & form table
         if ($result = mysqli_query($conn, $sql)) {
             if (mysqli_num_rows($result) === 0) { die("No results found."); } else {
                 while ($row = mysqli_fetch_array($result)) {
@@ -116,25 +108,8 @@ class Database {
                 }
             }
         }
-        
-        // try {
 
-        //     $conn = new PDO("mysql:host=$server;dbname=$dbname", $dbuser, $dbpass); //getConnection();
-        //     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        // } catch (PDOException $e) {
-        //     die("Connection failed<br>".$e->getMessage());
-        // }
-
-        
-        // $stmt = $conn->prepare($sql);
-
-        // // Run query and form table
-        // if ($stmt->execute()) {
-        //     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                
-        //     }
-        // } else { die("There was an error retreiving a list of admins from the database."); }
-
+        // Close connection
         mysqli_close($conn);
     }
     
