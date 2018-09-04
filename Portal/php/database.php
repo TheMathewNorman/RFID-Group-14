@@ -8,7 +8,7 @@ class Database {
     function getConnection() {
         $dbserv = $GLOBALS['server'];
         $dbuser = $GLOBALS['user'];
-        $dbpass = $GLOBALS['password'];
+        $dbpass = $GLOBALS['pass'];
         $dbname = $GLOBALS['dbname'];
         
         $dbconn = new PDO("mysql:host=$dbserv;dbname=$dbname", $dbuser, $dbpass);
@@ -102,7 +102,7 @@ class Database {
         //$conn = getConnection();
         $dbserv = $GLOBALS['server'];
         $dbuser = $GLOBALS['user'];
-        $dbpass = $GLOBALS['password'];
+        $dbpass = $GLOBALS['pass'];
         $dbname = $GLOBALS['dbname'];
         echo "$dbserv<br>$dbname<br>$dbuser<br>$dbpass";
 
