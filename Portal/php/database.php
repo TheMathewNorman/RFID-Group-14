@@ -82,10 +82,12 @@ class Database {
     }
 
     function countRows($query, $params = null) {
+        // 
         $startPos = strrpos($query, "FROM");
         $endPos = strlen($query) - 1;
-        
-        $sql = "SELECT count(*) as Count ".substr($query, $startPos, $endPos);
+        $queryConditions = substr($query, $startPos, $endPos);
+
+        $sql = "SELECT count(*) as Count $queryConditions";
 
         $stmt = $this->_dbconn->prepare($sql);
         
@@ -143,14 +145,27 @@ class Database {
     //         <th>Delete</th>
     //     </tr>
     // </table>
+        $rowCount;
         if ($searchq === "") {
-            $sql = "SELECT id, firstname, lastname, email, phone FROM admins";            
+            $rowCount = $this->_dbconn->query("SELECT count(*) FROM admins")->fetchColumn();
             
-            echo $this->countRows($sql);
-            
+            $sql = "SELECT id, firstname, lastname, email, phone FROM admins";
             $stmt = $this->_dbconn->prepare($sql);
             $stmt->execute();
         } else {
+            $params = array(':search' => $searchq, ':searchlike' => '%'.$searchq.'%');
+
+            $sql = "SELECT count(*) 
+                    FROM admins
+                    WHERE id = :search
+                    OR firstname LIKE :searchlike
+                    OR lastname LIKE :searchlike
+                    OR email LIKE :searchlike
+                    OR phone LIKE :searchlike";
+            $stmt = $this->_dbconn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            $stmt->execute($params);
+            $rowCount = $stmt->fetchColumn();
+            
             $sql = "SELECT id, firstname, lastname, email, phone 
                     FROM admins
                     WHERE id = :search
@@ -158,19 +173,26 @@ class Database {
                     OR lastname LIKE :searchlike
                     OR email LIKE :searchlike
                     OR phone LIKE :searchlike";
-            $params = array(':search' => $searchq, ':searchlike'=> '%'.$searchq.'%');
-            echo $this->countRows($sql, $params);
             
             $stmt = $this->_dbconn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
             $stmt->execute($params);
         }
         
-        // while ($row=$stmt->fetch()) {
-        //     // Replace and remove the delete button functionality for the key admin.
-        //     if ($row[0] == 1) { echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><span title=\"You cannot delete the primary admin account.\"><i class=\"fa fa-key fa-lg\"></i></span></td></tr>"); }
-        //     else if ($row[0] == $userid) { echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><span title=\"You cannot delete the primary admin account.\"><i class=\"fa fa-ban fa-lg\"></i></span></td></tr>"); }
-        //     else { echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=admin&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>"); }
-        // }
+        echo "<div>$rowCount</div>";
+
+        $id = $fname = $lname = $email = $phone = '';
+        while ($row=$stmt->fetch()) {
+            $id = $row['id'];
+            $fname = $row['firstname'];
+            $lname = $row['lastname'];
+            $email = $row['email'];
+            $phone = $row['phone'];
+            
+            // Replace and remove the delete button functionality for the key admin.
+            if ($row[0] == 1) { echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><span title=\"You cannot delete the primary admin account.\"><i class=\"fa fa-key fa-lg\"></i></span></td></tr>"); }
+            else if ($row[0] == $userid) { echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><span title=\"You cannot delete the primary admin account.\"><i class=\"fa fa-ban fa-lg\"></i></span></td></tr>"); }
+            else { echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=admin&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>"); }
+        }
 
     }
     
