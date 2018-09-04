@@ -9,6 +9,8 @@ class Database {
     private $_username;
     private $_password;
     private $_database;
+
+    protected $_pdo;
     
     function __construct() {
         $this->_host = $GLOBALS['server'];
@@ -22,11 +24,11 @@ class Database {
             die("Connection failed<br>".mysqli_connect_error($this->mysqli));
         }
 
-        // try {
-        //     $this->pdo = new PDO("mysql:host=".$GLOBALS['server'].";dbname=".$GLOBALS['dbname'], $GLOBALS['user'], $GLOBALS['pass']);
-        // } catch (PDOException $e) {
-        //     die($e->getMessage());
-        // }
+        try {
+            $this->_pdo = new PDO("mysql:host=".$this->_host.";dbname=".$this->_database, $this->_username, $this->_password);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
     }
 
     //// GENERAL FUNCTIONALITY //// 
@@ -128,11 +130,18 @@ class Database {
         // var_dump($row);
 
         // Testing mysqli
-        echo "Host: ".$this->_host."<br>Database: ".$this->_database."<br>Username: ".$this->_username."<br>Pass: ".$this->_password."<br><br>";
-
-
+        echo "<b>Testing MYSQLi connection</b>";
         if ($result = ($this->_mysqli->query("SELECT * FROM admins"))) {
             while ($row=mysqli_fetch_row($result)) {
+                var_dump($row);
+                echo "<br><br>";
+            }
+        }
+
+        // Testing pdo
+        echo "<b>Testing PDO connection</b>";
+        if ($stmt = $this->_pdo->query("SELECT * FROM admins")) {
+            while ($row = $stmt->fetch()) {
                 var_dump($row);
                 echo "<br><br>";
             }
