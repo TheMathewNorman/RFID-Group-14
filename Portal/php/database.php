@@ -81,17 +81,23 @@ class Database {
         }
     }
 
-    function countRows($query) {
-        $search = "FROM";
-
-        $startPos = strrpos($query, $search);
+    function countRows($query, $params = null) {
+        $startPos = strrpos($query, "FROM");
         $endPos = strlen($query) - 1;
         
-        $text = substr($query, $startPos, $endPos);
+        $sql = "SELECT count(*) as Count ".substr($query, $startPos, $endPos);
 
-        echo $text;
-        //$sql = "SELECT count(*) as Count FROM";
+        $stmt = $this->_dbconn->prepare($sql);
         
+        if ($params === null) {
+            $stmt->execute();
+        } else {
+            $stmt->execute($params);
+        }
+
+        $count = $stmt->fetch()['Count'];
+
+        return $count;
     }
 
     // Test database connection.
@@ -140,7 +146,7 @@ class Database {
         if ($searchq === "") {
             $sql = "SELECT id, firstname, lastname, email, phone FROM admins";            
             
-            $this->countRows($sql);
+            echo $this->countRows($sql);
             
             $stmt = $this->_dbconn->prepare($sql);
             $stmt->execute();
@@ -152,19 +158,19 @@ class Database {
                     OR lastname LIKE :searchlike
                     OR email LIKE :searchlike
                     OR phone LIKE :searchlike";
-            
-            $this->countRows($sql);
+            $params = array(':search' => $searchq, ':searchlike'=> '%'.$searchq.'%');
+            echo $this->countRows($sql, $params);
             
             $stmt = $this->_dbconn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-            $stmt->execute(array(':search' => $searchq, ':searchlike'=> '%'.$searchq.'%'));
+            $stmt->execute($params);
         }
         
-        while ($row=$stmt->fetch()) {
-            // Replace and remove the delete button functionality for the key admin.
-            if ($row[0] == 1) { echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><span title=\"You cannot delete the primary admin account.\"><i class=\"fa fa-key fa-lg\"></i></span></td></tr>"); }
-            else if ($row[0] == $userid) { echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><span title=\"You cannot delete the primary admin account.\"><i class=\"fa fa-ban fa-lg\"></i></span></td></tr>"); }
-            else { echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=admin&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>"); }
-        }
+        // while ($row=$stmt->fetch()) {
+        //     // Replace and remove the delete button functionality for the key admin.
+        //     if ($row[0] == 1) { echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><span title=\"You cannot delete the primary admin account.\"><i class=\"fa fa-key fa-lg\"></i></span></td></tr>"); }
+        //     else if ($row[0] == $userid) { echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><span title=\"You cannot delete the primary admin account.\"><i class=\"fa fa-ban fa-lg\"></i></span></td></tr>"); }
+        //     else { echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=admin&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>"); }
+        // }
 
     }
     
