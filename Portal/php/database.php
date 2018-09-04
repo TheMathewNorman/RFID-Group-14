@@ -9,12 +9,19 @@ class Database {
     private $_password;
     private $_database;
     
-    function __construct() {
+    function __construct($dbhost = "", $dbname = "", $dbuser = "", $dbpass = "") {
         // Set connection variables
-        $this->_host = $GLOBALS['server'];
-        $this->_username = $GLOBALS['user'];
-        $this->_password = $GLOBALS['pass'];
-        $this->_database = $GLOBALS['dbname'];
+        if ($dbhost === "" && $dbname === "" && $dbuser === "" && $dbpass === "") {
+            $this->_host = $GLOBALS['server'];
+            $this->_database = $GLOBALS['dbname'];
+            $this->_username = $GLOBALS['user'];
+            $this->_password = $GLOBALS['pass'];
+        } else {
+            $this->_host = $dbhost;
+            $this->_database = $dbname;
+            $this->_username = $dbuser;
+            $this->_password = $dbpass;
+        }
 
         // Create PDO connection
         try {
@@ -22,21 +29,6 @@ class Database {
         } catch (PDOException $e) {
             die($e->getMessage());
         }
-    }
-
-    function __construct($dbhost, $dbname, $dbuser, $dbpass) {
-                // Set connection variables
-                $this->_host = $dbhost;
-                $this->_database = $dbname;
-                $this->_username = $dbuser;
-                $this->_password = $dbpass;
-        
-                // Create PDO connection
-                try {
-                    $this->_dbconn = new PDO("mysql:host=".$this->_host.";dbname=".$this->_database, $this->_username, $this->_password);
-                } catch (PDOException $e) {
-                    die($e->getMessage());
-                }
     }
 
     function __destruct() {
@@ -141,18 +133,9 @@ class Database {
         // // Dump result
         // var_dump($row);
 
-        // Testing mysqli
-        echo "<b>Testing MYSQLi connection</b>";
-        if ($result = ($this->_mysqli->query("SELECT * FROM admins"))) {
-            while ($row=mysqli_fetch_assoc($result)) {
-                var_dump($row);
-                echo "<br><br>";
-            }
-        }
-
         // Testing pdo
         echo "<b>Testing PDO connection</b>";
-        if ($stmt = $this->_pdo->query("SELECT * FROM admins")) {
+        if ($stmt = $this->_dbconn->query("SELECT * FROM admins")) {
             while ($row = $stmt->fetch()) {
                 var_dump($row);
                 echo "<br><br>";
