@@ -3,6 +3,8 @@ include 'sqlcreds.php';
 
 class Database {
 
+    private $pdoconn = new PDO("mysql:host=".$GLOBALS['server'].";dbname=".$GLOBALS['dbname'], $GLOBALS['user'], $GLOBALS['pass']);
+
     //// GENERAL FUNCTIONALITY //// 
     // Create a PDO connection
     function getConnection() {
@@ -101,10 +103,10 @@ class Database {
     // List all admins in the admin table.
     function listAdmins($id, $searchq = "") {
         // Create connection
-        $conn = getConnection();
+        //$conn = getConnection();
 
         // Prepare statement
-        $stmt = $conn->prepare("SELECT * FROM admins WHERE email = :email");
+        $stmt = $pdoconn->prepare("SELECT * FROM admins WHERE email = :email");
         // Execute query
         $stmt->execute(['email' => "admin@therfid.men"]);
         // Fetch result
@@ -113,7 +115,7 @@ class Database {
         var_dump($row);
 
         // Nullify connection
-        $conn = null;
+        //$conn = null;
         
         // // Create connection
         // $conn = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
