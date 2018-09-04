@@ -3,24 +3,17 @@ include 'sqlcreds.php';
 
 class Database {
 
-    private $pdoconn;
+    private $pdo;
     
     function __construct() {
-        $this->pdoconn = new PDO("mysql:host=".$GLOBALS['server'].";dbname=".$GLOBALS['dbname'], $GLOBALS['user'], $GLOBALS['pass']);
+        try {
+            $this->pdo = new PDO("mysql:host=".$GLOBALS['server'].";dbname=".$GLOBALS['dbname'], $GLOBALS['user'], $GLOBALS['pass']);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
     }
 
     //// GENERAL FUNCTIONALITY //// 
-    // Create a PDO connection
-    function getConnection() {
-        $dbserv = $GLOBALS['server'];
-        $dbuser = $GLOBALS['user'];
-        $dbpass = $GLOBALS['pass'];
-        $dbname = $GLOBALS['dbname'];
-        
-        $dbconn = new PDO("mysql:host=$dbserv;dbname=$dbname", $dbuser, $dbpass);
-
-        return $dbconn;
-    }
 
     // Create the tables.
     function createTables() {
@@ -112,7 +105,7 @@ class Database {
         // Prepare statement
         $stmt = $pdoconn->prepare("SELECT * FROM admins WHERE email = :email");
         // Execute query
-        $stmt->execute(['email' => "admin@therfid.men"]);
+        $stmt->execute(['email' => 'admin@therfid.men']);
         // Fetch result
         $row = $stmt->fetch();
         // Dump result
