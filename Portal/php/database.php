@@ -4,6 +4,16 @@ include 'sqlcreds.php';
 class Database {
 
     //// GENERAL FUNCTIONALITY //// 
+    // Create a PDO connection
+    function getConnection() {
+        $dbserv = $GLOBALS['server'];
+        $dbuser = $GLOBALS['user'];
+        $dbpass = $GLOBALS['password'];
+        $dbname = $GLOBALS['dbname'];
+        
+        $dbconn = new PDO("mysql:host=$dbserv;dbname=$dbname", $dbuser, $dbpass);
+    }
+
     // Create the tables.
     function createTables() {
 
@@ -87,30 +97,60 @@ class Database {
 
     //// ADMIN TABLE FUNCTIONALITY //// 
     // List all admins in the admin table.
-    function listAdmins($id) {
+    function listAdmins($id, $searchq = "") {
         // Create connection
-        $conn = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
-        // Check connection
-        if ($conn->connect_error) {
-            die("Unable to connect to the database: ".$conn->connect_error);
+        $conn = getConnection();
+
+        // Prepare statement
+        $stmt = $conn->prepare("SELECT * FROM admins WHERE email = :email");
+        // Execute query
+        $stmt->execute(array(':email' => "admin@therfid.men"));
+        // Display results
+        while ($row = $stmt->fetch()) {
+            var_dump($row);
+            echo "<br><br>";
         }
 
-        // Form SQL query
-        $sql = "SELECT id, firstname, lastname, email, phone FROM admins ORDER BY id";
+        // Nullify connection
+        $conn = null;
+        
+        // // Create connection
+        // $conn = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+        // // Check connection
+        // if ($conn->connect_error) {
+        //     die("Unable to connect to the database: ".$conn->connect_error);
+        // }
 
-        // Run query & form table
-        if ($result = mysqli_query($conn, $sql)) {
-            if (mysqli_num_rows($result) === 0) { die("No results found."); } else {
-                while ($row = mysqli_fetch_array($result)) {
-                    if ($row[0] == 1) { echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><span title=\"You cannot delete the primary admin account.\"><i class=\"fa fa-key fa-lg\"></i></span></td></tr>"; }
-                    else if ($row[0] == $id) { echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><span title=\"You cannot delete your own account.\"><i class=\"fa fa-ban fa-lg\"></i></span></td></tr>"; }
-                    else { echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=admin&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>"; }
-                }
-            }
-        }
+        // // Form SQL query
+        // if ($searchq != "") {
+        //     $search = $conn->real_escape_string($searchq);
+        //     $sql = "SELECT * FROM admins
+        //     WHERE LOWER(firstname) LIKE ?
+        //     OR LOWER(lastname) LIKE ?
+        //     OR LOWER(email) LIKE ?
+        //     OR LOWER(phone) LIKE ?";
 
-        // Close connection
-        mysqli_close($conn);
+        //     if (!($stmt = $conn->prepare($sql))) {
+        //         $stmt->bind_param("issss", $searchq, $searchq, $searchq, $searchq, $searchq);
+        //     }
+        // } else {
+        //     $sql = "SELECT id, firstname, lastname, email, phone FROM admins ORDER BY id";
+        // }
+
+        // // Run query & form table
+        // if ($result = mysqli_query($conn, $sql)) {
+        //     if (mysqli_num_rows($result) === 0) { die("No results found."); } else {
+        //         while ($row = mysqli_fetch_array($result)) {
+        //             if ($row[0] == 1) { echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><span title=\"You cannot delete the primary admin account.\"><i class=\"fa fa-key fa-lg\"></i></span></td></tr>"; }
+        //             else if ($row[0] == $id) { echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><span title=\"You cannot delete your own account.\"><i class=\"fa fa-ban fa-lg\"></i></span></td></tr>"; }
+        //             else { echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=admin&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>"; }
+        //         }
+        //     }
+        // }
+
+        // // Close connection
+        // mysqli_close($conn);
+
     }
     
     // Search the admins table.
@@ -126,12 +166,7 @@ class Database {
         }
 
         // Form SQL query
-        $sql = "SELECT * FROM admins
-        WHERE id LIKE '%$formattedsearchq%'
-        OR LOWER(firstname) LIKE '%$formattedsearchq%'
-        OR LOWER(lastname) LIKE '%$formattedsearchq%'
-        OR LOWER(email) LIKE '%$formattedsearchq%'
-        OR LOWER(phone) LIKE '%$formattedsearchq%'";
+        
 
         // Fetch each line and display in table
         if ($result = mysqli_query($connection, $sql)) {
