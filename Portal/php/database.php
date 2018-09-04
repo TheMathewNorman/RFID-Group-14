@@ -99,10 +99,10 @@ class Database {
     function listAdmins($id) {
         // Create connection
         try {
-            $server = $_GLOBALS['server'];
-            $dbname = $_GLOBALS['dbname'];
-            $dbuser = $_GLOBALS['user'];
-            $dbpass = $_GLOBALS['pass'];
+            $server = $GLOBALS['server'];
+            $dbname = $GLOBALS['dbname'];
+            $dbuser = $GLOBALS['user'];
+            $dbpass = $GLOBALS['pass'];
             $conn = new PDO("mysql:host=$server;dbname=$dbname", $dbuser, $dbpass); //getConnection();
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
