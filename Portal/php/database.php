@@ -133,7 +133,7 @@ class Database {
         if ($searchq === "") {
             $sql = "SELECT id, firstname, lastname, email, phone FROM admins";            
             
-            countRows($sql);
+            $this->countRows($sql);
             
             $stmt = $this->_dbconn->prepare($sql);
             $stmt->execute();
@@ -146,7 +146,7 @@ class Database {
                     OR email LIKE :searchlike
                     OR phone LIKE :searchlike";
             
-            countRows($sql);
+            $this->countRows($sql);
             
             $stmt = $this->_dbconn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
             $stmt->execute(array(':search' => $searchq, ':searchlike'=> '%'.$searchq.'%'));
