@@ -3,12 +3,21 @@ include 'sqlcreds.php';
 
 class Database {
 
-    private $mysqli;
+    protected $_mysqli;
+    private $_host;
+    private $_username;
+    private $_password;
+    private $_database;
     
     function __construct() {
-        $this->mysqli = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+        $this->_host = $GLOBALS['server'];
+        $this->_username = $GLOBALS['user'];
+        $this->_password = $GLOBALS['pass'];
+        $this->_database = $GLOBALS['dbname'];
+
+        $this->mysqli = new mysqli($this->_host, $this->_username, $this->_password, $this->_database);
         
-        if (mysqli_connect_error($this->mysqli)) {
+        if (mysqli_connect_errno()) {
             die("Connection failed<br>".mysqli_connect_error($this->mysqli));
         }
 
@@ -108,14 +117,17 @@ class Database {
         // Create connection
         //$conn = getConnection();
 
-        // Prepare statement
-        $stmt = $pdo->prepare("SELECT * FROM admins WHERE email = :email");
-        // Execute query
-        $stmt->execute(['email' => 'admin@therfid.men']);
-        // Fetch result
-        $row = $stmt->fetch();
-        // Dump result
-        var_dump($row);
+        // // Prepare statement
+        // $stmt = $pdo->prepare("SELECT * FROM admins WHERE email = :email");
+        // // Execute query
+        // $stmt->execute(['email' => 'admin@therfid.men']);
+        // // Fetch result
+        // $row = $stmt->fetch();
+        // // Dump result
+        // var_dump($row);
+
+        // Testing mysqli
+
 
         // Nullify connection
         //$conn = null;
