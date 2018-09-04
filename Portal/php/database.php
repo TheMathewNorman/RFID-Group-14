@@ -99,7 +99,13 @@ class Database {
     // List all admins in the admin table.
     function listAdmins($id, $searchq = "") {
         // Create connection
-        $conn = getConnection();
+        //$conn = getConnection();
+        $dbserv = $GLOBALS['server'];
+        $dbuser = $GLOBALS['user'];
+        $dbpass = $GLOBALS['password'];
+        $dbname = $GLOBALS['dbname'];
+        
+        $conn = new PDO("mysql:host=$dbserv;dbname=$dbname", $dbuser, $dbpass);
 
         // Prepare statement
         $stmt = $conn->prepare("SELECT * FROM admins WHERE email = :email");
