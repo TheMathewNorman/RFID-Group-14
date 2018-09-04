@@ -1,6 +1,10 @@
 <?php
 include_once "../php/sqlcreds.php";
 
+include_once "../php/database.php";
+$database = new Database();
+$database->createTables();
+
 // Create connection
 $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
         

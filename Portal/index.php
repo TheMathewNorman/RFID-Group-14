@@ -1,4 +1,7 @@
 <?php
+    // Store any errors caught
+    $error = "";
+
     // First-run redirect
     $location = "";
     if (!file_exists("./php/sqlcreds.php")) {

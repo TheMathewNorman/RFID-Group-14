@@ -8,6 +8,7 @@ class Database {
     private $_username;
     private $_password;
     private $_database;
+    private $_connsuccess = true;
     
     function __construct($dbhost = "", $dbname = "", $dbuser = "", $dbpass = "") {
         // Set connection variables
@@ -27,7 +28,8 @@ class Database {
         try {
             $this->_dbconn = new PDO("mysql:host=".$this->_host.";dbname=".$this->_database, $this->_username, $this->_password);
         } catch (PDOException $e) {
-            die($e->getMessage());
+            $_connsuccess = false;
+            return $_connsuccess;
         }
     }
 
@@ -36,45 +38,35 @@ class Database {
     }
 
     //// GENERAL FUNCTIONALITY //// 
-
     // Create the tables.
     function createTables() {
-
-        // Create connection
-        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
-        
-        // Check connection
-        if ($connection->connect_error) {
-            die("Connection failed<br>$connection->connect_error");
-        }
-
         // Create the members table upon success
-        $sql = "CREATE TABLE admins (
+        $sql = "CREATE TABLE IF NOT EXISTS admins (
             id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
             firstname VARCHAR(30) NOT NULL,
             lastname VARCHAR(30) NOT NULL,
             email VARCHAR(50) NOT NULL,
             phone VARCHAR(10),
             passhash VARCHAR(128) NOT NULL
-        ); CREATE TABLE members (
+        ); CREATE TABLE IF NOT EXISTS members (
             id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
             firstname VARCHAR(30) NOT NULL,
             lastname VARCHAR(30) NOT NULL,
             email VARCHAR(50),
             phone VARCHAR(10),
             cardkey VARCHAR(128) NOT NULL
-        ); CREATE TABLE priviledge (
+        ); CREATE TABLE IF NOT EXISTS privilege (
             id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
             member_id INT(6) NOT NULL,
             reader_id INT(6),
             reader_group INT(6)
-        ); CREATE TABLE readers (
+        ); CREATE TABLE IF NOT EXISTS readers (
             id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
             reader_name VARCHAR(30) NOT NULL,
             reader_group INT(6) NOT NULL,
             signature VARCHAR(60) NOT NULL,
             approved BOOLEAN NOT NULL
-        ); CREATE TABLE logs (
+        ); CREATE TABLE IF NOT EXISTS logs (
             id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
             member_id INT(6) NOT NULL,
             reader_id INT(6) NOT NULL,
@@ -82,15 +74,15 @@ class Database {
             check_in BOOL DEFAULT false
         )";
             
-        if (mysqli_multi_query($connection, $sql) === FALSE) {
-            die("Error creating table: " . $connection->error);
+        try {
+            $this->_dbconn->exec($sql);
+        } catch (PDOException $e) {
+            die($e->getMessage());
         }
-
-        // Close the connection
-        $connection->close();
     }
 
     // Test database connection.
+    // DEPRECIATED
     function testConnection($server="", $dbuser="", $dbpass="", $dbname="") {
         if ($server=="") {
             $server = $GLOBALS['server'];
@@ -121,70 +113,30 @@ class Database {
     //// ADMIN TABLE FUNCTIONALITY //// 
     // List all admins in the admin table.
     function listAdmins($id, $searchq = "") {
-        // Create connection
-        //$conn = getConnection();
+    // <table id="list-table">
+    //     <tr>
+    //         <th>ID</th>
+    //         <th>Firstname</th>
+    //         <th>Lastname</th>
+    //         <th>Email</th>
+    //         <th>Phone Number</th>
+    //         <th>Update</th>
+    //         <th>Delete</th>
+    //     </tr>
+    // </table>
 
-        // // Prepare statement
-        // $stmt = $pdo->prepare("SELECT * FROM admins WHERE email = :email");
-        // // Execute query
-        // $stmt->execute(['email' => 'admin@therfid.men']);
-        // // Fetch result
-        // $row = $stmt->fetch();
-        // // Dump result
-        // var_dump($row);
-
-        // Testing pdo
-        echo "<b>Testing PDO connection</b>";
-        if ($stmt = $this->_dbconn->query("SELECT * FROM admins")) {
-            while ($row = $stmt->fetch()) {
+        $sql = "SELECT id, firstname, lastname, email, phone FROM admins";
+        if ($stmt = $this->_dbconn->query($sql)) {
+            while ($row=$stmt->fetch()) {
                 var_dump($row);
                 echo "<br><br>";
             }
         }
 
-        // Nullify connection
-        //$conn = null;
-        
-        // // Create connection
-        // $conn = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
-        // // Check connection
-        // if ($conn->connect_error) {
-        //     die("Unable to connect to the database: ".$conn->connect_error);
-        // }
-
-        // // Form SQL query
-        // if ($searchq != "") {
-        //     $search = $conn->real_escape_string($searchq);
-        //     $sql = "SELECT * FROM admins
-        //     WHERE LOWER(firstname) LIKE ?
-        //     OR LOWER(lastname) LIKE ?
-        //     OR LOWER(email) LIKE ?
-        //     OR LOWER(phone) LIKE ?";
-
-        //     if (!($stmt = $conn->prepare($sql))) {
-        //         $stmt->bind_param("issss", $searchq, $searchq, $searchq, $searchq, $searchq);
-        //     }
-        // } else {
-        //     $sql = "SELECT id, firstname, lastname, email, phone FROM admins ORDER BY id";
-        // }
-
-        // // Run query & form table
-        // if ($result = mysqli_query($conn, $sql)) {
-        //     if (mysqli_num_rows($result) === 0) { die("No results found."); } else {
-        //         while ($row = mysqli_fetch_array($result)) {
-        //             if ($row[0] == 1) { echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><span title=\"You cannot delete the primary admin account.\"><i class=\"fa fa-key fa-lg\"></i></span></td></tr>"; }
-        //             else if ($row[0] == $id) { echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><span title=\"You cannot delete your own account.\"><i class=\"fa fa-ban fa-lg\"></i></span></td></tr>"; }
-        //             else { echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=admin&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>"; }
-        //         }
-        //     }
-        // }
-
-        // // Close connection
-        // mysqli_close($conn);
-
     }
     
     // Search the admins table.
+    // DEPRECIATED
     function searchAdmins($searchq) {
         $formattedsearchq = strtolower(htmlspecialchars($searchq));
         
