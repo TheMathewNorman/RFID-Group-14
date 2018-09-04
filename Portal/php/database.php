@@ -82,9 +82,16 @@ class Database {
     }
 
     function countRows($query) {
-        $search = "/[^SELECT](.*)[^FROM]/";
-        $replace = " count(*) as Count ";
-        echo preg_replace($search, $replace, $query);
+        $search = "FROM";
+
+        $startPos = strrpos($query, $search);
+        $endPos = strlen($query) - 1;
+        
+        $text = substr($query, $startPos, $endPos);
+
+        echo $text;
+        //$sql = "SELECT count(*) as Count FROM";
+        
     }
 
     // Test database connection.
