@@ -127,7 +127,7 @@ class Database {
         // var_dump($row);
 
         // Testing mysqli
-        if ($result = mysqli_query($_mysqli, "SELECT * FROM admins")) {
+        if ($result = mysqli_query($this->_mysqli, "SELECT * FROM admins")) {
             while ($row=mysqli_fetch_row($result)) {
                 var_dump($row);
                 echo "<br><br>";
