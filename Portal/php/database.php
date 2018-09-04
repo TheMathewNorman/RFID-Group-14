@@ -104,12 +104,11 @@ class Database {
         // Prepare statement
         $stmt = $conn->prepare("SELECT * FROM admins WHERE email = :email");
         // Execute query
-        $stmt->execute(array(':email' => "admin@therfid.men"));
-        // Display results
-        while ($row = $stmt->fetch()) {
-            var_dump($row);
-            echo "<br><br>";
-        }
+        $stmt->execute(['email' => "admin@therfid.men"]);
+        // Fetch result
+        $row = $stmt->fetch();
+        // Dump result
+        var_dump($row);
 
         // Nullify connection
         $conn = null;
