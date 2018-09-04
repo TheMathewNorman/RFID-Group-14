@@ -3,7 +3,11 @@ include 'sqlcreds.php';
 
 class Database {
 
-    private $pdoconn = new PDO("mysql:host=".$GLOBALS['server'].";dbname=".$GLOBALS['dbname'], $GLOBALS['user'], $GLOBALS['pass']);
+    private $pdoconn;
+    
+    function __construct() {
+        $this->pdoconn = new PDO("mysql:host=".$GLOBALS['server'].";dbname=".$GLOBALS['dbname'], $GLOBALS['user'], $GLOBALS['pass']);
+    }
 
     //// GENERAL FUNCTIONALITY //// 
     // Create a PDO connection
