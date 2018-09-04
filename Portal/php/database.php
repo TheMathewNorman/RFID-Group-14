@@ -141,6 +141,8 @@ class Database {
         }
         
         // Run query and form table using results
+        var_dump($stmt->fetchAll());
+        echo "<br><br><br>";
         while ($row=$stmt->fetch()) {
             // Replace and remove the delete button functionality for the key admin.
             if ($row[0] == 1) { echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><span title=\"You cannot delete the primary admin account.\"><i class=\"fa fa-key fa-lg\"></i></span></td></tr>"); }
