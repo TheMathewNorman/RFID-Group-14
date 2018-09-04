@@ -5,11 +5,11 @@ class Database {
 
     //// GENERAL FUNCTIONALITY //// 
     function getConnection() {
-        $server = $_GLOBALS['server'];
-        $dbname = $_GLOBALS['dbname'];
-        $dbuser = $_GLOBALS['dbuser'];
-        $dbpass = $_GLOBALS['dbpass'];
-        $dbconn = new PDO("mysql:host=$server;dbname=$dbname", $dbuser, $dbpass);
+        $server = $GLOBALS['server'];
+        $dbname = $GLOBALS['dbname'];
+        $dbuser = $GLOBALS['user'];
+        $dbpass = $GLOBALS['pass'];
+        $dbconn = new mysqli($server, $dbuser, $dbpass, $dbname);
         
         return $dbconn;
     }
@@ -98,31 +98,44 @@ class Database {
     // List all admins in the admin table.
     function listAdmins($id) {
         // Create connection
-        try {
-            $server = $GLOBALS['server'];
-            $dbname = $GLOBALS['dbname'];
-            $dbuser = $GLOBALS['user'];
-            $dbpass = $GLOBALS['pass'];
-            $conn = new PDO("mysql:host=$server;dbname=$dbname", $dbuser, $dbpass); //getConnection();
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException $e) {
-            die("Connection failed<br>".$e->getMessage());
+        $conn = getConnection();
+        // Check connection
+        if ($conn->connect_error) {
+            die("Unable to connect to the database.");
         }
 
         // Form SQL query
         $sql = "SELECT id, firstname, lastname, email, phone FROM admins ORDER BY id";
-        $stmt = $conn->prepare($sql);
 
-        // Run query and form table
-        if ($stmt->execute()) {
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                if ($row[0] == 1) { echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><span title=\"You cannot delete the primary admin account.\"><i class=\"fa fa-key fa-lg\"></i></span></td></tr>"; }
-                else if ($row[0] == $id) { echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><span title=\"You cannot delete your own account.\"><i class=\"fa fa-ban fa-lg\"></i></span></td></tr>"; }
-                else { echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=admin&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>"; }
+        if ($result = mysqli_query($conn, $sql)) {
+            if (mysqli_num_rows($result) === 0) { die("No results found."); } else {
+                while ($row = mysqli_fetch_array($result)) {
+                    if ($row[0] == 1) { echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><span title=\"You cannot delete the primary admin account.\"><i class=\"fa fa-key fa-lg\"></i></span></td></tr>"; }
+                    else if ($row[0] == $id) { echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><span title=\"You cannot delete your own account.\"><i class=\"fa fa-ban fa-lg\"></i></span></td></tr>"; }
+                    else { echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=admin&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>"; }
+                }
             }
-        } else { die("There was an error retreiving a list of admins from the database."); }
+        }
+        
+        // try {
 
-        $conn = null;
+        //     $conn = new PDO("mysql:host=$server;dbname=$dbname", $dbuser, $dbpass); //getConnection();
+        //     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        // } catch (PDOException $e) {
+        //     die("Connection failed<br>".$e->getMessage());
+        // }
+
+        
+        // $stmt = $conn->prepare($sql);
+
+        // // Run query and form table
+        // if ($stmt->execute()) {
+        //     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                
+        //     }
+        // } else { die("There was an error retreiving a list of admins from the database."); }
+
+        mysqli_close($conn);
     }
     
     // Search the admins table.
