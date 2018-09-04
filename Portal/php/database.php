@@ -131,8 +131,8 @@ class Database {
         echo "Host: ".$this->_host."<br>Database: ".$this->_database."<br>Username: ".$this->_username."<br>Pass: ".$this->_password."<br><br>";
 
 
-        if ($this->_result = ($this->_mysqli->query("SELECT * FROM admins"))) {
-            while ($row=mysqli_fetch_row($this->_result)) {
+        if ($result = ($this->_mysqli->query("SELECT * FROM admins"))) {
+            while ($row=mysqli_fetch_row($result)) {
                 var_dump($row);
                 echo "<br><br>";
             }
