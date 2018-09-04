@@ -33,7 +33,7 @@
       </tr>
       <?php
         if (isset($_GET['searchInput'])) {
-          $database->searchAdmins($_GET['searchInput']);
+          $database->listAdmins($_SESSION['userid'], $_GET['searchInput']);
         } else {
           $database->listAdmins($_SESSION['userid']);
         }
