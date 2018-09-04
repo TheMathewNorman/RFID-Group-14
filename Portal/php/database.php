@@ -98,7 +98,7 @@ class Database {
     // List all admins in the admin table.
     function listAdmins($id) {
         // Create connection
-        $conn = getConnection();
+        $conn = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);//getConnection();
         // Check connection
         if ($conn->connect_error) {
             die("Unable to connect to the database.");
