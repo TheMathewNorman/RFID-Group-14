@@ -4,6 +4,7 @@ include 'sqlcreds.php';
 class Database {
 
     protected $_mysqli;
+    protected $_result;
     private $_host;
     private $_username;
     private $_password;
@@ -127,8 +128,8 @@ class Database {
         // var_dump($row);
 
         // Testing mysqli
-        if ($result = mysqli_query($this->_mysqli, "SELECT * FROM admins")) {
-            while ($row=mysqli_fetch_row($result)) {
+        if ($this->_result = ($this->_mysqli->query("SELECT * FROM admins"))) {
+            while ($row=mysqli_fetch_row($this->_result)) {
                 var_dump($row);
                 echo "<br><br>";
             }
