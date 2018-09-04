@@ -99,7 +99,11 @@ class Database {
     function listAdmins($id) {
         // Create connection
         try {
-            $conn = getConnection();
+            $server = $_GLOBALS['server'];
+            $dbname = $_GLOBALS['dbname'];
+            $dbuser = $_GLOBALS['dbuser'];
+            $dbpass = $_GLOBALS['dbpass'];
+            $conn = new PDO("mysql:host=$server;dbname=$dbname", $dbuser, $dbpass); //getConnection();
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
             die("Connection failed<br>".$e->getMessage());
