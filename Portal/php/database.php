@@ -103,7 +103,7 @@ class Database {
         //$conn = getConnection();
 
         // Prepare statement
-        $stmt = $pdoconn->prepare("SELECT * FROM admins WHERE email = :email");
+        $stmt = $pdo->prepare("SELECT * FROM admins WHERE email = :email");
         // Execute query
         $stmt->execute(['email' => 'admin@therfid.men']);
         // Fetch result
