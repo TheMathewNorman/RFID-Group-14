@@ -21,16 +21,6 @@
         <input type="text" placeholder="Search..." name="searchInput"> <input type="submit" value="Search">
       </form>
     
-    <table id="list-table">
-      <tr>
-        <th>ID</th>
-        <th>Firstname</th>
-        <th>Lastname</th>
-        <th>Email</th>
-        <th>Phone Number</th>
-        <th>Update</th>
-        <th>Delete</th>
-      </tr>
       <?php
         if (isset($_GET['searchInput'])) {
           $database->listAdmins($_SESSION['userid'], $_GET['searchInput']);
@@ -38,7 +28,6 @@
           $database->listAdmins($_SESSION['userid']);
         }
       ?>
-    </table>
   
       </div>
     </body>

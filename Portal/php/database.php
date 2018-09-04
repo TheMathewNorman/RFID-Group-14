@@ -81,6 +81,12 @@ class Database {
         }
     }
 
+    function countRows($query) {
+        $search = "/[^SELECT](.*)[^FROM]/";
+        $replace = " count(*) as Count ";
+        echo preg_replace($search, $replace, $query);
+    }
+
     // Test database connection.
     // DEPRECIATED
     function testConnection($server="", $dbuser="", $dbpass="", $dbname="") {
@@ -125,7 +131,10 @@ class Database {
     //     </tr>
     // </table>
         if ($searchq === "") {
-            $sql = "SELECT id, firstname, lastname, email, phone FROM admins";
+            $sql = "SELECT id, firstname, lastname, email, phone FROM admins";            
+            
+            countRows($sql);
+            
             $stmt = $this->_dbconn->prepare($sql);
             $stmt->execute();
         } else {
@@ -136,6 +145,9 @@ class Database {
                     OR lastname LIKE :searchlike
                     OR email LIKE :searchlike
                     OR phone LIKE :searchlike";
+            
+            countRows($sql);
+            
             $stmt = $this->_dbconn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
             $stmt->execute(array(':search' => $searchq, ':searchlike'=> '%'.$searchq.'%'));
         }
