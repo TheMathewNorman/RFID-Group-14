@@ -12,6 +12,8 @@ class Database {
         $dbname = $GLOBALS['dbname'];
         
         $dbconn = new PDO("mysql:host=$dbserv;dbname=$dbname", $dbuser, $dbpass);
+
+        return $dbconn;
     }
 
     // Create the tables.
