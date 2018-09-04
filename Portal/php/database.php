@@ -104,7 +104,8 @@ class Database {
         $dbuser = $GLOBALS['user'];
         $dbpass = $GLOBALS['password'];
         $dbname = $GLOBALS['dbname'];
-        
+        echo "$dbserv<br>$dbname<br>$dbuser<br>$dbpass";
+
         $conn = new PDO("mysql:host=$dbserv;dbname=$dbname", $dbuser, $dbpass);
 
         // Prepare statement
