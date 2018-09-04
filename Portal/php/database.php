@@ -3,32 +3,44 @@ include 'sqlcreds.php';
 
 class Database {
 
-    protected $_mysqli;
-    protected $_result;
+    protected $_dbconn;
     private $_host;
     private $_username;
     private $_password;
     private $_database;
-
-    protected $_pdo;
     
     function __construct() {
+        // Set connection variables
         $this->_host = $GLOBALS['server'];
         $this->_username = $GLOBALS['user'];
         $this->_password = $GLOBALS['pass'];
         $this->_database = $GLOBALS['dbname'];
 
-        $this->_mysqli = new mysqli($this->_host, $this->_username, $this->_password, $this->_database);
-        
-        if (mysqli_connect_errno()) {
-            die("Connection failed<br>".mysqli_connect_error($this->mysqli));
-        }
-
+        // Create PDO connection
         try {
-            $this->_pdo = new PDO("mysql:host=".$this->_host.";dbname=".$this->_database, $this->_username, $this->_password);
+            $this->_dbconn = new PDO("mysql:host=".$this->_host.";dbname=".$this->_database, $this->_username, $this->_password);
         } catch (PDOException $e) {
             die($e->getMessage());
         }
+    }
+
+    function __construct($dbhost, $dbname, $dbuser, $dbpass) {
+                // Set connection variables
+                $this->_host = $dbhost;
+                $this->_database = $dbname;
+                $this->_username = $dbuser;
+                $this->_password = $dbpass;
+        
+                // Create PDO connection
+                try {
+                    $this->_dbconn = new PDO("mysql:host=".$this->_host.";dbname=".$this->_database, $this->_username, $this->_password);
+                } catch (PDOException $e) {
+                    die($e->getMessage());
+                }
+    }
+
+    function __destruct() {
+        $this->_pdo = null;
     }
 
     //// GENERAL FUNCTIONALITY //// 
