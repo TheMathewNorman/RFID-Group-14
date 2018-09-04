@@ -16,7 +16,7 @@ class Database {
         $this->_password = $GLOBALS['pass'];
         $this->_database = $GLOBALS['dbname'];
 
-        $this->mysqli = new mysqli($this->_host, $this->_username, $this->_password, $this->_database);
+        $this->_mysqli = new mysqli($this->_host, $this->_username, $this->_password, $this->_database);
         
         if (mysqli_connect_errno()) {
             die("Connection failed<br>".mysqli_connect_error($this->mysqli));
