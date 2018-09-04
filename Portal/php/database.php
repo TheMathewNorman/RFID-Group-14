@@ -101,8 +101,8 @@ class Database {
         try {
             $server = $_GLOBALS['server'];
             $dbname = $_GLOBALS['dbname'];
-            $dbuser = $_GLOBALS['dbuser'];
-            $dbpass = $_GLOBALS['dbpass'];
+            $dbuser = $_GLOBALS['user'];
+            $dbpass = $_GLOBALS['pass'];
             $conn = new PDO("mysql:host=$server;dbname=$dbname", $dbuser, $dbpass); //getConnection();
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
