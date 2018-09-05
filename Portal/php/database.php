@@ -371,7 +371,7 @@ class Database {
     }
 
     // List all members
-    function listMembers($searchq = "") {
+    function listMembers($searchq = '') {
        // Store output
        $output = "";
         
@@ -636,45 +636,113 @@ class Database {
     }
     
     // Get all entries in the logs table
-    function getLogEntries() {
-        $logHTML = "";
+    function getLogEntries($searchq = '') {
+        $output = "";
 
-        // Create connection
-        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
 
-        // Check connection.
-        if ($connection->connect_error) {
-            $logHTML.="Connection failed<br>$connection->connect_error";
-        } else {
+        $rowCount = 0;
+        if ($searchq === '') {
+            // Get number of rows
+            $rowCount = $this->_dbconn->query("SELECT count(*)
+            FROM ((logs
+            INNER JOIN members ON logs.member_id = members.id)
+            INNER JOIN readers ON logs.reader_id = readers.id)
+            WHERE logs.check_in = 0
+            ORDER BY logs.access_date DESC")->fetchColumn();
 
-            // Form SQL query
+            // Execute query
             $sql = "SELECT logs.id AS ID, members.id AS MID, CONCAT(members.firstname, ' ', members.lastname) AS Member, readers.id AS RID, readers.reader_name AS Reader, DATE_FORMAT(logs.access_date, '%e/%m/%Y at %r') AS Date
             FROM ((logs
             INNER JOIN members ON logs.member_id = members.id)
             INNER JOIN readers ON logs.reader_id = readers.id)
             WHERE logs.check_in = 0
             ORDER BY logs.access_date DESC";
+            $stmt = $this->_dbconn->prepare($sql);
+            $stmt->execute();
+        } else {
+            // Set query parameters
+            $params = array(':search' => $searchq, ':searchlike' => '%'.$searchq.'%');
+            
+            // Get number of rows
+            $sql = "SELECT count(*) 
+            FROM ((logs 
+            INNER JOIN members ON logs.member_id = members.id) 
+            INNER JOIN readers ON logs.reader_id = readers.id) 
+            WHERE logs.check_in = 0
+            AND (logs.member_id = :search
+            OR logs.reader_id = :search
+            OR members.firstname LIKE :searchlike
+            OR members.lastname LIKE :searchlike
+            OR readers.reader_name LIKE :searchlike
+            ORDER BY logs.access_date DESC";
+            $stmt = $this->_dbconn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            $stmt->execute($params);
+            $rowCount = $stmt->fetchColumn();
 
-            // Fetch each line and display in table.
-            if ($result = mysqli_query($connection, $sql)) {
-                while ($row = mysqli_fetch_row($result)) {
-                    $logHTML.= "<tr>";
-                    $logHTML.= "<td>".$row[0]."</td>";
-                    $logHTML.= "<td>".$row[1]."</td>";
-                    $logHTML.= "<td>".$row[2]."</td>";
-                    $logHTML.= "<td>".$row[3]."</td>";
-                    $logHTML.= "<td>".$row[4]."</td>";
-                    $logHTML.= "<td>".$row[5]."</td>";
-                    $logHTML.= "</tr>";
-                }
+            // Execute query
+            $sql = "SELECT logs.id AS ID, members.id as MID, CONCAT(members.firstname, ' ', members.lastname) AS Member, readers.id AS RID, readers.reader_name AS Reader, DATE_FORMAT(logs.access_date, '%e/%m/%Y at %r') AS Date 
+            FROM ((logs 
+            INNER JOIN members ON logs.member_id = members.id) 
+            INNER JOIN readers ON logs.reader_id = readers.id) 
+            WHERE logs.check_in = 0
+            AND (logs.member_id = :search
+            OR logs.reader_id = :search
+            OR members.firstname LIKE :searchlike
+            OR members.lastname LIKE :searchlike
+            OR readers.reader_name LIKE :searchlike
+            ORDER BY logs.access_date DESC";
+            $stmt = $this->_dbconn->prepare($sql);
+            $stmt->execute($params);
+        }
+
+        // Fetch table rows
+        $id = $mid = $member = $rid = $reader = $date = '';
+        if ($rowCount > 0) {
+            // Create table
+            $output.= '<table id="list-table"><tr><th>#</th><th>Member ID</th><th>Member</th><th>Reader ID</th><th>Reader</th><th>Date & Time</th></tr>';
+
+            while ($row = $stmt->fetch()) {
+                $id = $row['ID'];
+                $mid = $row['MID'];
+                $member = $row['Member'];
+                $rid = $row['RID'];
+                $reader = $row['Reader'];
+                $date = $row['Date'];
+
+                $output.= "<tr>
+                            <td>$id</td>
+                            <td>$mid</td>
+                            <td>$member</td>
+                            <td>$rid</td>
+                            <td>$reader</td>
+                            <td>$date</td>
+                           </tr>";
+            }
+            $output.= "</table>";
+        } else {
+            if ($searchq === "") {
+                $output.= "There were no results.";
             } else {
-                $logHTML.="There was an error getting log information from the database.";
+                $output.= "There were no results for $searchq";
             }
         }
-        // Close the connection
-        $connection->close();
-        
-        // Return table or message
+
+        // Fetch each line and display in table.
+        if ($result = mysqli_query($connection, $sql)) {
+            while ($row = mysqli_fetch_row($result)) {
+                $logHTML.= "<tr>";
+                $logHTML.= "<td>".$row[0]."</td>";
+                $logHTML.= "<td>".$row[1]."</td>";
+                $logHTML.= "<td>".$row[2]."</td>";
+                $logHTML.= "<td>".$row[3]."</td>";
+                $logHTML.= "<td>".$row[4]."</td>";
+                $logHTML.= "<td>".$row[5]."</td>";
+                $logHTML.= "</tr>";
+            }
+        } else {
+            $logHTML.="There was an error getting log information from the database.";
+        }
+
         return $logHTML;
     }
     
@@ -1293,4 +1361,9 @@ class Database {
     }
 
 }
+
+class Reader extends Database {
+
+}
+
 ?>
