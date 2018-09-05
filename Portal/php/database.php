@@ -689,7 +689,7 @@ class Database {
             OR logs.reader_id = :search
             OR members.firstname LIKE :searchlike
             OR members.lastname LIKE :searchlike
-            OR readers.reader_name LIKE :searchlike
+            OR readers.reader_name LIKE :searchlike)
             ORDER BY logs.access_date DESC";
             $stmt = $this->_dbconn->prepare($sql);
             $stmt->execute($params);
