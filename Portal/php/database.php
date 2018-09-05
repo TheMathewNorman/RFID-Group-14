@@ -673,7 +673,7 @@ class Database {
             OR logs.reader_id = :search
             OR members.firstname LIKE :searchlike
             OR members.lastname LIKE :searchlike
-            OR readers.reader_name LIKE :searchlike
+            OR readers.reader_name LIKE :searchlike)
             ORDER BY logs.access_date DESC";
             $stmt = $this->_dbconn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
             $stmt->execute($params);
@@ -728,24 +728,6 @@ class Database {
         }
 
         echo $output;
-
-        // // Fetch each line and display in table.
-        // if ($result = mysqli_query($connection, $sql)) {
-        //     while ($row = mysqli_fetch_row($result)) {
-        //         $logHTML.= "<tr>";
-        //         $logHTML.= "<td>".$row[0]."</td>";
-        //         $logHTML.= "<td>".$row[1]."</td>";
-        //         $logHTML.= "<td>".$row[2]."</td>";
-        //         $logHTML.= "<td>".$row[3]."</td>";
-        //         $logHTML.= "<td>".$row[4]."</td>";
-        //         $logHTML.= "<td>".$row[5]."</td>";
-        //         $logHTML.= "</tr>";
-        //     }
-        // } else {
-        //     $logHTML.="There was an error getting log information from the database.";
-        // }
-
-        // return $logHTML;
     }
     
     // Search the logs table
