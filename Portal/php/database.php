@@ -637,8 +637,8 @@ class Database {
     
     // Get all entries in the logs table
     function getLogEntries($searchq = '') {
+        // Store output
         $output = "";
-
 
         $rowCount = 0;
         if ($searchq === '') {
@@ -727,23 +727,25 @@ class Database {
             }
         }
 
-        // Fetch each line and display in table.
-        if ($result = mysqli_query($connection, $sql)) {
-            while ($row = mysqli_fetch_row($result)) {
-                $logHTML.= "<tr>";
-                $logHTML.= "<td>".$row[0]."</td>";
-                $logHTML.= "<td>".$row[1]."</td>";
-                $logHTML.= "<td>".$row[2]."</td>";
-                $logHTML.= "<td>".$row[3]."</td>";
-                $logHTML.= "<td>".$row[4]."</td>";
-                $logHTML.= "<td>".$row[5]."</td>";
-                $logHTML.= "</tr>";
-            }
-        } else {
-            $logHTML.="There was an error getting log information from the database.";
-        }
+        echo $output;
 
-        return $logHTML;
+        // // Fetch each line and display in table.
+        // if ($result = mysqli_query($connection, $sql)) {
+        //     while ($row = mysqli_fetch_row($result)) {
+        //         $logHTML.= "<tr>";
+        //         $logHTML.= "<td>".$row[0]."</td>";
+        //         $logHTML.= "<td>".$row[1]."</td>";
+        //         $logHTML.= "<td>".$row[2]."</td>";
+        //         $logHTML.= "<td>".$row[3]."</td>";
+        //         $logHTML.= "<td>".$row[4]."</td>";
+        //         $logHTML.= "<td>".$row[5]."</td>";
+        //         $logHTML.= "</tr>";
+        //     }
+        // } else {
+        //     $logHTML.="There was an error getting log information from the database.";
+        // }
+
+        // return $logHTML;
     }
     
     // Search the logs table
