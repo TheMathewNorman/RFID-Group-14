@@ -134,27 +134,21 @@ class Database {
     //// ADMIN TABLE FUNCTIONALITY //// 
     // List all admins in the admin table.
     function listAdmins($userid, $searchq = "") {
-    // <table id="list-table">
-    //     <tr>
-    //         <th>ID</th>
-    //         <th>Firstname</th>
-    //         <th>Lastname</th>
-    //         <th>Email</th>
-    //         <th>Phone Number</th>
-    //         <th>Update</th>
-    //         <th>Delete</th>
-    //     </tr>
-    // </table>
-        $rowCount;
+        // Store output
+        $output = "";
+        
+        $rowCount = 0;
         if ($searchq === "") {
+            // Get number of rows
             $rowCount = $this->_dbconn->query("SELECT count(*) FROM admins")->fetchColumn();
             
+            // Execute query
             $sql = "SELECT id, firstname, lastname, email, phone FROM admins";
             $stmt = $this->_dbconn->prepare($sql);
             $stmt->execute();
         } else {
             $params = array(':search' => $searchq, ':searchlike' => '%'.$searchq.'%');
-
+            // Get number of rows
             $sql = "SELECT count(*) 
                     FROM admins
                     WHERE id = :search
@@ -166,6 +160,7 @@ class Database {
             $stmt->execute($params);
             $rowCount = $stmt->fetchColumn();
             
+            // Execute query
             $sql = "SELECT id, firstname, lastname, email, phone 
                     FROM admins
                     WHERE id = :search
@@ -177,23 +172,38 @@ class Database {
             $stmt = $this->_dbconn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
             $stmt->execute($params);
         }
-        
-        echo "<div>$rowCount</div>";
 
-        $id = $fname = $lname = $email = $phone = '';
-        while ($row=$stmt->fetch()) {
-            $id = $row['id'];
-            $fname = $row['firstname'];
-            $lname = $row['lastname'];
-            $email = $row['email'];
-            $phone = $row['phone'];
-            
-            // Replace and remove the delete button functionality for the key admin.
-            if ($row[0] == 1) { echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><span title=\"You cannot delete the primary admin account.\"><i class=\"fa fa-key fa-lg\"></i></span></td></tr>"); }
-            else if ($row[0] == $userid) { echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><span title=\"You cannot delete the primary admin account.\"><i class=\"fa fa-ban fa-lg\"></i></span></td></tr>"); }
-            else { echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=admin&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>"); }
+        // Create a table with any results and print to page
+        if ($rowCount > 0) {
+            // Create table
+            $output.= '<table id="list-table"><tr><th>ID</th><th>Firstname</th><th>Lastname</th><th>Email</th><th>Phone Number</th><th>Update</th><th>Delete</th></tr>';
+
+            // Fetch table rows
+            $id = $fname = $lname = $email = $phone = '';
+            while ($row=$stmt->fetch()) {
+                $id = $row['id'];
+                $fname = $row['firstname'];
+                $lname = $row['lastname'];
+                $email = $row['email'];
+                $phone = $row['phone'];
+                
+                // Replace and remove the delete button functionality for the key admin.
+                if ($id == 1) { $output.= "<tr><td>$id</td><td>$fname</td><td>$lname</td><td>$email</td><td>$phone</td><td><a href=\"updateadmin.php?id=".$id."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><span title=\"You cannot delete the primary admin account.\"><i class=\"fa fa-key fa-lg\"></i></span></td></tr>"; }
+                else if ($id == $userid) { $output.= "<tr><td>$id</td><td>$fname</td><td>$lname</td><td>$email</td><td>$phone</td><td><a href=\"updateadmin.php?id=".$id."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><span title=\"You cannot delete the primary admin account.\"><i class=\"fa fa-ban fa-lg\"></i></span></td></tr>"; }
+                else { $output.= "<tr><td>$id</td><td>$fname</td><td>$lname</td><td>$email</td><td>$phone</td><td><a href=\"updateadmin.php?id=".$id."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=admin&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>"; }
+            }
+
+            // Close table tag
+            $output.= '</table>';
+        } else {
+            if ($searchq === "") {
+                $output.= "There were no results.";
+            } else {
+                $output.= "There were no results for $searchq";
+            }
         }
 
+        echo $output;
     }
     
     // Search the admins table.
@@ -234,53 +244,39 @@ class Database {
     }
 
     // Attempt to login with a given email and password
-    function loginAdmin($email, $pass) {
+    function loginAdmin($email, $password) {
         // Login response
         //[0] = False on failure || True on success.
         //[1] = Error description on failure.
-        //['id'] = Admin ID on success
-        //['fname'] = Admin First Name on success
+        //['id'] = Admin's ID on success
+        //['fname'] = Admin's first name on success
         $loginResponse[0] = false;
 
-        // SHA512 hash for password
-        $passhash = hash("sha512", $pass);
+        // Hash password
+        $passhash = hash("sha512", $password);
 
-        // Create connection
-        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
-                
-        // Check connection
-        if ($connection->connect_error) {
-            $loginResponse[1] = "Failed to connect to database.";
+        // Set query parameters
+        $params = array(':email'=>$email,':passhash'=>$passhash);
+
+        // Get number of results
+        $sql = "SELECT count(*) FROM admins WHERE email = :email AND passhash = :passhash";
+        $stmt = $this->_dbconn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $stmt->execute($params);
+        $rowCount = $stmt->fetchColumn();
+
+        // Store information
+        if ($rowCount > 0) {
+            // Get admin info
+            $sql = "SELECT id, firstname FROM admins WHERE email = :email AND passhash = :passhash";
+            $stmt = $this->_dbconn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            $stmt->execute($params);
+
+            $info = $stmt->fetch();
+            $loginResponse[0] = true;
+            $loginResponse['id'] = $info['id'];
+            $loginResponse['fname'] = $info['firstname'];
         } else {
-
-            // SQL Query to match admin account with same email and passhash as entered
-            $sql = "SELECT * FROM admins WHERE email = '$email' AND passhash = '$passhash'";
-
-            if ($result = mysqli_query($connection, $sql)) {
-                if (mysqli_num_rows($result) == 1) {
-                    // LOGIN SUCCESS
-                    $loginResponse[0] = true;
-
-                    // Pass login information
-                    $userDetails = mysqli_fetch_array($result);
-                    $loginResponse[1] = "Login successful.";
-                    $loginResponse['id'] = $userDetails['id'];
-                    $loginResponse['fname'] = $userDetails['firstname'];
-
-                    // Return successful login response
-                    return $loginResponse;
-                
-                } else if (mysqli_num_rows($result) > 1) {
-                    $loginResponse[0] = false;
-                    $loginResponse[1] = "There is more than one admin with the email address: $email";
-                } else {
-                    $loginResponse[0] = false;
-                    $loginResponse[1] = "Email or password was incorrect.";
-                }
-            } else {
-                $loginResponse[0] = false;
-                $loginResponse[1] = "Failed to run query.";
-            }
+            $loginResponse[1] = 'Email or password was incorrect.';
         }
 
         // Return login response
@@ -289,32 +285,19 @@ class Database {
     
     // Fetch information for a given admin
     function fetchAdminInfo($adminid) {
-        // Create connection
-        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
-                
-        // Check connection
-        if ($connection->connect_error) {
-            die("Connection failed<br>$connection->connect_error");
-        }
+        // Set query parameters
+        $params = array(':id'=> $adminid);
 
-        // Form SQL query
-        $sql = "SELECT firstname, lastname, email, phone FROM admins WHERE id = '$adminid'";
+        // Execute the SQL query
+        $sql = "SELECT firstname, lastname, email, phone FROM admins WHERE id = :id";
+        $stmt = $this->_dbconn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $stmt->execute($params);
 
-        $userInfo;
+        // Format raw data to return
+        $rawData = $stmt->fetch();
+        $userInfo = array('fname'=>$rawData['firstname'], 'lname'=>$rawData['lastname'], 'email'=>$rawData['email'], 'phone'=>$rawData['phone']);
 
-        // Fetch each line and display in table
-        if ($result = mysqli_query($connection, $sql)) {
-            $row=mysqli_fetch_row($result);
-            
-            $userInfo = array("fname"=>$row[0], "lname"=>$row[1], "email"=>$row[2], "phone"=>$row[3]);
-
-            mysqli_free_result($result);
-        } else {
-            die("There was an error retreiving a list of admins from the database:<br>$connection->error<br>");
-        }
-
-        $connection->close();
-
+        // Return user info
         return $userInfo;
     }
 
@@ -322,25 +305,15 @@ class Database {
     function addAdmin($firstname, $lastname, $email, $phone="", $password) {
         // Encrypt the admin password before inserting into the database
         $passhash = hash("sha512", $password);
-        
-        // Create connection
-        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
-        
-        // Check connection
-        if ($connection->connect_error) {
-            die("Connection failed<br>$connection->connect_error");
-        }
 
-        // Form SQL query
-        $sql = "INSERT INTO admins (firstname, lastname, email, phone, passhash) VALUES ('$firstname', '$lastname', '$email', '$phone', '$passhash')";
+        // Set query parameters
+        $params = array(':firstname' => $firstname, ':lastname' => $lastname, ':email' => $email, ':phone'=> $phone, ':passhash' => $passhash);
 
-        // Try DB insertion, die on error.
-        if ($connection->query($sql) !== TRUE) {
-            die("Error adding admin:<br>$connection->error<br>");
-        }
-    
-        // Close the connection
-        $connection->close();
+        // Execute query
+        $sql = "INSERT INTO admins (firstname, lastname, email, phone, passhash) 
+                VALUES (:firstname, :lastname, :email, :phone, :passhash)";
+        $stmt = $this->_dbconn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $stmt->execute($params);
     }
 
     // Update an admin in the admins table.
@@ -351,122 +324,156 @@ class Database {
             $passhash = hash("sha512", $pass);
         }
 
-        // Create connection
-        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
-
-        // Check connection
-        if ($connection->connect_error) {
-            die("Connection failed:<br>$connection->connect_error");
+        // Form query
+        if ($passhash === "") {
+            $params = array(':firstname'=> $firstname, ':lastname'=> $lastname, ':email'=> $email, ':phone'=> $phone, ':id'=> $adminid);
+            $sql = "UPDATE admins SET firstname = :firstname, lastname = :lastname, email = :email, phone = :phone WHERE id = :id";
+        } else {
+            $params = array(':firstname'=> $firstname, ':lastname'=> $lastname, ':email'=> $email, ':phone'=> $phone, ':passhash'=> $passhash, ':id'=> $adminid);
+            $sql = "UPDATE admins SET firstname = :firstname, lastname = :lastname, email = :email, phone = :phone, passhash = :passhash WHERE id = :id";
         }
-
-        // Form multiquery SQL
-        $sql = "";
-        if ($firstname != "") { $sql .= "UPDATE admins SET firstname = '$firstname' WHERE id = '$adminid';"; }
-        if ($lastname != "") { $sql .= "UPDATE admins SET lastname = '$lastname' WHERE id = '$adminid';"; }
-        if ($email != "") { $sql .= "UPDATE admins SET email = '$email' WHERE id = '$adminid';"; }
-        if ($phone != "") { $sql .= "UPDATE admins SET phone = '$phone' WHERE id = '$adminid';"; }
-        if ($passhash != "") { $sql .= "UPDATE admins SET passhash = '$passhash' WHERE id = '$adminid';"; }
-
-
-        // Try performing multi SQL query, die on error.
-        if (mysqli_multi_query($connection, $sql) === FALSE) {
-            die("Error updating admin:<br>$connection->error");
-        }
-
-        // Close the connection
-        $connection->close();
+        // Execute query
+        $stmt = $this->_dbconn->prepare($sql);
+        $stmt->execute($params);
     }
 
     // Delete an admin from the admins table.
     function removeAdmin($adminid) {
         // Prevent deletion of key admin account.
         if ($adminid > 1) { 
+            // Set query parameters
+            $params = array(':id' => $adminid);
 
-            // Create connection
-            $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
-
-            // Check connection
-            if ($connection->connect_error) {
-                die("Connection failed<br>$connection->connect_error");
-            }
-
-            // Form SQL query
-            $sql = "DELETE FROM admins WHERE id = '$adminid'";
-
-            // Try DB delete, die on error.
-            if ($connection->query($sql) !== TRUE) {
-                die("Error deleting admin:<br>$connection->error");
-            }
-
-            // Close the connection
-            $connection->close();
+            // Execute query
+            $sql = "DELETE FROM admins WHERE id = :id";
+            $stmt = $this->_dbconn->prepare($sql);
+            $stmt->execute($params);
         }
     }
 
     //// MEMBERS TABLE FUNCTIONALITY //// 
     // List all members in the members table.
     function fetchMemberInfo($memberid) {
-        // Create connection
-        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
-                
-        // Check connection
-        if ($connection->connect_error) {
-            die("Connection failed<br>$connection->connect_error");
-        }
+        // Set query parameters
+        $params = array(':id'=> $memberid);
 
-        // Form SQL query
-        $sql = "SELECT firstname, lastname, email, phone FROM members WHERE id = '$memberid'";
+        // Execute the SQL query
+        $sql = "SELECT firstname, lastname, email, phone FROM members WHERE id = :id";
+        $stmt = $this->_dbconn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $stmt->execute($params);
 
-        $userInfo;
+        // Format raw data to return
+        $rawData = $stmt->fetch();
+        $userInfo = array('fname'=>$rawData['firstname'], 'lname'=>$rawData['lastname'], 'email'=>$rawData['email'], 'phone'=>$rawData['phone']);
 
-        // Fetch each line and display in table
-        if ($result = mysqli_query($connection, $sql)) {
-            $row=mysqli_fetch_row($result);
-            
-            $userInfo = array("fname"=>$row[0], "lname"=>$row[1], "email"=>$row[2], "phone"=>$row[3]);
-
-            mysqli_free_result($result);
-        } else {
-            die("There was an error retreiving a list of admins from the database:<br>$connection->error<br>");
-        }
-
-        $connection->close();
-
+        // Return user info
         return $userInfo;
     }
 
     // List all members
-    function listMembers() {
-        // Create connection
-        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+    function listMembers($searchq = "") {
+       // Store output
+       $output = "";
+        
+       $rowCount = 0;
+       if ($searchq === "") {
+           // Get number of rows
+           $rowCount = $this->_dbconn->query("SELECT count(*) FROM members")->fetchColumn();
+           
+           // Execute query
+           $sql = "SELECT id, firstname, lastname, email, phone FROM members";
+           $stmt = $this->_dbconn->prepare($sql);
+           $stmt->execute();
+       } else {
+           $params = array(':search' => $searchq, ':searchlike' => '%'.$searchq.'%');
+           // Get number of rows
+           $sql = "SELECT count(*) 
+                   FROM members
+                   WHERE id = :search
+                   OR firstname LIKE :searchlike
+                   OR lastname LIKE :searchlike
+                   OR email LIKE :searchlike
+                   OR phone LIKE :searchlike";
+           $stmt = $this->_dbconn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+           $stmt->execute($params);
+           $rowCount = $stmt->fetchColumn();
+           
+           // Execute query
+           $sql = "SELECT id, firstname, lastname, email, phone 
+                   FROM members
+                   WHERE id = :search
+                   OR firstname LIKE :searchlike
+                   OR lastname LIKE :searchlike
+                   OR email LIKE :searchlike
+                   OR phone LIKE :searchlike";
+           
+           $stmt = $this->_dbconn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+           $stmt->execute($params);
+       }
+
+       // Create a table with any results and print to page
+       if ($rowCount > 0) {
+           // Create table
+           $output.= '<table id="list-table"><tr><th>ID</th><th>Firstname</th><th>Lastname</th><th>Email</th><th>Phone Number</th><th>Update</th><th>Delete</th></tr>';
+
+           // Fetch table rows
+           $id = $fname = $lname = $email = $phone = '';
+           while ($row=$stmt->fetch()) {
+               $id = $row['id'];
+               $fname = $row['firstname'];
+               $lname = $row['lastname'];
+               $email = $row['email'];
+               $phone = $row['phone'];
+               
+               // Replace and remove the delete button functionality for the key admin.
+               $output.= "<tr><td>$id</td><td>$fname</td><td>$lname</td><td>$email</td><td>$phone</td><td><a href=\"updatemember.php?id=".$id."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=member&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>";
+           }
+
+           // Close table tag
+           $output.= '</table>';
+       } else {
+           if ($searchq === "") {
+               $output.= "There were no results.";
+           } else {
+               $output.= "There were no results for $searchq";
+           }
+       }
+
+       echo $output;
+       
+       
+       
+        // // Create connection
+        // $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
                 
-        // Check connection.
-        if ($connection->connect_error) {
-            die("Connection failed<br>$connection->connect_error");
-        }
+        // // Check connection.
+        // if ($connection->connect_error) {
+        //     die("Connection failed<br>$connection->connect_error");
+        // }
 
-        // Form SQL query
-        $sql = "SELECT id, firstname, lastname, email, phone FROM members ORDER BY id";
+        // // Form SQL query
+        // $sql = "SELECT id, firstname, lastname, email, phone FROM members ORDER BY id";
 
-        // Fetch each line and display in table.
-        if ($result = mysqli_query($connection, $sql)) {
-            if (mysqli_num_rows($result) === 0) {
-                echo "The members table is empty.<br>";
-            } else {
-                while ($row=mysqli_fetch_row($result)) {
-                    echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updatemember.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=member&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>";
-                }
-            }
-            mysqli_free_result($result);
-        } else {
-            die("There was an error listing the members from the database:<br>$connection->error<br>");
-        }
+        // // Fetch each line and display in table.
+        // if ($result = mysqli_query($connection, $sql)) {
+        //     if (mysqli_num_rows($result) === 0) {
+        //         echo "The members table is empty.<br>";
+        //     } else {
+        //         while ($row=mysqli_fetch_row($result)) {
+        //             echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updatemember.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=member&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>";
+        //         }
+        //     }
+        //     mysqli_free_result($result);
+        // } else {
+        //     die("There was an error listing the members from the database:<br>$connection->error<br>");
+        // }
 
-        // Close the connection
-        $connection->close();
+        // // Close the connection
+        // $connection->close();
     }
 
     // Search the members table
+    // DEPRECIATED
     function searchMembers($searchq) {
         $formattedsearchq = strtolower(htmlspecialchars($searchq));
         
@@ -509,25 +516,15 @@ class Database {
     function addMember($firstname, $lastname, $email="", $phone="", $cardkey) {
         // Encrypt the card key before inserting into the database
         $cardkeyhash = hash("sha512", $cardkey);
-        
-        // Create connection
-        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
-        
-        // Check connection
-        if ($connection->connect_error) {
-            die("Connection failed<br>$connection->connect_error");
-        }
 
-        // Form SQL query
-        $sql = "INSERT INTO members (firstname, lastname, email, phone, cardkey) VALUES ('$firstname', '$lastname', '$email', '$phone', '$cardkeyhash')";
+        // Set query parameters
+        $params = array(':firstname' => $firstname, ':lastname' => $lastname, ':email' => $email, ':phone'=> $phone, ':keyhash' => $cardkeyhash);
 
-        // Try DB insertion, die on error.
-        if ($connection->query($sql) !== TRUE) {
-            die("Error adding member:<br>$connection->error<br>");
-        }
-    
-        // Close the connection
-        $connection->close();
+        // Execute query
+        $sql = "INSERT INTO members (firstname, lastname, email, phone, cardkey) 
+                VALUES (:firstname, :lastname, :email, :phone, :keyhash)";
+        $stmt = $this->_dbconn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $stmt->execute($params);
     }
 
     // Update a member in the members table.
@@ -537,7 +534,21 @@ class Database {
         if ($cardkey != "") {
             $cardkeyhash = hash("sha512", $cardkey);
         }
-        
+
+        // Form query
+        if ($cardkeyhash === "") {
+            $params = array(':firstname'=> $firstname, ':lastname'=> $lastname, ':email'=> $email, ':phone'=> $phone, ':id'=> $memberid);
+            $sql = "UPDATE members SET firstname = :firstname, lastname = :lastname, email = :email, phone = :phone WHERE id = :id";
+        } else {
+            $params = array(':firstname'=> $firstname, ':lastname'=> $lastname, ':email'=> $email, ':phone'=> $phone, ':keyhash'=> $cardkeyhash, ':id'=> $memberid);
+            $sql = "UPDATE members SET firstname = :firstname, lastname = :lastname, email = :email, phone = :phone, cardkey = :keyhash WHERE id = :id";
+        }
+        // Execute query
+        $stmt = $this->_dbconn->prepare($sql);
+        $stmt->execute($params);
+
+
+
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
         
@@ -566,24 +577,13 @@ class Database {
     
     // Delete a member from the members table.
     function removeMember($memberid) {
-        // Create connection
-        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+        // Set query parameters
+        $params = array(':id' => $memberid);
 
-        // Check connection
-        if ($connection->connect_error) {
-            die("Connection failed<br>$connection->connect_error");
-        }
-
-        // Form SQL query
-        $sql = "DELETE FROM members WHERE id = '$memberid'";
-
-        // Try DB delete, die on error.
-        if (!$connection->query($sql)) {
-            die("Error deleting member:<br>$connection->error");
-        }
-
-        // Close the connection
-        $connection->close();
+        // Execute query
+        $sql = "DELETE FROM members WHERE id = :id";
+        $stmt = $this->_dbconn->prepare($sql);
+        $stmt->execute($params);
     }
 
     //// LOG TABLE FUNCTIONALITY //// 
