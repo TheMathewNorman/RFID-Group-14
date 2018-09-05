@@ -731,6 +731,7 @@ class Database {
     }
     
     // Search the logs table
+    // DEPRECIATED
     function searchLogEntries($searchq) {
         $logHTML = "";
 

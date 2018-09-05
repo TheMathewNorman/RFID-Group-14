@@ -55,9 +55,9 @@
         </tr>
         <?php
           if ($search !== "") {
-            echo $database->getLogEntries($search);
+            $database->getLogEntries($search);
           } else {
-            echo $database->getLogEntries();
+            $database->getLogEntries();
           }
         ?>
       </table>
