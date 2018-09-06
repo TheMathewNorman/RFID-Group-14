@@ -1090,21 +1090,38 @@ class Database {
     }
 
     // List all approved readers
-    function listReaders() {
+    function listReaders($searchq = "") {
         $output = '';
 
-        // Get number of rows
-        $rowCount = 0;
-        $sql = "SELECT count(*) FROM readers WHERE approved = 1 ORDER BY id";
-        $stmt = $this->_dbconn->prepare($sql);
-        $stmt->execute();
-        $rowCount = $stmt->fetchColumn();
-        
-        if ($rowCount > 0) {
-            // Execute SQL query
-            $sql = "SELECT id, reader_name, reader_group, signature FROM readers WHERE approved = 1 ORDER BY id";
+        if ($searchq == '') {
+            // Get number of rows
+            $rowCount = 0;
+            $sql = "SELECT count(*) FROM readers WHERE approved = 1 ORDER BY id";
             $stmt = $this->_dbconn->prepare($sql);
             $stmt->execute();
+            $rowCount = $stmt->fetchColumn();
+        } else {
+            // Get number of rows
+            $rowCount = 0;
+            $params = array(':searchlike' => '%'.$searchq.'%');
+            $sql = "SELECT count(*) FROM readers WHERE approved = 1 AND reader_name LIKE :searchlike ORDER BY id";
+            $stmt = $this->_dbconn->prepare($sql);
+            $stmt->execute($params);
+            $rowCount = $stmt->fetchColumn();
+        }
+        
+        if ($rowCount > 0) {
+            if ($searchq == '') {
+                // Execute SQL query
+                $sql = "SELECT id, reader_name, reader_group, signature FROM readers WHERE approved = 1 ORDER BY id";
+                $stmt = $this->_dbconn->prepare($sql);
+                $stmt->execute();
+            } else {
+                // Execute SQL query
+                $sql = "SELECT id, reader_name, reader_group, signature FROM readers WHERE approved = 1 AND reader_name LIKE :searchlike ORDER BY id";
+                $stmt = $this->_dbconn->prepare($sql);
+                $stmt->execute($params);
+            }
 
             // Form table 
             $output.= '<table id="list-table"><tr><th>Reader ID</th><th>Reader Name</th><th>Reader Group</th><th>Signature</th><th>Update</th><th>Remove</th></tr>';
@@ -1128,48 +1145,49 @@ class Database {
     }
 
     // Search all approved readers
+    // DEPRECIATED
     function searchReaders($searchq) {
-        // Create connection
-        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+        // // Create connection
+        // $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
                         
-        // Check connection.
-        if ($connection->connect_error) {
-            die("Connection failed<br>$connection->connect_error");
-        }
+        // // Check connection.
+        // if ($connection->connect_error) {
+        //     die("Connection failed<br>$connection->connect_error");
+        // }
 
-        // Form SQL query
-        $sql = "SELECT id, reader_name, reader_group, signature
-                FROM readers
-                WHERE approved = 1
-                AND (
-                    reader_name LIKE '%$searchq%'
-                    OR id LIKE '%$searchq%'
-                )
-                ORDER BY id";
+        // // Form SQL query
+        // $sql = "SELECT id, reader_name, reader_group, signature
+        //         FROM readers
+        //         WHERE approved = 1
+        //         AND (
+        //             reader_name LIKE '%$searchq%'
+        //             OR id LIKE '%$searchq%'
+        //         )
+        //         ORDER BY id";
 
-        // Fetch each line and display in table.
-        if ($result = mysqli_query($connection, $sql)) {
-            if (mysqli_num_rows($result) === 0) {
-                echo "The readers table is empty.<br>";
-            } else {
-                while ($row=mysqli_fetch_row($result)) {
-                    echo "<tr>
-                    <td>$row[0]</td>
-                    <td>$row[1]</td>
-                    <td>$row[2]</td>
-                    <td>$row[3]</td>
-                    <td><a href=\"updatereader.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td>
-                    <td><a href=\"../php/deletereader.php?id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td>
-                    </tr>";
-                }
-            }
-            mysqli_free_result($result);
-        } else {
-            die("There was an error listing the readers from the database:<br>$connection->error<br>");
-        }
+        // // Fetch each line and display in table.
+        // if ($result = mysqli_query($connection, $sql)) {
+        //     if (mysqli_num_rows($result) === 0) {
+        //         echo "The readers table is empty.<br>";
+        //     } else {
+        //         while ($row=mysqli_fetch_row($result)) {
+        //             echo "<tr>
+        //             <td>$row[0]</td>
+        //             <td>$row[1]</td>
+        //             <td>$row[2]</td>
+        //             <td>$row[3]</td>
+        //             <td><a href=\"updatereader.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td>
+        //             <td><a href=\"../php/deletereader.php?id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td>
+        //             </tr>";
+        //         }
+        //     }
+        //     mysqli_free_result($result);
+        // } else {
+        //     die("There was an error listing the readers from the database:<br>$connection->error<br>");
+        // }
 
-        // Close the connection
-        $connection->close();
+        // // Close the connection
+        // $connection->close();
     }
 
     // Remove a reader

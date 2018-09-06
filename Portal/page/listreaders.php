@@ -1,9 +1,6 @@
 <?php
     include_once "../php/database.php";
     $database = new Database();
-
-    include_once "../php/validate.php";
-    $validate = new Validate();
 ?>
 <html>
 <head>
@@ -21,30 +18,14 @@
     <form action="" method="GET" name="search" onsubmit="validateInput()">
         <input type="text" placeholder="Search..." name="searchInput"> <input type="submit" value="Search">
       </form>
-      
-        <table id="list-table">
-        <tr>
-        <th>Reader ID</th>
-        <th>Reader Name</th>
-        <th>Reader Group</th>
-        <th>Signature</th>
-        <th>Update</th>
-        <th>Remove</th>
-        </tr>
         
         <?php 
-        if (isset($_GET['searchInput'])) {
-            $searchq = $validate->sanitizeString($_GET['searchInput']);
-            if ($searchq != "") {
-                echo $database->searchReaders($searchq);
-            } else {
-                echo $database->listReaders();
-            }
+        if (isset($_GET['searchInput']) && $_GET['searchInput'] != '') {
+            $database->listReaders($_GET['searchInput']);
         } else {
-            echo $database->listReaders();
+            $database->listReaders();
         } 
         ?>
-        </table>
 
 
 </div>
