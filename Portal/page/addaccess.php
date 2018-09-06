@@ -13,7 +13,7 @@
         foreach ($_POST as $postItem) {
             $database->addPrivilege($_GET['id'], $postItem);
         }
-        $location = "listaccess.php?id=".$_GET['id'];
+        //$location = "listaccess.php?id=".$_GET['id'];
     }
 
     if ($location != "") {
