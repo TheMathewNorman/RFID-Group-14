@@ -15,14 +15,8 @@
     <?php include "../component/header.php"; ?>
     <?php include "../component/menu.php"; ?>
       
-          <table id="list-table">
-          <tr>
-            <th>ID</th>
-            <th>Reader Code</th>
-            <th>Approve</th>
-          </tr>
-          <?php echo $database->listPending(); ?>
-        </table>
+
+    <?php $database->listPending(); ?>
 
 
 </div>

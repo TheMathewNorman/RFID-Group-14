@@ -1083,6 +1083,8 @@ class Database {
 
             $output.= "</table>";
         }
+
+        echo $output;
     }
 
     // List all approved readers
