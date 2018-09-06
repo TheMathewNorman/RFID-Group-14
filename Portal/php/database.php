@@ -855,6 +855,8 @@ class Database {
         $stmt = $this->_dbconn->prepare($sql);
         $stmt->execute($params);
         $rowCount = $stmt->fetchColumn();
+
+        echo $rowCount;
         
         if ($rowCount > 0) {
             // Execute query
@@ -863,7 +865,7 @@ class Database {
             INNER JOIN readers ON privilege.reader_id = readers.id)
             WHERE privilege.member_id = :memberid";
             $stmt = $this->_dbconn->prepare($sql);
-            $stmt->execute();
+            $stmt->execute($params);
 
             // Form table
             $output.= '<table id="list-table"><tr><th>Member ID</th><th>Name</th><th>Modify Access</th></tr>';
