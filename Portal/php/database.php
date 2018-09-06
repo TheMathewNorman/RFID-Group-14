@@ -771,7 +771,7 @@ class Database {
                 }
 
                 $output.= "<tr $rowStyle>";
-                $output.= "<td>$memberid</td><td>$membername</td><td>$numofvisits</td><td>$active</td><td>$lastactivity hours ago</td><td>$lastvisit</td>";
+                $output.= "<td>$memberid</td><td>$membername</td><td>$numofvisits</td><td>$active</td><td>$lastactivity</td><td>$lastvisit</td>";
                 $output.= "</tr>";
             }
             $output.= "</table>";
