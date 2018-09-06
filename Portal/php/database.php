@@ -711,8 +711,7 @@ class Database {
         INNER JOIN members ON logs.member_id = members.id)
         INNER JOIN (SELECT member_id, MAX(access_date) as visit_date FROM logs WHERE check_in = 1 GROUP BY logs.member_id) last_visit ON logs.member_id = last_visit.member_id)
         WHERE logs.check_in = 1
-        GROUP BY logs.member_id
-        ORDER BY Active DESC";
+        GROUP BY logs.member_id";
         $stmt = $this->_dbconn->prepare($sql);
         $stmt->execute();
         $rowCount = $stmt->fetchColumn();
