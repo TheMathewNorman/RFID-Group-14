@@ -15,20 +15,7 @@
     <?php include "../component/header.php"; ?>
     <?php include "../component/menu.php"; ?>
     
-    <form action="" method="GET" name="search" onsubmit="validateInput()">
-        <input type="text" placeholder="Search..." name="searchInput"> <input type="submit" value="Search">
-      </form>
-
-    <table id="list-table">
-      <tr>
-        <th>Member ID</th>
-        <th>Name</th>
-        <th>Modify Access</th>
-      </tr>
-      <?php echo $database->listPrivilegeMembers(); ?>
-    </table>
-
-
-</div>
+    <?php $database->listPrivilegeMembers(); ?>
+    </div>
 </body>
 </html>

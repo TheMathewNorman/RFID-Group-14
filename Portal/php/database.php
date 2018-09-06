@@ -789,7 +789,6 @@ class Database {
     //// PRIVILEDGE TABLE FUNCTIONALITY //// 
     // Add member privilege
     function addPrivilege($memberid, $readerid, $readergroup = "") {
-        
         // Check table for existing entries
         $rowCount;
         $params = array(':memberid' => $memberid, ':readerid' => $readerid);
@@ -798,46 +797,46 @@ class Database {
         $stmt->execute($params);
         $rowCount = $stmt->fetchColumn();
 
+        // If there are no existing entries for this combination in the privilege table, create a new one.
         if ($rowCount == 0) {
             $sql = "INSERT INTO privilege(member_id, reader_id) VALUES (:memberid, :readerid)";
             $stmt = $this->_dbconn->prepare($sql);
             $stmt->execute($params);
         }
     }
+    
     // List all members
     function listPrivilegeMembers() {
-        // Create connection
-        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
-                
-        // Check connection.
-        if ($connection->connect_error) {
-            die("Connection failed<br>$connection->connect_error");
-        }
+        $output = '';
+        
+        // Get row count
+        $rowCount;
+        $sql = "SELECT count(*) FROM members ORDER BY id";
+        $stmt = $this->_dbconn->prepare($sql);
+        $stmt->execute();
+        $rowCount = $stmt->fetchColumn();
+        
+        if ($rowCount > 0) {
+            // Execute query
+            $sql = "SELECT id, CONCAT(firstname, ' ', lastname) AS MemberName FROM members ORDER BY id";
+            $stmt = $this->_dbconn->prepare($sql);
+            $stmt->execute();
 
-        // Form SQL query
-        $sql = "SELECT id, CONCAT(firstname, ' ', lastname) AS MemberName FROM members ORDER BY id";
+            // Form table
+            $output.= '<table id="list-table"><tr><th>Member ID</th><th>Name</th><th>Modify Access</th></tr>';
 
-        // Fetch each line and display in table.
-        $memberAccessInfo;
-        if ($result = mysqli_query($connection, $sql)) {
-            if (mysqli_num_rows($result) === 0) {
-                echo "The privilege table is empty.<br>";
-            } else {
-                while ($row=mysqli_fetch_row($result)) {
-                    echo "<tr>
-                    <td>$row[0]</td>
-                    <td>$row[1]</td>
-                    <td><a href=\"listaccess.php?id=".$row[0]."\"><i class=\"fas fa-edit fa-lg\"></i></a></td>
-                    </tr>";
-                }
+            // Fetch each line and display in table.
+            $id = $membername = '';
+            while ($row = $stmt->fetch()) {
+                $output.= "<tr><td>$row[0]</td><td>$row[1]</td><td><a href=\"listaccess.php?id=".$row[0]."\"><i class=\"fas fa-edit fa-lg\"></i></a></td></tr>";
             }
-            mysqli_free_result($result);
+        
+            $output.= "</table>";
         } else {
-            die("There was an error listing the data in the privilege table:<br>$connection->error<br>");
+            $output = "There are no members. Please add a member before assigning access.";
         }
 
-        // Close the connection
-        $connection->close();
+        echo $output;
     }
     
     // List all privileges associated with a member
