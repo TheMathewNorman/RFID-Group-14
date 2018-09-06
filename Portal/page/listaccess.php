@@ -21,17 +21,10 @@
     <?php include "../component/header.php"; ?>
     <?php include "../component/menu.php"; ?>
     
-    <table id="list-table">
-      <tr>
-        <th>PID</th>
-        <th>Reader ID</th>
-        <th>Reader Name</th>
-        <th>Remove</th>
-      </tr>
-      <?php
-        $database->listMemberPrivilege($_GET['id']);
-      ?>
-    </table>
+    <?php
+      $database->listMemberPrivilege($_GET['id']);
+    ?>
+    
     <div id="add-new-button">  
         <a href="addaccess.php?id=<?php echo $_GET['id']; ?>"><i class="fas fa-plus-circle fa-lg"></i></a>
 

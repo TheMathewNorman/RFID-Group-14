@@ -855,8 +855,6 @@ class Database {
         $stmt = $this->_dbconn->prepare($sql);
         $stmt->execute($params);
         $rowCount = $stmt->fetchColumn();
-
-        echo $rowCount;
         
         if ($rowCount > 0) {
             // Execute query
