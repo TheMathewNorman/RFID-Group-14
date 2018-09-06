@@ -792,7 +792,7 @@ class Database {
         
         // Check table for existing entries
         $rowCount;
-        $params = array(':readerid' => $readerid, ':memberid' => $memberid);
+        $params = array(':memberid' => $memberid, ':readerid' => $readerid);
         $sql = "SELECT count(*) FROM privilege WHERE member_id = :memberid AND reader_id = :readerid";
         $stmt = $this->_dbconn->prepare($sql);
         $stmt->execute($params);
@@ -803,7 +803,6 @@ class Database {
             $stmt = $this->_dbconn->prepare($sql);
             $stmt->execute($params);
         }
-        echo "Getting here.";
     }
     // List all members
     function listPrivilegeMembers() {
