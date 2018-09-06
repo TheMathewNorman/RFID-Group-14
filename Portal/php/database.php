@@ -923,25 +923,12 @@ class Database {
     }
 
     // Revoke a member's privilege
-    function removePrivilege($id) {
-        // Create connection
-        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
-                        
-        // Check connection.
-        if ($connection->connect_error) {
-            die("Connection failed<br>$connection->connect_error");
-        }
-
-        // Form SQL query
-        $sql = "DELETE FROM privilege WHERE id = $id";
-
-        // Remove the reader.
-        if (!mysqli_query($connection, $sql)) {
-            die("There was an error removing the reader from the database:<br>$connection->error<br>");
-        }
-
-        // Close the connection
-        $connection->close();
+    function removePrivilege($privilegeid) {
+        // Execute query
+        $params = array(':privilegeid' => $privilegeid);
+        $sql = "DELETE FROM privilege WHERE id = :privilegeid";
+        $stmt = $this->_dbconn->prepare($sql);
+        $stmt->execute();
     }
 
     // Check if member associated with key has been given access to the reader.
@@ -979,29 +966,12 @@ class Database {
     
     //// READER TABLE FUNCTIONALITY //// 
     // Update a reader
-    function updateReader($readerid, $name = "", $group = "", $approved = "") {
-        // Create connection
-        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
-                
-        // Check connection.
-        if ($connection->connect_error) {
-            die("Connection failed<br>$connection->connect_error");
-        }
-
-        // Form SQL query
-        $sql = "";
-
-        if ($name !== "") { $sql.= "UPDATE readers SET reader_name = '$name' WHERE id = $readerid;"; }
-        if ($group !== "") { $sql.= "UPDATE readers SET reader_group = $group WHERE id = $readerid;"; }
-        if ($approved !== "") { $sql.= "UPDATE readers SET approved = $approved WHERE id = $readerid;"; }
-
-        // Update the reader.
-        if (!mysqli_multi_query($connection, $sql)) {
-            die("There was an error updating the reader:<br>$connection->error<br>");
-        }
-
-        // Close the connection
-        $connection->close();
+    function updateReader($readerid, $readername = "", $readergroup = "", $approved = "") {
+        // Execute query
+        $params = array(':readername'=> $readername, ':readergroup'=> $readergroup, ':approved'=> $approved, ':readerid'=> $readerid);
+        $sql = "UPDATE readers SET reader_name = :readername, reader_group = :readergroup, email = :email, phone = :phone, approved = :approved WHERE id = :readerid";
+        $stmt = $this->_dbconn->prepare($sql);
+        $stmt->execute($params);
     }
 
     // Check if the reader is approved.
@@ -1048,51 +1018,23 @@ class Database {
     }
 
     // Approve a reader
-    function approveReader($id) {
-        // Create connection
-        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
-                        
-        // Check connection.
-        if ($connection->connect_error) {
-            die("Connection failed<br>$connection->connect_error");
-        }
-
+    function approveReader($readerid) {
         // Form SQL query
-        $sql = "UPDATE readers SET approved = 1 WHERE id = $id";
-
-        // Remove the reader.
-        if (!mysqli_query($connection, $sql)) {
-            die("There was an error approving the reader:<br>$connection->error<br>");
-        }
-
-        // Close the connection
-        $connection->close();
+        $params = array(':readerid' => $readerid);
+        $sql = "UPDATE readers SET approved = 1 WHERE id = :readerid";
+        $stmt = $this->_dbconn->prepare($sql);
+        $stmt->execute($params);
     }
 
     // Get number of pending readers
     function getPendingCount() {
         $pendingCount = 0;
         
-        // Create connection
-        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
-                
-        // Check connection.
-        if ($connection->connect_error) {
-            die("Connection failed<br>$connection->connect_error");
-        }
-
-        // Form SQL query
+        // Execute query
         $sql = "SELECT count(*) FROM readers WHERE approved = 0";
-
-        // Get number of pending readers
-        if ($result = mysqli_query($connection, $sql)) {
-            $pendingCount = mysqli_fetch_row($result)[0][0];
-        } else {
-            die("Failed to get pending count");
-        }
-
-        // Close connection
-        $connection->close();
+        $stmt = $this->_dbconn->prepare($sql);
+        $stmt->execute();
+        $pendingCount = $stmt->fetchColumn();
 
         // Return number of pending readers
         return $pendingCount;
