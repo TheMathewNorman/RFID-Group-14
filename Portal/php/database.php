@@ -866,7 +866,8 @@ class Database {
             $stmt->execute($params);
 
             // Form table
-            $output.= '<table id="list-table"><tr><th>Member ID</th><th>Name</th><th>Modify Access</th></tr>';
+            $output.= '<table id="list-table"><tr><th>PID</th><th>Reader ID</th><th>Reader Name</th><th>Remove</th></tr>';
+
 
             // Fetch each line and display in table.
             $pid = $rid = $readername = '';
