@@ -847,7 +847,7 @@ class Database {
         
         // Get row count
         $rowCount;
-        $params = array(':id' => $memberid);
+        $params = array(':memberid' => $memberid);
         $sql = "SELECT count(*)
         FROM (privilege 
         INNER JOIN readers ON privilege.reader_id = readers.id)
