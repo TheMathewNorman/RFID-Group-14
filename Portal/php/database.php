@@ -798,14 +798,13 @@ class Database {
         $stmt->execute($params);
         $rowCount = $stmt->fetchColumn();
 
-        if ($rowCount == 0) {
-            $sql = "INSERT INTO privilege(member_id, reader_id) VALUES (:memberid, :readerid)";
-            $stmt = $this->_dbconn->prepare($sql);
-            $stmt->execute($params);
-        }
+        echo "Getting here. $rowCount";
 
-        // Close the connection
-        $connection->close();
+        // if ($rowCount == 0) {
+        //     $sql = "INSERT INTO privilege(member_id, reader_id) VALUES (:memberid, :readerid)";
+        //     $stmt = $this->_dbconn->prepare($sql);
+        //     $stmt->execute($params);
+        // }
     }
     // List all members
     function listPrivilegeMembers() {
