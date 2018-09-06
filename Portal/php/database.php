@@ -969,7 +969,7 @@ class Database {
     function updateReader($readerid, $readername = "", $readergroup = "", $approved = "") {
         // Execute query
         $params = array(':readername'=> $readername, ':readergroup'=> $readergroup, ':approved'=> $approved, ':readerid'=> $readerid);
-        $sql = "UPDATE readers SET reader_name = :readername, reader_group = :readergroup, email = :email, phone = :phone, approved = :approved WHERE id = :readerid";
+        $sql = "UPDATE readers SET reader_name = :readername, reader_group = :readergroup, approved = :approved WHERE id = :readerid";
         $stmt = $this->_dbconn->prepare($sql);
         $stmt->execute($params);
     }
