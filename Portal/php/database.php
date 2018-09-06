@@ -875,7 +875,7 @@ class Database {
                 $pid = $row['PID'];
                 $rid = $row['RID'];
                 $readername = $row['ReaderName'];
-                $output.= "<tr><td>$pid</td><td>$rid</td><td>$readername</td><td><td><a href=\"../php/deleteaccess.php?id=".$pid."&member=$memberid\"><i class=\"fas fa-minus-circle fa-lg\"></i></a></td></tr>";
+                $output.= "<tr><td>$pid</td><td>$rid</td><td>$readername</td><td><a href=\"../php/deleteaccess.php?id=".$pid."&member=$memberid\"><i class=\"fas fa-minus-circle fa-lg\"></i></a></td></tr>";
             }
         
             $output.= "</table>";
