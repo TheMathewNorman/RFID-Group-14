@@ -34,7 +34,7 @@ class Database {
     }
 
     function __destruct() {
-        $this->_pdo = null;
+        $this->_dbconn = null;
     }
 
     //// GENERAL FUNCTIONALITY //// 
@@ -79,27 +79,6 @@ class Database {
         } catch (PDOException $e) {
             die($e->getMessage());
         }
-    }
-
-    function countRows($query, $params = null) {
-        // 
-        $startPos = strrpos($query, "FROM");
-        $endPos = strlen($query) - 1;
-        $queryConditions = substr($query, $startPos, $endPos);
-
-        $sql = "SELECT count(*) as Count $queryConditions";
-
-        $stmt = $this->_dbconn->prepare($sql);
-        
-        if ($params === null) {
-            $stmt->execute();
-        } else {
-            $stmt->execute($params);
-        }
-
-        $count = $stmt->fetch()['Count'];
-
-        return $count;
     }
 
     // Test database connection.
@@ -210,38 +189,38 @@ class Database {
     // Search the admins table.
     // DEPRECIATED
     function searchAdmins($searchq) {
-        $formattedsearchq = strtolower(htmlspecialchars($searchq));
+        // $formattedsearchq = strtolower(htmlspecialchars($searchq));
         
-        // Create connection
-        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+        // // Create connection
+        // $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
                 
-        // Check connection
-        if ($connection->connect_error) {
-            die("Connection failed<br>$connection->connect_error");
-        }
+        // // Check connection
+        // if ($connection->connect_error) {
+        //     die("Connection failed<br>$connection->connect_error");
+        // }
 
-        // Form SQL query
+        // // Form SQL query
         
 
-        // Fetch each line and display in table
-        if ($result = mysqli_query($connection, $sql)) {
-            if (mysqli_num_rows($result) === 0) {
-                echo "The admins table contains no match for the search: <b>$searchq</b><br>";
-            } else {
-                echo "Found ".mysqli_num_rows($result)." results for $searchq<br>";
-                while ($row=mysqli_fetch_row($result)) {
-                    // Replace and remove the delete button functionality for the key admin.
-                    if ($row[0] == 1) { echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><span title=\"You cannot delete the primary admin account.\"><i class=\"fa fa-key fa-lg\"></i></span></td></tr>"); }
-                    else { echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=admin&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>"); }
-                }
-            }
-            mysqli_free_result($result);
-        } else {
-            die("There was an error searching the database:<br>$connection->error<br>");
-        }
+        // // Fetch each line and display in table
+        // if ($result = mysqli_query($connection, $sql)) {
+        //     if (mysqli_num_rows($result) === 0) {
+        //         echo "The admins table contains no match for the search: <b>$searchq</b><br>";
+        //     } else {
+        //         echo "Found ".mysqli_num_rows($result)." results for $searchq<br>";
+        //         while ($row=mysqli_fetch_row($result)) {
+        //             // Replace and remove the delete button functionality for the key admin.
+        //             if ($row[0] == 1) { echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><span title=\"You cannot delete the primary admin account.\"><i class=\"fa fa-key fa-lg\"></i></span></td></tr>"); }
+        //             else { echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updateadmin.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=admin&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>"); }
+        //         }
+        //     }
+        //     mysqli_free_result($result);
+        // } else {
+        //     die("There was an error searching the database:<br>$connection->error<br>");
+        // }
 
-        // Close the connection
-        $connection->close();
+        // // Close the connection
+        // $connection->close();
     }
 
     // Attempt to login with a given email and password
@@ -441,76 +420,46 @@ class Database {
        }
 
        echo $output;
-       
-       
-       
-        // // Create connection
-        // $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
-                
-        // // Check connection.
-        // if ($connection->connect_error) {
-        //     die("Connection failed<br>$connection->connect_error");
-        // }
-
-        // // Form SQL query
-        // $sql = "SELECT id, firstname, lastname, email, phone FROM members ORDER BY id";
-
-        // // Fetch each line and display in table.
-        // if ($result = mysqli_query($connection, $sql)) {
-        //     if (mysqli_num_rows($result) === 0) {
-        //         echo "The members table is empty.<br>";
-        //     } else {
-        //         while ($row=mysqli_fetch_row($result)) {
-        //             echo "<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updatemember.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=member&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>";
-        //         }
-        //     }
-        //     mysqli_free_result($result);
-        // } else {
-        //     die("There was an error listing the members from the database:<br>$connection->error<br>");
-        // }
-
-        // // Close the connection
-        // $connection->close();
     }
 
     // Search the members table
     // DEPRECIATED
     function searchMembers($searchq) {
-        $formattedsearchq = strtolower(htmlspecialchars($searchq));
+        // $formattedsearchq = strtolower(htmlspecialchars($searchq));
         
-        // Create connection
-        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+        // // Create connection
+        // $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
                 
-        // Check connection
-        if ($connection->connect_error) {
-            die("Connection failed<br>$connection->connect_error");
-        }
+        // // Check connection
+        // if ($connection->connect_error) {
+        //     die("Connection failed<br>$connection->connect_error");
+        // }
 
-        // Form SQL query
-        $sql = "SELECT * FROM members
-        WHERE id LIKE '%$formattedsearchq%'
-        OR LOWER(firstname) LIKE '%$formattedsearchq%'
-        OR LOWER(lastname) LIKE '%$formattedsearchq%'
-        OR LOWER(email) LIKE '%$formattedsearchq%'
-        OR LOWER(phone) LIKE '%$formattedsearchq%'";
+        // // Form SQL query
+        // $sql = "SELECT * FROM members
+        // WHERE id LIKE '%$formattedsearchq%'
+        // OR LOWER(firstname) LIKE '%$formattedsearchq%'
+        // OR LOWER(lastname) LIKE '%$formattedsearchq%'
+        // OR LOWER(email) LIKE '%$formattedsearchq%'
+        // OR LOWER(phone) LIKE '%$formattedsearchq%'";
 
-        // Fetch each line and display in table
-        if ($result = mysqli_query($connection, $sql)) {
-            if (mysqli_num_rows($result) === 0) {
-                echo "The members table contains no match for the search: <b>$searchq</b><br>";
-            } else {
-                echo "Found ".mysqli_num_rows($result)." results for $searchq<br>";
-                while ($row=mysqli_fetch_row($result)) {
-                    echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updatemember.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=member&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>");
-                }
-            }
-            mysqli_free_result($result);
-        } else {
-            die("There was an error searching the database:<br>$connection->error<br>");
-        }
+        // // Fetch each line and display in table
+        // if ($result = mysqli_query($connection, $sql)) {
+        //     if (mysqli_num_rows($result) === 0) {
+        //         echo "The members table contains no match for the search: <b>$searchq</b><br>";
+        //     } else {
+        //         echo "Found ".mysqli_num_rows($result)." results for $searchq<br>";
+        //         while ($row=mysqli_fetch_row($result)) {
+        //             echo str_replace($searchq, "<b>$searchq</b>","<tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td><a href=\"updatemember.php?id=".$row[0]."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=member&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>");
+        //         }
+        //     }
+        //     mysqli_free_result($result);
+        // } else {
+        //     die("There was an error searching the database:<br>$connection->error<br>");
+        // }
 
-        // Close the connection
-        $connection->close();
+        // // Close the connection
+        // $connection->close();
     }
 
     // Add a member to the members table.
@@ -565,46 +514,32 @@ class Database {
     function addLogEntry($signature, $key, $checkin=0) {
         $keyhash = hash('sha512', $key);
 
-        $return = true;
-
-        // Create connection
-        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
-
-        // Check connection.
-        if ($connection->connect_error) {
-            $return = false;
-        }
+        $return = false;
 
         // Get member id from key
         $memberid;
-        $sql = "SELECT id FROM members WHERE cardkey = '$keyhash'";
-        if ($result = mysqli_query($connection, $sql)) {
-            if ($row = mysqli_fetch_row($result)) {
-                $memberid = $row[0];
+        $params = array(':cardkeyhash' => $keyhash);
+        $sql = "SELECT id FROM members WHERE cardkey = :cardkeyhash";
+        $stmt = $this->_dbconn->prepare($sql);
+        $stmt->execute($params);
+        if ($memberid = $stmt->fetchColumn()) {
+            // Get reader id from signature
+            $readerid;
+            $params = array(':signature' => $signature);
+            $sql = "SELECT id FROM readers WHERE signature = :signature";
+            $stmt = $this->_dbconn->prepare($sql);
+            $stmt->execute($params);
+            if ($readerid = $stmt->fetchColumn()) {
+                
+                // Add log entry
+                $params = array(':memberid' => $memberid, ':readerid' => $readerid, ':checkin' => $checkin);
+                $sql = "INSERT INTO logs (member_id, reader_id, check_in) VALUES (:memberid, :readerid, :checkin)";
+                $stmt = $this->_dbconn->prepare($sql);
+                if ($stmt->execute($params)) {
+                    $return = true;
+                }
             }
-        } else {
-            $return = false;
         }
-
-        // Get member id from key
-        $readerid;
-        $sql = "SELECT id FROM readers WHERE signature = '$signature'";
-        if ($result = mysqli_query($connection, $sql)) {
-            if ($row = mysqli_fetch_row($result)) {
-                $readerid = $row[0];
-            }
-        } else {
-            $return = false;
-        }
-
-        // Add log entry
-        $sql = "INSERT INTO logs (member_id, reader_id, check_in) VALUES ($memberid, $readerid, $checkin)";
-        if (!$connection->query($sql)) {
-            $return = false;
-        }
-
-        // Close the connection
-        $connection->close();
 
         return $return;
     }
