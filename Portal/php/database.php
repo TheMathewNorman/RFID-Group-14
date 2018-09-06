@@ -767,7 +767,7 @@ class Database {
                 if ($lastactivity > 1) {
                     $lastactivity.= ' hours ago';
                 } else {
-                    $lastactivity = 'Less than 1 hour ago';
+                    $lastactivity = '<1 hour ago';
                 }
 
                 $output.= "<tr $rowStyle>";
