@@ -1082,6 +1082,8 @@ class Database {
             }
 
             $output.= "</table>";
+        } else {
+            $output = "There are no readers pending approval.";
         }
 
         echo $output;
