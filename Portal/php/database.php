@@ -793,18 +793,17 @@ class Database {
         // Check table for existing entries
         $rowCount;
         $params = array(':readerid' => $readerid, ':memberid' => $memberid);
-        $sql = "SELECT count(*) FROM privilege WHERE reader_id = :readerid AND member_id = :memberid";
+        $sql = "SELECT count(*) FROM privilege WHERE member_id = :memberid AND reader_id = :readerid";
         $stmt = $this->_dbconn->prepare($sql);
         $stmt->execute($params);
         $rowCount = $stmt->fetchColumn();
 
-        echo "Getting here. $rowCount";
-
-        // if ($rowCount == 0) {
-        //     $sql = "INSERT INTO privilege(member_id, reader_id) VALUES (:memberid, :readerid)";
-        //     $stmt = $this->_dbconn->prepare($sql);
-        //     $stmt->execute($params);
-        // }
+        if ($rowCount == 0) {
+            $sql = "INSERT INTO privilege(member_id, reader_id) VALUES (:memberid, :readerid)";
+            $stmt = $this->_dbconn->prepare($sql);
+            $stmt->execute($params);
+        }
+        echo "Getting here.";
     }
     // List all members
     function listPrivilegeMembers() {
