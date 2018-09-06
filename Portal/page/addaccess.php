@@ -34,16 +34,10 @@
         <?php include "../component/menu.php"; ?>
             
             <form action="" method="POST">
-            <table id="list-table">
-                <tr>
-                    <th>Reader ID</th>
-                    <th>Reader Name</th>
-                    <th>Add</th>
-                </tr>
                 <?php
                     $database->listPrivilegeReaders();
                 ?>
-            </table>
+
             <div style="text-align:center;margin-top:10px;">
                 <input type="Submit" value="Submit">
             </div>
