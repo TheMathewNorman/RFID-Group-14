@@ -642,67 +642,134 @@ class Database {
     // Search the logs table
     // DEPRECIATED
     function searchLogEntries($searchq) {
-        $logHTML = "";
+        // $logHTML = "";
 
-        // Create connection
-        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+        // // Create connection
+        // $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
 
-        // Check connection.
-        if ($connection->connect_error) {
-            $logHTML.="Connection failed<br>$connection->connect_error";
-        } else {
+        // // Check connection.
+        // if ($connection->connect_error) {
+        //     $logHTML.="Connection failed<br>$connection->connect_error";
+        // } else {
 
-            // Form SQL query
-            $sql = "SELECT logs.id AS ID, members.id as MID, CONCAT(members.firstname, ' ', members.lastname) AS Member, readers.id AS RID, readers.reader_name AS Reader, DATE_FORMAT(logs.access_date, '%e/%m/%Y at %r') AS Date 
-            FROM ((logs 
-            INNER JOIN members ON logs.member_id = members.id) 
-            INNER JOIN readers ON logs.reader_id = readers.id) 
-            WHERE logs.check_in = 0
-            AND (logs.id = '$searchq'
-            OR logs.member_id = '$searchq'
-            OR logs.reader_id = '$searchq'
-            OR members.firstname LIKE '%$searchq%'
-            OR members.lastname LIKE '%$searchq%'
-            OR readers.reader_name LIKE '%$searchq%'
-            XOR DATE_FORMAT(logs.access_date, '%Y-%m-%e') = '$searchq'
-            XOR DATE_FORMAT(logs.access_date, '%e-%m-%Y %r') LIKE '%$searchq%'
-            XOR DATE_FORMAT(logs.access_date, '%e-%m-%Y %T') LIKE '%$searchq%'
-            XOR DATE_FORMAT(logs.access_date, '%e-%m-%y %r') LIKE '%$searchq%'
-            XOR DATE_FORMAT(logs.access_date, '%e-%m-%Y %T') LIKE '%$searchq%'
-            XOR DATE_FORMAT(logs.access_date, '%r %T %e %m %M %Y') LIKE '%$searchq%')
-            ORDER BY logs.access_date DESC";
+        //     // Form SQL query
+        //     $sql = "SELECT logs.id AS ID, members.id as MID, CONCAT(members.firstname, ' ', members.lastname) AS Member, readers.id AS RID, readers.reader_name AS Reader, DATE_FORMAT(logs.access_date, '%e/%m/%Y at %r') AS Date 
+        //     FROM ((logs 
+        //     INNER JOIN members ON logs.member_id = members.id) 
+        //     INNER JOIN readers ON logs.reader_id = readers.id) 
+        //     WHERE logs.check_in = 0
+        //     AND (logs.id = '$searchq'
+        //     OR logs.member_id = '$searchq'
+        //     OR logs.reader_id = '$searchq'
+        //     OR members.firstname LIKE '%$searchq%'
+        //     OR members.lastname LIKE '%$searchq%'
+        //     OR readers.reader_name LIKE '%$searchq%'
+        //     XOR DATE_FORMAT(logs.access_date, '%Y-%m-%e') = '$searchq'
+        //     XOR DATE_FORMAT(logs.access_date, '%e-%m-%Y %r') LIKE '%$searchq%'
+        //     XOR DATE_FORMAT(logs.access_date, '%e-%m-%Y %T') LIKE '%$searchq%'
+        //     XOR DATE_FORMAT(logs.access_date, '%e-%m-%y %r') LIKE '%$searchq%'
+        //     XOR DATE_FORMAT(logs.access_date, '%e-%m-%Y %T') LIKE '%$searchq%'
+        //     XOR DATE_FORMAT(logs.access_date, '%r %T %e %m %M %Y') LIKE '%$searchq%')
+        //     ORDER BY logs.access_date DESC";
 
-            // Fetch each line and display in table.
-            if ($result = mysqli_query($connection, $sql)) {
-                if (mysqli_num_rows($result) > 0) {
-                    while ($row = mysqli_fetch_row($result)) {
-                        $logHTML.= "<tr>";
-                        $logHTML.= "<td>".$row[0]."</td>";
-                        $logHTML.= "<td>".$row[1]."</td>";
-                        $logHTML.= "<td>".$row[2]."</td>";
-                        $logHTML.= "<td>".$row[3]."</td>";
-                        $logHTML.= "<td>".$row[4]."</td>";
-                        $logHTML.= "<td>".$row[5]."</td>";
-                        $logHTML.= "</tr>";
-                    }
-                } else {
-                    $logHTML.= "There were no results.";
-                }
-            } else {
-                $logHTML.="There was an error getting log information from the database: ".mysqli_error($connection);
-            }
-        }
-        // Close the connection
-        $connection->close();
+        //     // Fetch each line and display in table.
+        //     if ($result = mysqli_query($connection, $sql)) {
+        //         if (mysqli_num_rows($result) > 0) {
+        //             while ($row = mysqli_fetch_row($result)) {
+        //                 $logHTML.= "<tr>";
+        //                 $logHTML.= "<td>".$row[0]."</td>";
+        //                 $logHTML.= "<td>".$row[1]."</td>";
+        //                 $logHTML.= "<td>".$row[2]."</td>";
+        //                 $logHTML.= "<td>".$row[3]."</td>";
+        //                 $logHTML.= "<td>".$row[4]."</td>";
+        //                 $logHTML.= "<td>".$row[5]."</td>";
+        //                 $logHTML.= "</tr>";
+        //             }
+        //         } else {
+        //             $logHTML.= "There were no results.";
+        //         }
+        //     } else {
+        //         $logHTML.="There was an error getting log information from the database: ".mysqli_error($connection);
+        //     }
+        // }
+        // // Close the connection
+        // $connection->close();
         
-        // Return table or message
-        return $logHTML;
+        // // Return table or message
+        // return $logHTML;
     }
 
     // Display a list of check-ins
     function getCheckinEntries() {
-        $logHTML = "";
+        $output = "";
+        
+        // Get number of rows
+        $rowCount;
+        // Form SQL query
+        $sql = "SELECT count(*)
+        FROM ((logs
+        INNER JOIN members ON logs.member_id = members.id)
+        INNER JOIN (SELECT member_id, MAX(access_date) as visit_date FROM logs WHERE check_in = 1 GROUP BY logs.member_id) last_visit ON logs.member_id = last_visit.member_id)
+        WHERE logs.check_in = 1
+        GROUP BY logs.member_id
+        ORDER BY Active DESC";
+        $stmt = $this->_dbconn->prepare($sql);
+        $stmt->execute();
+        $rowCount = $stmt->fetchColumn();
 
+        // Form SQL query
+        $sql = "SELECT 
+        members.id AS MID, 
+        CONCAT(members.firstname, ' ', members.lastname) AS Member,
+        FLOOR(count(check_in) / 2) AS Checkins,
+        CASE
+            when count(logs.check_in) MOD 2 = 0 then 0
+            when count(logs.check_in) MOD 2 = 1 then 1
+        END AS Active,
+        DATE_FORMAT(last_visit.visit_date, '%e/%m/%Y at %r') AS LastCheckin,
+        TIMESTAMPDIFF(HOUR, last_visit.visit_date, NOW()) AS TimeSince
+        FROM ((logs
+        INNER JOIN members ON logs.member_id = members.id)
+        INNER JOIN (SELECT member_id, MAX(access_date) as visit_date FROM logs WHERE check_in = 1 GROUP BY logs.member_id) last_visit ON logs.member_id = last_visit.member_id)
+        WHERE logs.check_in = 1
+        GROUP BY logs.member_id
+        ORDER BY Active DESC";
+        $stmt = $this->_dbconn->prepare($sql);
+        $stmt->execute();
+
+        if ($rowCount > 0) {
+            // Create table
+            $output.= '<table id="list-table"><tr><th>Member ID</th><th>Member</th><th># of Visits</th><th>Currently Active</th><th>Last Activity</th><th>Last Visit</th></tr>';      
+
+            // Get table rows
+            $memberid = $membername = $numofvisits = $active = $lastactivity = $lastvisit = '';
+            while ($row = $stmt->fetch()) {
+                $memberid = $row['MID'];
+                $membername = $row['Member'];
+                $numofvisits = $row['Checkins'];
+                $lastactivity = $row['TimeSince'];
+                $lastvisit = $row['LastCheckin'];
+
+                $rowStyle = "";
+                $active;
+                if ($row['Active'] == 1 && $lastactivity < 12) {
+                    $active = "YES";
+                    $rowStyle = 'style="background-color:rgba(0,100,0,0.7)"';
+                } else if ($row['Active'] == 1 && $lastactivity > 12) {
+                    $active = "MAYBE";
+                    $rowStyle = 'style="background-color:rgba(125,100,0,0.6)"';
+                } else {
+                    $active = "NO";
+                    $rowStyle = 'style="background-color: rgba(100,0,0,0.2)"';
+                }
+
+                $output .= "<tr $rowStyle>";
+                $output .= "<td>$memberid</td><td>$membername</td><td>$numofvisits</td><td>$active</td><td>$lastactivity</td><td>$lastvisit</td>";
+            }
+            $output.= "</table>";
+        }
+
+        echo $output;
         // Create connection
         $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
 
