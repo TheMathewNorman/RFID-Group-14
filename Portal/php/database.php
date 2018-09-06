@@ -1126,6 +1126,7 @@ class Database {
             // Form table 
             $output.= '<table id="list-table"><tr><th>Reader ID</th><th>Reader Name</th><th>Reader Group</th><th>Signature</th><th>Update</th><th>Remove</th></tr>';
 
+            // Add table rows from database
             $id = $readername = $readergroup = $readersig = '';
             while ($row = $stmt->fetch()) {
                 $id = $row['id'];
@@ -1192,24 +1193,11 @@ class Database {
 
     // Remove a reader
     function removeReader($readerid) {
-        // Create connection
-        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
-                        
-        // Check connection.
-        if ($connection->connect_error) {
-            die("Connection failed<br>$connection->connect_error");
-        }
-
-        // Form SQL query
-        $sql = "DELETE FROM readers WHERE id = $readerid; DELETE FROM privilege WHERE reader_id = $readerid";
-
-        // Remove the reader.
-        if (!mysqli_multi_query($connection, $sql)) {
-            die("There was an error removing the reader from the database:<br>$connection->error<br>");
-        }
-
-        // Close the connection
-        $connection->close();
+        // Execute query
+        $params = array(':readerid' => $readerid);
+        $sql = "DELETE FROM readers WHERE id = :readerid; DELETE FROM privilege WHERE reader_id = :readerid";
+        $stmt = $this->_dbconn->prepare($sql);
+        $stmt->execute($params);
     }
 
 }

@@ -20,11 +20,11 @@
       </form>
         
         <?php 
-        if (isset($_GET['searchInput']) && $_GET['searchInput'] != '') {
-            $database->listReaders($_GET['searchInput']);
-        } else {
-            $database->listReaders();
-        } 
+            if (isset($_GET['searchInput']) && $_GET['searchInput'] != '') {
+                $database->listReaders($_GET['searchInput']);
+            } else {
+                $database->listReaders();
+            } 
         ?>
 
 
