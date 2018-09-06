@@ -1048,60 +1048,41 @@ class Database {
         $stmt = $this->_dbconn->prepare($sql);
         $stmt->execute($params);
 
-        $readerInfo;
         $readerInfo = $stmt->fetch();
-
-        // $readerinfo = array()
-
-        // // Fetch each line and display in table
-        // if ($result = mysqli_query($connection, $sql)) {
-        //     $row=mysqli_fetch_row($result);
-            
-        //     $readerInfo = array("reader_name"=>$row[0], "reader_group"=>$row[1], "approved"=>$row[2], "signature"=>$row[3]);
-
-        //     mysqli_free_result($result);
-        // } else {
-        //     die("There was an error retreiving a list of admins from the database:<br>$connection->error<br>");
-        // }
-        
-        // $connection->close();
         
         return $readerInfo;
     }
 
     // List all readers pending approval
     function listPending() {
-        // Create connection
-        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
-                
-        // Check connection.
-        if ($connection->connect_error) {
-            die("Connection failed<br>$connection->connect_error");
-        }
+        $output = '';
 
-        // Form SQL query
-        $sql = "SELECT id, signature FROM readers WHERE approved = 0 ORDER BY id";
+        // Get number of rows
+        $rowCount = 0;
+        $sql = "SELECT count(*) FROM readers WHERE approved = 0 ORDER BY id";
+        $stmt = $this->_dbconn->prepare($sql);
+        $stmt->execute();
+        $rowCount = $stmt->fetchColumn();
+        
+        if ($rowCount > 0) {
+            // Execute SQL query
+            $sql = "SELECT id, signature FROM readers WHERE approved = 0 ORDER BY id";
+            $stmt = $this->_dbconn->prepare($sql);
+            $stmt->execute();
 
-        // Fetch each line and display in table.
-        if ($result = mysqli_query($connection, $sql)) {
-            if (mysqli_num_rows($result) === 0) {
-                echo "The pending readers table is empty.<br>";
-            } else {
-                while ($row=mysqli_fetch_row($result)) {
-                    echo "<tr>
-                    <td>$row[0]</td>
-                    <td>$row[1]</td>
-                    <td><a href=\"../php/approvereader.php?id=".$row[0]."\"><i class=\"fas fa-check fa-lg\"></i></a></td>
-                    </tr>";
-                }
+            // Form table 
+            $output.= '<table id="list-table"><tr><th>ID</th><th>Reader Code</th><th>Approve</th></tr>';
+
+            $id = $readercode = $approve = '';
+            while ($row = $stmt->fetch()) {
+                $id = $row['id'];
+                $readercode = $row['signature'];
+
+                $output.= "<tr><td>$id</td><td>$readercode</td><td><a href=\"../php/approvereader.php?id=$id\"><i class=\"fas fa-check fa-lg\"></i></a></td></tr>";
             }
-            mysqli_free_result($result);
-        } else {
-            die("There was an error listing the readers from the database:<br>$connection->error<br>");
-        }
 
-        // Close the connection
-        $connection->close();
+            $output.= "</table>";
+        }
     }
 
     // List all approved readers
