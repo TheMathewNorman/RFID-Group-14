@@ -737,9 +737,10 @@ class Database {
         $stmt = $this->_dbconn->prepare($sql);
         $stmt->execute();
 
-        echo "getting here";
+        echo $rowCount;
 
         if ($rowCount > 0) {
+
             // Create table
             $output.= '<table id="list-table"><tr><th>Member ID</th><th>Member</th><th># of Visits</th><th>Currently Active</th><th>Last Activity</th><th>Last Visit</th></tr>';      
 
