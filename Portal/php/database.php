@@ -888,37 +888,38 @@ class Database {
     
     // List all readers that can be assigned to a member
     function listPrivilegeReaders() {
-        // Create connection
-        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+        $output = '';
         
-        // Check connection.
-        if ($connection->connect_error) {
-            die("Connection failed<br>$connection->connect_error");
-        }
+        // Get row count
+        $rowCount;
+        $sql = "SELECT count(*) FROM readers WHERE approved = 1";
+        $stmt = $this->_dbconn->prepare($sql);
+        $stmt->execute();
+        $rowCount = $stmt->fetchColumn();
+        
+        if ($rowCount > 0) {
+            // Execute query
+            $sql = "SELECT id, reader_name AS ReaderName FROM readers WHERE approved = 1";
+            $stmt = $this->_dbconn->prepare($sql);
+            $stmt->execute();
 
-        // Form SQL query
-        $sql = "SELECT id, reader_name FROM readers WHERE approved = 1";
+            // Form table
+            $output.= '<table id="list-table"><tr><th>Member ID</th><th>Name</th><th>Modify Access</th></tr>';
 
-        // Fetch each line and display in table.
-        if ($result = mysqli_query($connection, $sql)) {
-            if (mysqli_num_rows($result) === 0) {
-                echo "There are no readers.<br>";
-            } else {
-                while ($row=mysqli_fetch_row($result)) {
-                    echo "<tr>
-                    <td>$row[0]</td>
-                    <td>$row[1]</td>
-                    <td><input type=\"checkbox\" name=\"".$row[0]."\" value=\"".$row[0]."\"></td>
-                    </tr>";
-                }
+            // Fetch each line and display in table.
+            $id = $readername = '';
+            while ($row = $stmt->fetch()) {
+                $id = $row['id'];
+                $readername = $row['ReaderName'];
+                $output.= "<tr><td>$id</td><td>$readername</td><td><input type=\"checkbox\" name=\"$id\" value=\"$id\"></td></tr>";
             }
-            mysqli_free_result($result);
+        
+            $output.= "</table>";
         } else {
-            die("There was an error listing the data in the readers table:<br>$connection->error<br>");
+            $output = "There are no readers. <br>Please connect a reader before trying to assign member access.";
         }
 
-        // Close the connection
-        $connection->close();
+        echo $output;
     }
 
     // Revoke a member's privilege
