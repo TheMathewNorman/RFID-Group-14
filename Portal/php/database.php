@@ -763,74 +763,76 @@ class Database {
                     $rowStyle = 'style="background-color: rgba(100,0,0,0.2)"';
                 }
 
-                $output .= "<tr $rowStyle>";
-                $output .= "<td>$memberid</td><td>$membername</td><td>$numofvisits</td><td>$active</td><td>$lastactivity</td><td>$lastvisit</td>";
+                $output.= "<tr $rowStyle>";
+                $output.= "<td>$memberid</td><td>$membername</td><td>$numofvisits</td><td>$active</td><td>$lastactivity</td><td>$lastvisit</td>";
+                $output.= "</tr>";
             }
             $output.= "</table>";
         }
 
         echo $output;
-        // Create connection
-        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
 
-        // Check connection.
-        if ($connection->connect_error) {
-            $logHTML.="Connection failed<br>$connection->connect_error";
-        } else {
+        // // Create connection
+        // $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
 
-            // Form SQL query
-            $sql = "SELECT 
-                    members.id AS MID, 
-                    CONCAT(members.firstname, ' ', members.lastname) AS Member,
-                    FLOOR(count(check_in) / 2) AS Checkins,
-                    CASE
-                        when count(logs.check_in) MOD 2 = 0 then 0
-                        when count(logs.check_in) MOD 2 = 1 then 1
-                    END AS Active,
-                    DATE_FORMAT(last_visit.visit_date, '%e/%m/%Y at %r') AS LastCheckin,
-                    TIMESTAMPDIFF(HOUR, last_visit.visit_date, NOW()) AS TimeSince
-                FROM ((logs
-                INNER JOIN members ON logs.member_id = members.id)
-                INNER JOIN (SELECT member_id, MAX(access_date) as visit_date FROM logs WHERE check_in = 1 GROUP BY logs.member_id) last_visit ON logs.member_id = last_visit.member_id)
-                WHERE logs.check_in = 1
-                GROUP BY logs.member_id
-                ORDER BY Active DESC";
+        // // Check connection.
+        // if ($connection->connect_error) {
+        //     $logHTML.="Connection failed<br>$connection->connect_error";
+        // } else {
 
-            // Fetch each line and display in table.
-            if ($result = mysqli_query($connection, $sql)) {
-                while ($row = mysqli_fetch_row($result)) {
+        //     // Form SQL query
+        //     $sql = "SELECT 
+        //             members.id AS MID, 
+        //             CONCAT(members.firstname, ' ', members.lastname) AS Member,
+        //             FLOOR(count(check_in) / 2) AS Checkins,
+        //             CASE
+        //                 when count(logs.check_in) MOD 2 = 0 then 0
+        //                 when count(logs.check_in) MOD 2 = 1 then 1
+        //             END AS Active,
+        //             DATE_FORMAT(last_visit.visit_date, '%e/%m/%Y at %r') AS LastCheckin,
+        //             TIMESTAMPDIFF(HOUR, last_visit.visit_date, NOW()) AS TimeSince
+        //         FROM ((logs
+        //         INNER JOIN members ON logs.member_id = members.id)
+        //         INNER JOIN (SELECT member_id, MAX(access_date) as visit_date FROM logs WHERE check_in = 1 GROUP BY logs.member_id) last_visit ON logs.member_id = last_visit.member_id)
+        //         WHERE logs.check_in = 1
+        //         GROUP BY logs.member_id
+        //         ORDER BY Active DESC";
 
-                    // Highlight rows where the member is currently on site
-                    if ($row[3] == 1 && $row[5] < 10) {
-                        $logHTML.= '<tr style="background-color: rgba(0,100,0,0.7)">';
-                    } else if ($row[3] == 1 && $row[5] > 10) {
-                        $logHTML.= '<tr style="background-color: rgba(125,100,0,0.6)">';
-                    } else {
-                        $logHTML.= '<tr style="background-color: rgba(100,0,0,0.2)">';
-                    }
-                    $logHTML.= "<td>".$row[0]."</td>";
-                    $logHTML.= "<td>".$row[1]."</td>";
-                    $logHTML.= "<td>".$row[2]."</td>";
-                    if ($row[3] == 1 && $row[5] < 10) {
-                        $logHTML.= '<td>YES</td>';
-                    } else if ($row[3] == 1 && $row[5] > 10) {
-                        $logHTML.= '<td>MAYBE</td>';
-                    } else {
-                        $logHTML.= '<td>No</td>';
-                    }
-                    $logHTML.= "<td>".$row[5]." hours ago</td>";
-                    $logHTML.= "<td>".$row[4]."</td>";
-                    $logHTML.= "</tr>";
-                }
-            } else {
-                $logHTML.="There was an error getting log information from the database.";
-            }
-        }
-        // Close the connection
-        $connection->close();
+        //     // Fetch each line and display in table.
+        //     if ($result = mysqli_query($connection, $sql)) {
+        //         while ($row = mysqli_fetch_row($result)) {
+
+        //             // Highlight rows where the member is currently on site
+        //             if ($row[3] == 1 && $row[5] < 10) {
+        //                 $logHTML.= '<tr style="background-color: rgba(0,100,0,0.7)">';
+        //             } else if ($row[3] == 1 && $row[5] > 10) {
+        //                 $logHTML.= '<tr style="background-color: rgba(125,100,0,0.6)">';
+        //             } else {
+        //                 $logHTML.= '<tr style="background-color: rgba(100,0,0,0.2)">';
+        //             }
+        //             $logHTML.= "<td>".$row[0]."</td>";
+        //             $logHTML.= "<td>".$row[1]."</td>";
+        //             $logHTML.= "<td>".$row[2]."</td>";
+        //             if ($row[3] == 1 && $row[5] < 10) {
+        //                 $logHTML.= '<td>YES</td>';
+        //             } else if ($row[3] == 1 && $row[5] > 10) {
+        //                 $logHTML.= '<td>MAYBE</td>';
+        //             } else {
+        //                 $logHTML.= '<td>No</td>';
+        //             }
+        //             $logHTML.= "<td>".$row[5]." hours ago</td>";
+        //             $logHTML.= "<td>".$row[4]."</td>";
+        //             $logHTML.= "</tr>";
+        //         }
+        //     } else {
+        //         $logHTML.="There was an error getting log information from the database.";
+        //     }
+        // }
+        // // Close the connection
+        // $connection->close();
         
-        // Return table or message
-        return $logHTML;  
+        // // Return table or message
+        // return $logHTML;  
     }
 
     //// PRIVILEDGE TABLE FUNCTIONALITY //// 
