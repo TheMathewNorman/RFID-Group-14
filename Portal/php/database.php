@@ -103,7 +103,8 @@ class Database {
     }
 
     // Test database connection.
-    // DEPRECIATED
+    // DEPRECIATED:
+    // Tests in __construct
     function testConnection($server="", $dbuser="", $dbpass="", $dbname="") {
         if ($server=="") {
             $server = $GLOBALS['server'];
@@ -546,33 +547,6 @@ class Database {
         // Execute query
         $stmt = $this->_dbconn->prepare($sql);
         $stmt->execute($params);
-
-
-
-        // Create connection
-        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
-        
-        // Check connection
-        if ($connection->connect_error) {
-            die("Connection failed:<br>$connection->connect_error");
-        }
-
-        // Form multiquery SQL
-        $sql = "";
-        if ($firstname != "") { $sql .= "UPDATE members SET firstname = '$firstname' WHERE id = '$memberid';"; }
-        if ($lastname != "") { $sql .= "UPDATE members SET lastname = '$lastname' WHERE id = '$memberid';"; }
-        if ($email != "") { $sql .= "UPDATE members SET email = '$email' WHERE id = '$memberid';"; }
-        if ($phone != "") { $sql .= "UPDATE members SET phone = '$phone' WHERE id = '$memberid';"; }
-        if ($cardkeyhash != "") { $sql .= "UPDATE members SET cardkey = '$cardkeyhash' WHERE id = '$memberid';"; }
-
-
-        // Try performing multi SQL query, die on error.
-        if (mysqli_multi_query($connection, $sql) === FALSE) {
-            die("Error updating member:<br>$connection->error");
-        }
-        
-        // Close the connection
-        $connection->close();
     }
     
     // Delete a member from the members table.
@@ -1348,7 +1322,11 @@ class Database {
 }
 
 class Reader extends Database {
+    function checkPrivlege() {}
 
+    function checkReaderApproved() {}
+
+    function addLogEntry() {}
 }
 
 ?>
