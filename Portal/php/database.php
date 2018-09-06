@@ -705,7 +705,6 @@ class Database {
         
         // Get number of rows
         $rowCount;
-        // Form SQL query
         $sql = "SELECT count(*)
         FROM ((logs
         INNER JOIN members ON logs.member_id = members.id)
@@ -716,7 +715,7 @@ class Database {
         $stmt->execute();
         $rowCount = $stmt->fetchColumn();
 
-        // Form SQL query
+        // Execute query
         $sql = "SELECT 
         members.id AS MID, 
         CONCAT(members.firstname, ' ', members.lastname) AS Member,
@@ -736,8 +735,6 @@ class Database {
         $stmt = $this->_dbconn->prepare($sql);
         $stmt->execute();
 
-        echo $rowCount;
-
         if ($rowCount > 0) {
 
             // Create table
@@ -754,6 +751,7 @@ class Database {
 
                 $rowStyle = "";
                 $active;
+                // Adjust table row colour and active status based on check-in trends.
                 if ($row['Active'] == 1 && $lastactivity < 12) {
                     $active = "YES";
                     $rowStyle = 'style="background-color:rgba(0,100,0,0.7)"';
@@ -765,8 +763,15 @@ class Database {
                     $rowStyle = 'style="background-color: rgba(100,0,0,0.2)"';
                 }
 
+                // Format last activity text
+                if ($lastactivity > 1) {
+                    $lastactivity.= ' hours ago';
+                } else {
+                    $lastactivity = 'Less than 1 hour ago';
+                }
+
                 $output.= "<tr $rowStyle>";
-                $output.= "<td>$memberid</td><td>$membername</td><td>$numofvisits</td><td>$active</td><td>$lastactivity</td><td>$lastvisit</td>";
+                $output.= "<td>$memberid</td><td>$membername</td><td>$numofvisits</td><td>$active</td><td>$lastactivity hours ago</td><td>$lastvisit</td>";
                 $output.= "</tr>";
             }
             $output.= "</table>";
