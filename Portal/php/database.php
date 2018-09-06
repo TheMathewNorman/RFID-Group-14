@@ -828,7 +828,9 @@ class Database {
             // Fetch each line and display in table.
             $id = $membername = '';
             while ($row = $stmt->fetch()) {
-                $output.= "<tr><td>$row[0]</td><td>$row[1]</td><td><a href=\"listaccess.php?id=".$row[0]."\"><i class=\"fas fa-edit fa-lg\"></i></a></td></tr>";
+                $id = $row['id'];
+                $membername = $row['MemberName'];
+                $output.= "<tr><td>$id</td><td>$membername</td><td><a href=\"listaccess.php?id=".$id."\"><i class=\"fas fa-edit fa-lg\"></i></a></td></tr>";
             }
         
             $output.= "</table>";
@@ -840,43 +842,47 @@ class Database {
     }
     
     // List all privileges associated with a member
-    function listMemberPrivilege($id) {
-        // Create connection
-        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+    function listMemberPrivilege($memberid) {
+        $output = '';
         
-        // Check connection.
-        if ($connection->connect_error) {
-            die("Connection failed<br>$connection->connect_error");
-        }
+        // Get row count
+        $rowCount;
+        $params = array(':id' => $memberid);
+        $sql = "SELECT count(*)
+        FROM (privilege 
+        INNER JOIN readers ON privilege.reader_id = readers.id)
+        WHERE privilege.member_id = :memberid";
+        $stmt = $this->_dbconn->prepare($sql);
+        $stmt->execute($params);
+        $rowCount = $stmt->fetchColumn();
+        
+        if ($rowCount > 0) {
+            // Execute query
+            $sql = "SELECT privilege.id AS PID, readers.id AS RID, readers.reader_name AS ReaderName
+            FROM (privilege 
+            INNER JOIN readers ON privilege.reader_id = readers.id)
+            WHERE privilege.member_id = :memberid";
+            $stmt = $this->_dbconn->prepare($sql);
+            $stmt->execute();
 
-        // Form SQL query
-        $sql = "SELECT privilege.id AS PID, readers.id AS RID, readers.reader_name AS ReaderName
-                FROM (privilege 
-                INNER JOIN readers ON privilege.reader_id = readers.id)
-                WHERE privilege.member_id = $id";
+            // Form table
+            $output.= '<table id="list-table"><tr><th>Member ID</th><th>Name</th><th>Modify Access</th></tr>';
 
-        // Fetch each line and display in table.
-        $memberAccessInfo;
-        if ($result = mysqli_query($connection, $sql)) {
-            if (mysqli_num_rows($result) === 0) {
-                echo "The privilege table is empty.<br>";
-            } else {
-                while ($row=mysqli_fetch_row($result)) {
-                    echo "<tr>
-                    <td>$row[0]</td>
-                    <td>$row[1]</td>
-                    <td>$row[2]</td>
-                    <td><a href=\"../php/deleteaccess.php?id=".$row[0]."&member=$id\"><i class=\"fas fa-minus-circle fa-lg\"></i></a></td>
-                    </tr>";
-                }
+            // Fetch each line and display in table.
+            $pid = $rid = $readername = '';
+            while ($row = $stmt->fetch()) {
+                $pid = $row['PID'];
+                $rid = $row['RID'];
+                $readername = $row['ReaderName'];
+                $output.= "<tr><td>$pid</td><td>$rid</td><td>$readername</td><td><td><a href=\"../php/deleteaccess.php?id=".$pid."&member=$memberid\"><i class=\"fas fa-minus-circle fa-lg\"></i></a></td></tr>";
             }
-            mysqli_free_result($result);
+        
+            $output.= "</table>";
         } else {
-            die("There was an error listing the data in the privilege table:<br>$connection->error<br>");
+            $output = "This member hasn't yet been assigned any privileges. <br>Click the button below to assign one.";
         }
 
-        // Close the connection
-        $connection->close();
+        echo $output;
     }
     
     // List all readers that can be assigned to a member
