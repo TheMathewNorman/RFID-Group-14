@@ -1048,8 +1048,8 @@ class Database {
         $stmt = $this->_dbconn->prepare($sql);
         $stmt->execute($params);
 
-        $readerinfo;
-        $readerinfo = $stmt->fetch();
+        $readerInfo;
+        $readerInfo = $stmt->fetch();
 
         // $readerinfo = array()
 
