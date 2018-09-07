@@ -1143,13 +1143,13 @@ class Reader extends Database {
         $stmt = $this->_dbconn->prepare($sql);
         $stmt->execute($params);
         $rowCount = $stmt->fetchColumn();
-        print 'Row count 1:'.$rowCount."<br>";
+        echo 'Row count 1:'.$rowCount."<br>";
         if ($rowCount === 0) {
             $sql = "SELECT count(*) FROM readers WHERE approved = 1 AND signature = :signature";
             $stmt = $this->_dbconn->prepare($sql);
             $stmt->execute($params);
             $rowCount = $stmt->fetchColumn();
-            print 'Row count 2:'.$rowCount."<br>";
+            echo 'Row count 2:'.$rowCount."<br>";
             if ($rowCount === 0) {
                 $sql = "INSERT INTO readers(reader_name, reader_group, approved, signature) VALUES ('', 0, 0, :signature)";
                 $stmt = $this->_dbconn->prepare($sql);
