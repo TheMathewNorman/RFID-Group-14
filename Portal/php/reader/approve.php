@@ -1,6 +1,5 @@
 <?php
     include_once('../database.php');
-    include_once('../validate.php');
     $reader = new Reader();
 
     $return = '0';
