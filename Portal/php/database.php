@@ -510,39 +510,7 @@ class Database {
     }
 
     //// LOG TABLE FUNCTIONALITY //// 
-    // Add a new entry to the Log
-    function addLogEntry($signature, $key, $checkin=0) {
-        $keyhash = hash('sha512', $key);
-
-        $return = false;
-
-        // Get member id from key
-        $memberid;
-        $params = array(':cardkeyhash' => $keyhash);
-        $sql = "SELECT id FROM members WHERE cardkey = :cardkeyhash";
-        $stmt = $this->_dbconn->prepare($sql);
-        $stmt->execute($params);
-        if ($memberid = $stmt->fetchColumn()) {
-            // Get reader id from signature
-            $readerid;
-            $params = array(':signature' => $signature);
-            $sql = "SELECT id FROM readers WHERE signature = :signature";
-            $stmt = $this->_dbconn->prepare($sql);
-            $stmt->execute($params);
-            if ($readerid = $stmt->fetchColumn()) {
-                
-                // Add log entry
-                $params = array(':memberid' => $memberid, ':readerid' => $readerid, ':checkin' => $checkin);
-                $sql = "INSERT INTO logs (member_id, reader_id, check_in) VALUES (:memberid, :readerid, :checkin)";
-                $stmt = $this->_dbconn->prepare($sql);
-                if ($stmt->execute($params)) {
-                    $return = true;
-                }
-            }
-        }
-
-        return $return;
-    }
+    
     
     // Get all entries in the logs table
     function getLogEntries($searchq = '') {
@@ -931,38 +899,7 @@ class Database {
         $stmt->execute($params);
     }
 
-    // Check if member associated with key has been given access to the reader.
-    function checkPrivilege($signature, $key) {
-        $keyhash = hash('sha512', $key);
-        
-        $return = false;
-
-        // Create connection
-        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
-                
-        // Check connection and return status
-        if ($connection->connect_error) {
-            die('Connection failed:<br>'.$connection->connect_error);
-        }
-
-        // Find any results for given member and reader combination in the privilege table
-        $sql = "SELECT privilege.id FROM ((privilege INNER JOIN members ON privilege.member_id = members.id) INNER JOIN readers ON privilege.reader_id = readers.id) WHERE readers.signature = '$signature' AND readers.approved = 1 AND members.cardkey = '$keyhash'";
-
-        if ($result = mysqli_query($connection, $sql)) {
-            // Return true or false
-            if (mysqli_num_rows($result) > 0) {
-                $return = true;
-            } else {
-                $return = false;
-            }
-        } else {
-            die(mysqli_error($connection));
-        }
-
-        $connection->close();
-
-        return $return;
-    }
+    
     
     //// READER TABLE FUNCTIONALITY //// 
     // Update a reader
@@ -974,49 +911,6 @@ class Database {
         $stmt->execute($params);
     }
 
-    // Check if the reader is approved.
-    function checkReaderApproved($id) {
-        $return = false; 
-        
-        // Create connection
-        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
-                
-        // Check connection.
-        if ($connection->connect_error) {
-            die("Connection failed<br>$connection->connect_error");
-        }
- 
-        // Form SQL query
-        $sql = "SELECT * FROM readers WHERE approved = 0 AND signature = '$id' ORDER BY id";
-         
-        // Check if reader is in pending
-        if ($result = mysqli_query($connection, $sql)) {
-            if (mysqli_num_rows($result) === 0) {
-
-                $sql = "SELECT * FROM readers WHERE approved = 1 AND signature = '$id' ORDER BY id";
-                // Check if reader is in approved
-                if ($result = mysqli_query($connection, $sql)) {
-                    if (mysqli_num_rows($result) === 0) {
-                        // Add to pending readers
-                        $sql = "INSERT INTO readers(reader_name, reader_group, approved, signature) VALUES ('', 0, 0, '$id')";
-                        if (!mysqli_query($connection, $sql)) {
-                            die("There was an error adding the reader to pending. ".mysqli_error());
-                        }
-                    } else {
-                        $return = true;
-                    }
-                } else {
-                    die("Error accessing readers. ".mysqli_error());
-                }
-            }
-        } else {
-            die("There was an error running the query. ".mysqli_error());
-        }
-         
-        $connection->close();
-        return $return;
-    }
-
     // Approve a reader
     function approveReader($readerid) {
         // Form SQL query
@@ -1025,6 +919,8 @@ class Database {
         $stmt = $this->_dbconn->prepare($sql);
         $stmt->execute($params);
     }
+
+  
 
     // Get number of pending readers
     function getPendingCount() {
@@ -1200,9 +1096,156 @@ class Database {
         $stmt->execute($params);
     }
 
+
+    // Check if the reader is approved.
+    // MOVED TO READER
+    function checkReaderApproved($id) {
+        // $return = false; 
+        
+        // // Create connection
+        // $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+                
+        // // Check connection.
+        // if ($connection->connect_error) {
+        //     die("Connection failed<br>$connection->connect_error");
+        // }
+ 
+        // // Form SQL query
+        // $sql = "SELECT * FROM readers WHERE approved = 0 AND signature = '$id' ORDER BY id";
+         
+        // // Check if reader is in pending
+        // if ($result = mysqli_query($connection, $sql)) {
+        //     if (mysqli_num_rows($result) === 0) {
+
+        //         $sql = "SELECT * FROM readers WHERE approved = 1 AND signature = '$id' ORDER BY id";
+        //         // Check if reader is in approved
+        //         if ($result = mysqli_query($connection, $sql)) {
+        //             if (mysqli_num_rows($result) === 0) {
+        //                 // Add to pending readers
+        //                 $sql = "INSERT INTO readers(reader_name, reader_group, approved, signature) VALUES ('', 0, 0, '$id')";
+        //                 if (!mysqli_query($connection, $sql)) {
+        //                     die("There was an error adding the reader to pending. ".mysqli_error());
+        //                 }
+        //             } else {
+        //                 $return = true;
+        //             }
+        //         } else {
+        //             die("Error accessing readers. ".mysqli_error());
+        //         }
+        //     }
+        // } else {
+        //     die("There was an error running the query. ".mysqli_error());
+        // }
+         
+        // $connection->close();
+        // return $return;
+    }
+    
+    // Check if member associated with key has been given access to the reader.
+    // MOVED TO READER
+    function checkPrivilege($signature, $key) {
+        // $keyhash = hash('sha512', $key);
+        
+        // $return = false;
+
+        // // Create connection
+        // $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+                
+        // // Check connection and return status
+        // if ($connection->connect_error) {
+        //     die('Connection failed:<br>'.$connection->connect_error);
+        // }
+
+        // // Find any results for given member and reader combination in the privilege table
+        // $sql = "SELECT privilege.id FROM ((privilege INNER JOIN members ON privilege.member_id = members.id) INNER JOIN readers ON privilege.reader_id = readers.id) WHERE readers.signature = '$signature' AND readers.approved = 1 AND members.cardkey = '$keyhash'";
+
+        // if ($result = mysqli_query($connection, $sql)) {
+        //     // Return true or false
+        //     if (mysqli_num_rows($result) > 0) {
+        //         $return = true;
+        //     } else {
+        //         $return = false;
+        //     }
+        // } else {
+        //     die(mysqli_error($connection));
+        // }
+
+        // $connection->close();
+
+        // return $return;
+    }
+
+    // Add a new entry to the Log
+    // MOVED TO READER
+    function addLogEntry($signature, $key, $checkin=0) {
+        // $keyhash = hash('sha512', $key);
+
+        // $return = false;
+
+        // // Get member id from key
+        // $memberid;
+        // $params = array(':cardkeyhash' => $keyhash);
+        // $sql = "SELECT id FROM members WHERE cardkey = :cardkeyhash";
+        // $stmt = $this->_dbconn->prepare($sql);
+        // $stmt->execute($params);
+        // if ($memberid = $stmt->fetchColumn()) {
+        //     // Get reader id from signature
+        //     $readerid;
+        //     $params = array(':signature' => $signature);
+        //     $sql = "SELECT id FROM readers WHERE signature = :signature";
+        //     $stmt = $this->_dbconn->prepare($sql);
+        //     $stmt->execute($params);
+        //     if ($readerid = $stmt->fetchColumn()) {
+                
+        //         // Add log entry
+        //         $params = array(':memberid' => $memberid, ':readerid' => $readerid, ':checkin' => $checkin);
+        //         $sql = "INSERT INTO logs (member_id, reader_id, check_in) VALUES (:memberid, :readerid, :checkin)";
+        //         $stmt = $this->_dbconn->prepare($sql);
+        //         if ($stmt->execute($params)) {
+        //             $return = true;
+        //         }
+        //     }
+        // }
+
+        // return $return;
+    }
 }
 
 class Reader extends Database {
+    // Add log entry
+    function addLogEntry($signature, $key, $checkin=0) {
+        $keyhash = hash('sha512', $key);
+
+        $return = false;
+
+        // Get member id from key
+        $memberid;
+        $params = array(':cardkeyhash' => $keyhash);
+        $sql = "SELECT id FROM members WHERE cardkey = :cardkeyhash";
+        $stmt = $this->_dbconn->prepare($sql);
+        $stmt->execute($params);
+        if ($memberid = $stmt->fetchColumn()) {
+            // Get reader id from signature
+            $readerid;
+            $params = array(':signature' => $signature);
+            $sql = "SELECT id FROM readers WHERE signature = :signature";
+            $stmt = $this->_dbconn->prepare($sql);
+            $stmt->execute($params);
+            if ($readerid = $stmt->fetchColumn()) {
+                
+                // Add log entry
+                $params = array(':memberid' => $memberid, ':readerid' => $readerid, ':checkin' => $checkin);
+                $sql = "INSERT INTO logs (member_id, reader_id, check_in) VALUES (:memberid, :readerid, :checkin)";
+                $stmt = $this->_dbconn->prepare($sql);
+                if ($stmt->execute($params)) {
+                    $return = true;
+                }
+            }
+        }
+
+        return $return;
+    }
+    
     // Check if the reader is approved.
     function checkReaderApproved($id) {
         $return = false; 
@@ -1279,14 +1322,7 @@ class Reader extends Database {
         return $return;
     }
 
-    // Approve a reader
-    function approveReader($readerid) {
-        // Form SQL query
-        $params = array(':readerid' => $readerid);
-        $sql = "UPDATE readers SET approved = 1 WHERE id = :readerid";
-        $stmt = $this->_dbconn->prepare($sql);
-        $stmt->execute($params);
-    }
+
 }
 
 ?>
