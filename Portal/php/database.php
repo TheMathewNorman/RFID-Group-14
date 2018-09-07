@@ -1139,7 +1139,19 @@ class Reader extends Database {
         // Get row count
         $rowCount;
         $params = array(':signature' => $signature);
-        $sql = "SELECT count(*) FROM readers WHERE approved = 0 AND signature = :signature";
+        $sql = "SELECT count(*) FROM readers WHERE signature = :signature";
+        $stmt = $this->_dbconn->prepare($sql);
+        $stmt->execute($params);
+        $rowCount = $stmt->fetchColumn();
+
+        echo 'Row count output: '.$rowCount.'<br>';
+        echo '<b>Var dump:</b><br>';
+        var_dump($rowCount);
+
+        // Get row count
+        $rowCount;
+        $params = array(':signature' => $signature);
+        $sql = "SELECT count(*) FROM readers WHERE signature = :signature";
         $stmt = $this->_dbconn->prepare($sql);
         $stmt->execute($params);
         $rowCount = $stmt->fetch();
