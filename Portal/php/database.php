@@ -1142,8 +1142,8 @@ class Reader extends Database {
         $sql = "SELECT count(*) FROM readers WHERE approved = 0 AND signature = :signature";
         $stmt = $this->_dbconn->prepare($sql);
         $stmt->execute($params);
-        $rowCount = $stmt->fetchColumn();
-        echo 'Row count 1:'.$rowCount."<br>";
+        $rowCount = $stmt->fetch();
+        var_dump($rowCount);
         if ($rowCount === 0) {
             $sql = "SELECT count(*) FROM readers WHERE approved = 1 AND signature = :signature";
             $stmt = $this->_dbconn->prepare($sql);
