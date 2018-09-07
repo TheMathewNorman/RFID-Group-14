@@ -1142,7 +1142,7 @@ class Reader extends Database {
         $sql = "SELECT COUNT(*) FROM readers WHERE signature = :signature";
         $stmt = $this->_dbconn->prepare($sql);
         $stmt->execute($params);
-        $rowCount = $stmt->fetchColumn();
+        $rowCount = $stmt->fetchColumn(PDO::FETCH_NUM);
 
         echo 'Row count output: '.$rowCount.'<br>';
         echo '<b>Var dump:</b><br>';
