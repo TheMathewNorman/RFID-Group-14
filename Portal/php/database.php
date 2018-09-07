@@ -319,16 +319,16 @@ class Database {
 
     // Delete an admin from the admins table.
     function removeAdmin($adminid) {
-        // // Prevent deletion of key admin account.
-        // if ($adminid > 1) { 
-        //     // Set query parameters
-        //     $params = array(':id' => $adminid);
+        // Prevent deletion of key admin account.
+        if ($adminid > 1) { 
+            // Set query parameters
+            $params = array(':id' => $adminid);
 
-        //     // Execute query
-        //     $sql = "DELETE FROM admins WHERE id = :id";
-        //     $stmt = $this->_dbconn->prepare($sql);
-        //     $stmt->execute($params);
-        // }
+            // Execute query
+            $sql = "DELETE FROM admins WHERE id = :id";
+            $stmt = $this->_dbconn->prepare($sql);
+            $stmt->execute($params);
+        }
     }
 
     //// MEMBERS TABLE FUNCTIONALITY //// 
@@ -1200,190 +1200,6 @@ class Database {
         $stmt->execute($params);
     }
 
-}
-
-class Admins extends Database {
-    // Delete an admin from the admins table.
-    function removeAdmin($adminid) {
-        // Prevent deletion of key admin account.
-        if ($adminid > 1) { 
-            // Set query parameters
-            $params = array(':id' => $adminid);
-
-            // Execute query
-            $sql = "DELETE FROM admins WHERE id = :id";
-            $stmt = $this->_dbconn->prepare($sql);
-            $stmt->execute($params);
-        }
-    }
-
-    // List all admins in the admin table.
-    function listAdmins($userid, $searchq = "") {
-        // Store output
-        $output = "";
-        
-        $rowCount = 0;
-        if ($searchq === "") {
-            // Get number of rows
-            $rowCount = $this->_dbconn->query("SELECT count(*) FROM admins")->fetchColumn();
-            
-            // Execute query
-            $sql = "SELECT id, firstname, lastname, email, phone FROM admins";
-            $stmt = $this->_dbconn->prepare($sql);
-            $stmt->execute();
-        } else {
-            $params = array(':search' => $searchq, ':searchlike' => '%'.$searchq.'%');
-            // Get number of rows
-            $sql = "SELECT count(*) 
-                    FROM admins
-                    WHERE id = :search
-                    OR firstname LIKE :searchlike
-                    OR lastname LIKE :searchlike
-                    OR email LIKE :searchlike
-                    OR phone LIKE :searchlike";
-            $stmt = $this->_dbconn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-            $stmt->execute($params);
-            $rowCount = $stmt->fetchColumn();
-            
-            // Execute query
-            $sql = "SELECT id, firstname, lastname, email, phone 
-                    FROM admins
-                    WHERE id = :search
-                    OR firstname LIKE :searchlike
-                    OR lastname LIKE :searchlike
-                    OR email LIKE :searchlike
-                    OR phone LIKE :searchlike";
-            
-            $stmt = $this->_dbconn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-            $stmt->execute($params);
-        }
-
-        // Create a table with any results and print to page
-        if ($rowCount > 0) {
-            // Create table
-            $output.= '<table id="list-table"><tr><th>ID</th><th>Firstname</th><th>Lastname</th><th>Email</th><th>Phone Number</th><th>Update</th><th>Delete</th></tr>';
-
-            // Fetch table rows
-            $id = $fname = $lname = $email = $phone = '';
-            while ($row=$stmt->fetch()) {
-                $id = $row['id'];
-                $fname = $row['firstname'];
-                $lname = $row['lastname'];
-                $email = $row['email'];
-                $phone = $row['phone'];
-                
-                // Replace and remove the delete button functionality for the key admin.
-                if ($id == 1) { $output.= "<tr><td>$id</td><td>$fname</td><td>$lname</td><td>$email</td><td>$phone</td><td><a href=\"updateadmin.php?id=".$id."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><span title=\"You cannot delete the primary admin account.\"><i class=\"fa fa-key fa-lg\"></i></span></td></tr>"; }
-                else if ($id == $userid) { $output.= "<tr><td>$id</td><td>$fname</td><td>$lname</td><td>$email</td><td>$phone</td><td><a href=\"updateadmin.php?id=".$id."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><span title=\"You cannot delete the primary admin account.\"><i class=\"fa fa-ban fa-lg\"></i></span></td></tr>"; }
-                else { $output.= "<tr><td>$id</td><td>$fname</td><td>$lname</td><td>$email</td><td>$phone</td><td><a href=\"updateadmin.php?id=".$id."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=admin&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>"; }
-            }
-
-            // Close table tag
-            $output.= '</table>';
-        } else {
-            if ($searchq === "") {
-                $output.= "There were no results.";
-            } else {
-                $output.= "There were no results for $searchq";
-            }
-        }
-
-        echo $output;
-    }
-
-    // Attempt to login with a given email and password
-    function loginAdmin($email, $password) {
-        // Login response
-        //[0] = False on failure || True on success.
-        //[1] = Error description on failure.
-        //['id'] = Admin's ID on success
-        //['fname'] = Admin's first name on success
-        $loginResponse[0] = false;
-
-        // Hash password
-        $passhash = hash("sha512", $password);
-
-        // Set query parameters
-        $params = array(':email'=>$email,':passhash'=>$passhash);
-
-        // Get number of results
-        $sql = "SELECT count(*) FROM admins WHERE email = :email AND passhash = :passhash";
-        $stmt = $this->_dbconn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-        $stmt->execute($params);
-        $rowCount = $stmt->fetchColumn();
-
-        // Store information
-        if ($rowCount > 0) {
-            // Get admin info
-            $sql = "SELECT id, firstname FROM admins WHERE email = :email AND passhash = :passhash";
-            $stmt = $this->_dbconn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-            $stmt->execute($params);
-
-            $info = $stmt->fetch();
-            $loginResponse[0] = true;
-            $loginResponse['id'] = $info['id'];
-            $loginResponse['fname'] = $info['firstname'];
-        } else {
-            $loginResponse[1] = 'Email or password was incorrect.';
-        }
-
-        // Return login response
-        return $loginResponse;
-    }
-    
-    // Fetch information for a given admin
-    function fetchAdminInfo($adminid) {
-        // Set query parameters
-        $params = array(':id'=> $adminid);
-
-        // Execute the SQL query
-        $sql = "SELECT firstname, lastname, email, phone FROM admins WHERE id = :id";
-        $stmt = $this->_dbconn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-        $stmt->execute($params);
-
-        // Format raw data to return
-        $rawData = $stmt->fetch();
-        $userInfo = array('fname'=>$rawData['firstname'], 'lname'=>$rawData['lastname'], 'email'=>$rawData['email'], 'phone'=>$rawData['phone']);
-
-        // Return user info
-        return $userInfo;
-    }
-
-    // Add an admin to the admins table.
-    function addAdmin($firstname, $lastname, $email, $phone="", $password) {
-        // Encrypt the admin password before inserting into the database
-        $passhash = hash("sha512", $password);
-
-        // Set query parameters
-        $params = array(':firstname' => $firstname, ':lastname' => $lastname, ':email' => $email, ':phone'=> $phone, ':passhash' => $passhash);
-
-        // Execute query
-        $sql = "INSERT INTO admins (firstname, lastname, email, phone, passhash) 
-                VALUES (:firstname, :lastname, :email, :phone, :passhash)";
-        $stmt = $this->_dbconn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-        $stmt->execute($params);
-    }
-
-    // Update an admin in the admins table.
-    function updateAdmin($adminid, $firstname, $lastname, $email, $phone, $pass) {
-        // Encrypt the card key before inseting into the database if set
-        $passhash = "";
-        if ($pass != "") {
-            $passhash = hash("sha512", $pass);
-        }
-
-        // Form query
-        if ($passhash === "") {
-            $params = array(':firstname'=> $firstname, ':lastname'=> $lastname, ':email'=> $email, ':phone'=> $phone, ':id'=> $adminid);
-            $sql = "UPDATE admins SET firstname = :firstname, lastname = :lastname, email = :email, phone = :phone WHERE id = :id";
-        } else {
-            $params = array(':firstname'=> $firstname, ':lastname'=> $lastname, ':email'=> $email, ':phone'=> $phone, ':passhash'=> $passhash, ':id'=> $adminid);
-            $sql = "UPDATE admins SET firstname = :firstname, lastname = :lastname, email = :email, phone = :phone, passhash = :passhash WHERE id = :id";
-        }
-        // Execute query
-        $stmt = $this->_dbconn->prepare($sql);
-        $stmt->execute($params);
-    }
 }
 
 class Reader extends Database {
