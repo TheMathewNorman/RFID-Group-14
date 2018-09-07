@@ -928,7 +928,7 @@ class Database {
         $params = array(':privilegeid' => $privilegeid);
         $sql = "DELETE FROM privilege WHERE id = :privilegeid";
         $stmt = $this->_dbconn->prepare($sql);
-        $stmt->execute();
+        $stmt->execute($params);
     }
 
     // Check if member associated with key has been given access to the reader.
