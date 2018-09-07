@@ -1202,12 +1202,107 @@ class Database {
 
 }
 
+class Admins extends Database {
+    // Delete an admin from the admins table.
+    function removeAdmin($adminid) {
+        // Prevent deletion of key admin account.
+        if ($adminid > 1) { 
+            // Set query parameters
+            $params = array(':id' => $adminid);
+
+            // Execute query
+            $sql = "DELETE FROM admins WHERE id = :id";
+            $stmt = $this->_dbconn->prepare($sql);
+            $stmt->execute($params);
+        }
+    }
+}
+
 class Reader extends Database {
-    function checkPrivlege() {}
+    // Check if the reader is approved.
+    function checkReaderApproved($id) {
+        $return = false; 
+        
+        // Create connection
+        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+                
+        // Check connection.
+        if ($connection->connect_error) {
+            die("Connection failed<br>$connection->connect_error");
+        }
+    
+        // Form SQL query
+        $sql = "SELECT * FROM readers WHERE approved = 0 AND signature = '$id' ORDER BY id";
+            
+        // Check if reader is in pending
+        if ($result = mysqli_query($connection, $sql)) {
+            if (mysqli_num_rows($result) === 0) {
 
-    function checkReaderApproved() {}
+                $sql = "SELECT * FROM readers WHERE approved = 1 AND signature = '$id' ORDER BY id";
+                // Check if reader is in approved
+                if ($result = mysqli_query($connection, $sql)) {
+                    if (mysqli_num_rows($result) === 0) {
+                        // Add to pending readers
+                        $sql = "INSERT INTO readers(reader_name, reader_group, approved, signature) VALUES ('', 0, 0, '$id')";
+                        if (!mysqli_query($connection, $sql)) {
+                            die("There was an error adding the reader to pending. ".mysqli_error());
+                        }
+                    } else {
+                        $return = true;
+                    }
+                } else {
+                    die("Error accessing readers. ".mysqli_error());
+                }
+            }
+        } else {
+            die("There was an error running the query. ".mysqli_error());
+        }
+            
+        $connection->close();
+        return $return;
+    }
 
-    function addLogEntry() {}
+    // Check if member associated with key has been given access to the reader.
+    function checkPrivilege($signature, $key) {
+        $keyhash = hash('sha512', $key);
+        
+        $return = false;
+
+        // Create connection
+        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+                
+        // Check connection and return status
+        if ($connection->connect_error) {
+            die('Connection failed:<br>'.$connection->connect_error);
+        }
+
+        // Find any results for given member and reader combination in the privilege table
+        $sql = "SELECT privilege.id FROM ((privilege INNER JOIN members ON privilege.member_id = members.id) INNER JOIN readers ON privilege.reader_id = readers.id) WHERE readers.signature = '$signature' AND readers.approved = 1 AND members.cardkey = '$keyhash'";
+
+        if ($result = mysqli_query($connection, $sql)) {
+            // Return true or false
+            if (mysqli_num_rows($result) > 0) {
+                $return = true;
+            } else {
+                $return = false;
+            }
+        } else {
+            die(mysqli_error($connection));
+        }
+
+        $connection->close();
+
+        return $return;
+    }
+
+    // Approve a reader
+    function approveReader($readerid) {
+        // Form SQL query
+        $params = array(':readerid' => $readerid);
+        $sql = "UPDATE readers SET approved = 1 WHERE id = :readerid";
+        $stmt = $this->_dbconn->prepare($sql);
+        $stmt->execute($params);
+    }
 }
 
 ?>

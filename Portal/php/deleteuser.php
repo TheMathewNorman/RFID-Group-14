@@ -1,6 +1,7 @@
 <?php
     include_once "database.php";
     $database = new Database();
+    $admins = new Admins();
 
     include_once "sessions.php";
 
@@ -14,7 +15,8 @@
             $id = $_GET['id'];
 
             if ($table == "admin") {
-                $database->removeAdmin($id);
+                //$database->removeAdmin($id);
+                $admins->removeAdmin($id);
                 $redirect = "../page/listadmin.php";
             } else if ($table == "member") {
                 $database->removeMember($id);
