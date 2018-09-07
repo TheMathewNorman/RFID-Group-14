@@ -1139,7 +1139,7 @@ class Reader extends Database {
         // Get row count
         $rowCount;
         $params = array(':signature' => $signature);
-        $sql = "SELECT count(*) FROM readers WHERE signature = :signature";
+        $sql = "SELECT COUNT(*) FROM readers WHERE signature = :signature";
         $stmt = $this->_dbconn->prepare($sql);
         $stmt->execute($params);
         $rowCount = $stmt->fetchColumn();
