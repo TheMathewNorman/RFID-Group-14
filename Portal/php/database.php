@@ -1133,45 +1133,69 @@ class Reader extends Database {
     }
     
     // Check if the reader is approved.
-    function checkReaderApproved($id) {
+    function checkReaderApproved($signature) {
         $return = false; 
         
-        // Create connection
-        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
-                
-        // Check connection.
-        if ($connection->connect_error) {
-            die("Connection failed<br>$connection->connect_error");
-        }
-    
-        // Form SQL query
-        $sql = "SELECT * FROM readers WHERE approved = 0 AND signature = '$id' ORDER BY id";
+        // Get row count
+        $rowCount;
+        $params = array(':signature' => $signature);
+        $sql = "SELECT count(*) FROM readers WHERE approved = 0 AND signature = :signature";
+        $stmt = $this->_dbconn->prepare($sql);
+        $stmt->execute($params);
+        $rowCount = $stmt->fetchColumn();
+        if ($rowCount === 0) {
+            $sql = "SELECT count(*) FROM readers WHERE approved = 1 AND signature = :signature";
+            $stmt = $this->_dbconn->prepare($sql);
+            $stmt->execute($params);
+            $rowCount = $stmt->fetchColumn();
             
-        // Check if reader is in pending
-        if ($result = mysqli_query($connection, $sql)) {
-            if (mysqli_num_rows($result) === 0) {
-
-                $sql = "SELECT * FROM readers WHERE approved = 1 AND signature = '$id' ORDER BY id";
-                // Check if reader is in approved
-                if ($result = mysqli_query($connection, $sql)) {
-                    if (mysqli_num_rows($result) === 0) {
-                        // Add to pending readers
-                        $sql = "INSERT INTO readers(reader_name, reader_group, approved, signature) VALUES ('', 0, 0, '$id')";
-                        if (!mysqli_query($connection, $sql)) {
-                            die("There was an error adding the reader to pending. ".mysqli_error());
-                        }
-                    } else {
-                        $return = true;
-                    }
-                } else {
-                    die("Error accessing readers. ".mysqli_error());
-                }
+            if ($rowCount === 0) {
+                $sql = "INSERT INTO readers(reader_name, reader_group, approved, signature) VALUES ('', 0, 0, :signature)";
+                $stmt = $this->_dbconn->prepare($sql);
+                $stmt->execute($params);
+            } else {
+                $return = true;
             }
-        } else {
-            die("There was an error running the query. ".mysqli_error());
         }
+
+
+        // // Create connection
+        // $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+                
+        // // Check connection.
+        // if ($connection->connect_error) {
+        //     die("Connection failed<br>$connection->connect_error");
+        // }
+    
+        // // Form SQL query
+        // $sql = "SELECT * FROM readers WHERE approved = 0 AND signature = '$id' ORDER BY id";
             
-        $connection->close();
+        // // Check if reader is in pending
+        // if ($result = mysqli_query($connection, $sql)) {
+        //     if (mysqli_num_rows($result) === 0) {
+
+        //         $sql = "SELECT * FROM readers WHERE approved = 1 AND signature = '$id' ORDER BY id";
+        //         // Check if reader is in approved
+        //         if ($result = mysqli_query($connection, $sql)) {
+        //             if (mysqli_num_rows($result) === 0) {
+        //                 // Add to pending readers
+        //                 $sql = "INSERT INTO readers(reader_name, reader_group, approved, signature) VALUES ('', 0, 0, '$id')";
+        //                 if (!mysqli_query($connection, $sql)) {
+        //                     die("There was an error adding the reader to pending. ".mysqli_error());
+        //                 }
+        //             } else {
+        //                 $return = true;
+        //             }
+        //         } else {
+        //             die("Error accessing readers. ".mysqli_error());
+        //         }
+        //     }
+        // } else {
+        //     die("There was an error running the query. ".mysqli_error());
+        // }
+            
+        // $connection->close();
+
         return $return;
     }
 
