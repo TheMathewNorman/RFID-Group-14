@@ -1384,20 +1384,6 @@ class Admins extends Database {
         $stmt = $this->_dbconn->prepare($sql);
         $stmt->execute($params);
     }
-
-    // Delete an admin from the admins table.
-    function removeAdmin($adminid) {
-        // Prevent deletion of key admin account.
-        if ($adminid > 1) { 
-            // Set query parameters
-            $params = array(':id' => $adminid);
-
-            // Execute query
-            $sql = "DELETE FROM admins WHERE id = :id";
-            $stmt = $this->_dbconn->prepare($sql);
-            $stmt->execute($params);
-        }
-    }
 }
 
 class Reader extends Database {
