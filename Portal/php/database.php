@@ -1142,34 +1142,34 @@ class Reader extends Database {
         $sql = "SELECT COUNT(*) FROM readers WHERE signature = :signature";
         $stmt = $this->_dbconn->prepare($sql);
         $stmt->execute($params);
-        $rowCount = $stmt->fetchColumn()[0];
+        $rowCount = $stmt->fetchColumn();
 
         echo 'Row count output: '.$rowCount.'<br>';
         echo '<b>Var dump:</b><br>';
         var_dump($rowCount);
 
-        // Get row count
-        $rowCount;
-        $params = array(':signature' => $signature);
-        $sql = "SELECT count(*) FROM readers WHERE signature = :signature";
-        $stmt = $this->_dbconn->prepare($sql);
-        $stmt->execute($params);
-        $rowCount = $stmt->fetch();
-        var_dump($rowCount);
-        if ($rowCount === 0) {
-            $sql = "SELECT count(*) FROM readers WHERE approved = 1 AND signature = :signature";
-            $stmt = $this->_dbconn->prepare($sql);
-            $stmt->execute($params);
-            $rowCount = $stmt->fetchColumn();
-            echo 'Row count 2:'.$rowCount."<br>";
-            if ($rowCount === 0) {
-                $sql = "INSERT INTO readers(reader_name, reader_group, approved, signature) VALUES ('', 0, 0, :signature)";
-                $stmt = $this->_dbconn->prepare($sql);
-                $stmt->execute($params);
-            } else {
-                $return = true;
-            }
-        }
+        // // Get row count
+        // $rowCount;
+        // $params = array(':signature' => $signature);
+        // $sql = "SELECT count(*) FROM readers WHERE signature = :signature";
+        // $stmt = $this->_dbconn->prepare($sql);
+        // $stmt->execute($params);
+        // $rowCount = $stmt->fetch();
+        // var_dump($rowCount);
+        // if ($rowCount === 0) {
+        //     $sql = "SELECT count(*) FROM readers WHERE approved = 1 AND signature = :signature";
+        //     $stmt = $this->_dbconn->prepare($sql);
+        //     $stmt->execute($params);
+        //     $rowCount = $stmt->fetchColumn();
+        //     echo 'Row count 2:'.$rowCount."<br>";
+        //     if ($rowCount === 0) {
+        //         $sql = "INSERT INTO readers(reader_name, reader_group, approved, signature) VALUES ('', 0, 0, :signature)";
+        //         $stmt = $this->_dbconn->prepare($sql);
+        //         $stmt->execute($params);
+        //     } else {
+        //         $return = true;
+        //     }
+        // }
 
 
         // // Create connection
