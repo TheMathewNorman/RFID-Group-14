@@ -1145,7 +1145,7 @@ class Reader extends Database {
         $rowCount = $stmt->fetchColumn();
 
         if ($rowCount == 0) {
-            $sql = "INSERT INTO readers (reader_name, reader_group, approved, signature) VALUES ('', '', 0, :signature)";
+            $sql = "INSERT INTO readers (reader_name, reader_group, approved, signature) VALUES ('', 0, 0, :signature)";
             $stmt = $this->_dbconn->prepare($sql);
             $stmt->execute($params);
             echo "Adding to pending.<br>";
