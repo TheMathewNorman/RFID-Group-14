@@ -1172,7 +1172,9 @@ class Reader extends Database {
         $sql = "SELECT COUNT(*) FROM ((privilege INNER JOIN members ON privilege.member_id = members.id) INNER JOIN readers ON privilege.reader_id = readers.id) WHERE readers.signature = :signature AND readers.approved = 1 AND members.cardkey = :cardkey";
         $stmt = $this->_dbconn->prepare($sql);
         $stmt->execute($params);
-        if ($result = $stmt->fetchColumn()) {
+        $rowCount = $stmt->fetchColumn();
+        echo $rowCount;
+        if ($rowCount > 0) {
             $return = true;
         }
 
