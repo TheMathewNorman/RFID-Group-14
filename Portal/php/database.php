@@ -497,7 +497,7 @@ class Database {
         $id = $mid = $member = $rid = $reader = $date = '';
         if ($rowCount > 0) {
             // Create table
-            $output.= '<table id="list-table"><tr><th>#</th><th>Member ID</th><th>Member</th><th>Reader ID</th><th>Reader</th><th>Date & Time</th></tr>';
+            $output.= '<table id="list-table"><thead><tr><th>#</th><th>Member ID</th><th>Member</th><th>Reader ID</th><th>Reader</th><th>Date & Time</th></tr></thead><tbody>';
 
             while ($row = $stmt->fetch()) {
                 $id = $row['ID'];
@@ -516,7 +516,7 @@ class Database {
                             <td>$date</td>
                            </tr>";
             }
-            $output.= "</table>";
+            $output.= "</tbody></table>";
         } else {
             if ($searchq === "") {
                 $output.= "There were no results.";
