@@ -1170,29 +1170,13 @@ class Reader extends Database {
         
         $return = false;
 
-        // Create connection
-        $connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
-                
-        // Check connection and return status
-        if ($connection->connect_error) {
-            die('Connection failed:<br>'.$connection->connect_error);
+        $params = array(':signature' => $signature, ':cardkey' => $keyhash);
+        $sql = "SELECT COUNT(*) FROM ((privilege INNER JOIN members ON privilege.member_id = members.id) INNER JOIN readers ON privilege.reader_id = readers.id) WHERE readers.signature = :signature AND readers.approved = 1 AND members.cardkey = :cardkey";
+        $stmt = $this->_dbconn->prepare($sql);
+        $stmt->execute($params);
+        if ($result = $stmt->fetchColumn()) {
+            $return = true;
         }
-
-        // Find any results for given member and reader combination in the privilege table
-        $sql = "SELECT privilege.id FROM ((privilege INNER JOIN members ON privilege.member_id = members.id) INNER JOIN readers ON privilege.reader_id = readers.id) WHERE readers.signature = '$signature' AND readers.approved = 1 AND members.cardkey = '$keyhash'";
-
-        if ($result = mysqli_query($connection, $sql)) {
-            // Return true or false
-            if (mysqli_num_rows($result) > 0) {
-                $return = true;
-            } else {
-                $return = false;
-            }
-        } else {
-            die(mysqli_error($connection));
-        }
-
-        $connection->close();
 
         return $return;
     }
