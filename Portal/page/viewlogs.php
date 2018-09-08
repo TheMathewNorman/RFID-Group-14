@@ -2,12 +2,9 @@
   include_once '../php/database.php';
   $database = new Database();
 
-  include_once '../php/validate.php';
-  $validate = new Validate();
-
   $search = "";
   if (isset($_GET['search'])) {
-    $search = $validate->sanitizeString($_GET['search']);
+    $search = $_GET['search'];
   } else if (isset($_GET['today'])) {
     $today = getdate();
     
