@@ -28,17 +28,6 @@
     <link rel="stylesheet" type="text/css" href="../css/global-style.css">
     <link rel="stylesheet" type="text/css" href="../css/header.css">
     <link rel="stylesheet" type="text/css" href="../css/menu.css">
-
-    <link rel="stylesheet" type="text/css" href="../css/datatables.css"/>
-
-    <script type="text/javascript" src="../js/jquery.min.js"></script>
-    <script type="text/javascript" src="../js/datatables.min.js"></script>
-
-    <script type="text/javascript">
-      $(document).ready(function() {
-        $('#list-table').DataTable();
-      } );
-    </script>
   </head>
   <body>
     <div id="content">
