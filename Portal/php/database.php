@@ -1144,9 +1144,21 @@ class Reader extends Database {
         $stmt->execute($params);
         $rowCount = $stmt->fetchColumn();
 
-        echo 'Row count output: '.$rowCount.'<br>';
-        echo '<b>Var dump:</b><br>';
-        var_dump($rowCount);
+        if ($rowCount == 0) {
+            $sql = "INSERT INTO readers (reader_name, reader_group, approved, signature) VALUES ('', '', 0, :signature)";
+            $stmt = $this->_dbconn->prepare($sql);
+            $stmt->execute($params);
+            echo "Adding to pending.<br>";
+        } else {
+            $sql = "SELECT COUNT(*) FROM readers WHERE approved = 1 AND signature = :signature";
+            $stmt = $this->_dbconn->prepare($sql);
+            $stmt->execute($params);
+            $rowCount = $stmt->fetchColumn();
+            echo "Checking if approved.<br>";
+            if ($rowCount >= 1) {
+                $return = true;
+            }
+        }
 
         // // Get row count
         // $rowCount;
