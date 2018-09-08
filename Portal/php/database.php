@@ -1149,13 +1149,11 @@ class Reader extends Database {
             $sql = "INSERT INTO readers (reader_name, reader_group, approved, signature) VALUES ('', 0, 0, :signature)";
             $stmt = $this->_dbconn->prepare($sql);
             $stmt->execute($params);
-            echo "Adding to pending.<br>";
         } else { // If the reader exists, and approved, set return value to true
             $sql = "SELECT COUNT(*) FROM readers WHERE approved = 1 AND signature = :signature";
             $stmt = $this->_dbconn->prepare($sql);
             $stmt->execute($params);
             $rowCount = $stmt->fetchColumn();
-            echo "Checking if approved.<br>";
             if ($rowCount >= 1) {
                 $return = true;
             }
