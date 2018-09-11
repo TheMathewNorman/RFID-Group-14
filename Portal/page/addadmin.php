@@ -3,6 +3,7 @@
     include_once "../php/database.php";
     $database = new Database();
 
+    $error = "";
     if (isset($_POST['firstname']) && isset($_POST['lastname']) && isset($_POST['email']) && isset($_POST['password'])) {
         $fname = $_POST['firstname'];
         $lname = $_POST['lastname'];
@@ -13,9 +14,15 @@
         if (isset($_POST['phone'])) {
             $phone = $_POST['phone'];
         }
-        $database->addAdmin($fname,$lname,$email,$phone,$password);
         
-        header("Location: listadmin.php");
+        
+        if (!$database->addAdmin($fname,$lname,$email,$phone,$password)) {
+            $error = "duplicate";
+        }
+        
+        if (empty($error)) {
+            header("Location: listadmin.php");
+        }
     }
   
 ?>
@@ -33,6 +40,11 @@
             
             <form action="" method="POST">
                 <table class="form-table">
+                    <?php 
+                        if ($error == "duplicate") {
+                            echo "An administrator with that email already exists.";
+                        }
+                    ?>
                     <tr><td style="text-align:right">First name: </td><td><input type="text" name="firstname" required> *</td></tr>
                     <tr><td style="text-align:right">Last name: </td><td><input type="text" name="lastname"  required> *</td></tr>
                     <tr><td style="text-align:right">Email: </td><td><input type="email" name="email" required> *</td></tr>

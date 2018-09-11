@@ -1,22 +1,9 @@
 <?php
-    // Inlcude the database class functionality.
-    include_once '../php/database.php';
-    $database = new Database();
-
-    // Used to relay any error messages to the user.
-    $error = '';
-
-    if (isset($_POST['dbname']) && isset($_POST['dbuser']) && isset($_POST['dbpass'])) {
-        
-        
-        if ($database->testConnection($_POST['server'], $_POST['dbuser'], $_POST['dbpass'], $_POST['dbname'])) {
-            // Create tables
-
-            // Go to next page
-            header('Location: ./create.admin.php');
-        } else {
-            $error = "<b>Failed to connect to database. Please check credentials and try again.</b>";
-        }
+$page = '';
+    if (isset($_GET['issue'])) {
+        $page = $_GET['issue'];
+    } else {
+        header("Location: ../index.php");
     }
 ?>
 
@@ -26,47 +13,13 @@
 <meta charset="UTF-8" />
 <title>Access Control Management System</title>
 
-<link rel="stylesheet" href="../css/setup.css">
+<link rel="stylesheet" href="../css/global-style.css">
 </head>
 <body>
-    <div id="setup-container">
-        <div id="setup-heading">
-            First Run Setup
-        </div>
-        <div id="setup-subheading">
-            <?php
-                if ($error !== '') {
-                    echo $error;
-                } else {
-            ?>
-            Please enter information used to connect to the database.
-            <?php
-                }
-            ?>
-        </div>
-        
-        <!-- Database setup form -->
-        <div id="setup-form">
-        <form action="" method="POST">
-            <div class="form-field">
-                <div class="input-icon"><i class="fas fa-user fa-lg"></i></div>
-                <div class="input-box"><input type="text" name="server" value="localhost"></div>
-            </div>
-            <div class="form-field">
-                <div class="input-icon"><i class="fas fa-user fa-lg"></i></div>
-                <div class="input-box"><input type="text" name="dbname" placeholder="Database name"></div>
-            </div>
-            <div class="form-field">
-                <div class="input-icon"><i class="fas fa-user fa-lg"></i></div>
-                <div class="input-box"><input type="text" name="dbuser" placeholder="Username"></div>
-            </div>
-            <div class="form-field">
-                <div class="input-icon"><i class="fas fa-lock fa-lg"></i></div>
-                <div class="input-box"><input type="password" name="dbpass" placeholder="Password"></div>
-            </div>
-            <input type="submit" value="Next">
-            </form>
-        </div>
+    <div id="content" class="setup-content">
+        <?php
+            include 'content.php';
+        ?>
     </div>
 </body>
 </html>

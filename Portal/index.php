@@ -1,42 +1,56 @@
 <?php
-    // Store any errors caught
-    $error = "";
+    // Include instances of required classes
+    require_once "./php/sessions.php";
+    $sessions = new Sessions();
+    
+    // Store any message
+    $message = "";
 
-    // First-run redirect
+    // Redirect locaton
     $location = "";
-    if (!file_exists("./php/sqlcreds.php")) {
-        $location = "./component/firstrun.php";
+
+    //// First-run check
+    // Check config file exists
+    $database;
+    if (!file_exists($_SERVER['DOCUMENT_ROOT'].'/config.php')) {
+        $location = "./setup/index.php?issue=noConfig";
+    } else {
+        // Test database connection
+        require_once "./php/database.php";
+        $database = new Database();
+        if (!$database->connsuccess) {
+            $location = "./setup/index.php?issue=database";
+        } else {
+            // Check all tables required exist
+            if (!$database->checkTablesExist()) {
+                $location = "./setup/index.php?issue=tables";
+            }
+        }
     }
 
+    //// Set page message
     if (isset($_GET['message'])) {
         if ($_GET['message'] = "nologin") {
-            $error = "You must be logged in to view that page.";
+            $message = "You must be logged in to view that page.";
         }
         if ($_GET['message'] = "logout") {
-            $error = "You have successfully been logged out.";
+            $message = "You have successfully been logged out.";
         }
     }
-    
-    // Include instances of required classes
-    include_once "./php/database.php";
-    include_once "./php/sessions.php";
-    $database = new Database();
-    $sessions = new Sessions();
 
     // Attempt to login when credientials have been entered.
-    if (isset($_POST['email']) && isset($_POST['password'])) {
-        $loginResponse = $database->loginAdmin($_POST['email'], $_POST['password']);
-
-        if ($loginResponse[0]) {
-            // Create a session
-            $sessions->startSession($loginResponse['id'], $loginResponse['fname']);
+    if (empty($location)) {
+        if (isset($_POST['email']) && isset($_POST['password'])) {
             
-            // Redirect
-            $location = "./page/index.php";
-        } else {
-            // Return error on login failure.
-            $error = "Error: " . $loginResponse[1];
-        }        
+            try {
+                $loginResponse = $database->loginAdmin($_POST['email'], $_POST['password']);
+
+                $sessions->startSession($loginResponse['id'], $loginResponse['fname']);
+                $location = 'page/index.php';
+            } catch (Exception $e) {
+                $message = 'Error: Email or password was incorrect.';
+            }
+        }
     }
 
     // Redirect if already logged in
@@ -44,7 +58,7 @@
         $location = "./page/index.php";
     }
 
-    if ($location !== "") {
+    if (!empty($location)) {
         header("Location: $location");
     }
 ?>
@@ -62,7 +76,7 @@
         <div id="login-heading">
             RFID Access Control
         </div>
-        <div id="login-error"><?php echo $error; ?></div>
+        <div id="login-error"><?php echo $message; ?></div>
         <div id="login-form">
             <form action="" method="POST">
                 <div class="form-field">

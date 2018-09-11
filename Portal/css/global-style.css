@@ -40,6 +40,9 @@ body {
 
     border-radius: 0 0 15px 15px;
 }
+.setup-content a {
+    color: white;
+}
 #content td {
     color: white;
 }

@@ -1,114 +1,95 @@
 <?php
-include 'sqlcreds.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/config.php';
 
 class Database {
 
     protected $_dbconn;
-    private $_host;
-    private $_username;
-    private $_password;
-    private $_database;
-    private $_connsuccess = true;
+
+    private $_dbhost;
+    private $_dbname;
+    private $_dbuser;
+    private $_dbpass;
+
+    public $connsuccess = true;
+    public $connerror = "";
     
-    function __construct($dbhost = "", $dbname = "", $dbuser = "", $dbpass = "") {
-        // Set connection variables
-        if ($dbhost === "" && $dbname === "" && $dbuser === "" && $dbpass === "") {
-            $this->_host = $GLOBALS['server'];
-            $this->_database = $GLOBALS['dbname'];
-            $this->_username = $GLOBALS['user'];
-            $this->_password = $GLOBALS['pass'];
+    function __construct($dbhost="", $dbname="", $dbuser="", $dbpass="") {
+        if (!empty($dbhost) && !empty($dbname) && !empty($dbuser) && !empty($dbpass)) {
+            $this->_dbhost = $dbhost;
+            $this->_dbname = $dbname;
+            $this->_dbuser = $dbuser;
+            $this->_dbpass = $dbpass;
         } else {
-            $this->_host = $dbhost;
-            $this->_database = $dbname;
-            $this->_username = $dbuser;
-            $this->_password = $dbpass;
+            $this->_dbhost = DB_HOST;
+            $this->_dbname = DB_NAME;
+            $this->_dbuser = DB_USER;
+            $this->_dbpass = DB_PASS;
         }
 
-        // Create PDO connection
-        try {
-            $this->_dbconn = new PDO("mysql:host=".$this->_host.";dbname=".$this->_database, $this->_username, $this->_password);
-        } catch (PDOException $e) {
-            $_connsuccess = false;
-            return $_connsuccess;
-        }
+        $this->connect();
     }
 
     function __destruct() {
         $this->_dbconn = null;
     }
 
-    //// GENERAL FUNCTIONALITY //// 
-    // Create the tables.
-    function createTables() {
-        // Create the members table upon success
-        $sql = "CREATE TABLE IF NOT EXISTS admins (
-            id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-            firstname VARCHAR(30) NOT NULL,
-            lastname VARCHAR(30) NOT NULL,
-            email VARCHAR(50) NOT NULL,
-            phone VARCHAR(10),
-            passhash VARCHAR(128) NOT NULL
-        ); CREATE TABLE IF NOT EXISTS members (
-            id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-            firstname VARCHAR(30) NOT NULL,
-            lastname VARCHAR(30) NOT NULL,
-            email VARCHAR(50),
-            phone VARCHAR(10),
-            cardkey VARCHAR(128) NOT NULL
-        ); CREATE TABLE IF NOT EXISTS privilege (
-            id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-            member_id INT(6) NOT NULL,
-            reader_id INT(6),
-            reader_group INT(6)
-        ); CREATE TABLE IF NOT EXISTS readers (
-            id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-            reader_name VARCHAR(30) NOT NULL,
-            reader_group INT(6) NOT NULL,
-            signature VARCHAR(60) NOT NULL,
-            approved BOOLEAN NOT NULL
-        ); CREATE TABLE IF NOT EXISTS logs (
-            id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-            member_id INT(6) NOT NULL,
-            reader_id INT(6) NOT NULL,
-            access_date TIMESTAMP NOT NULL,
-            check_in BOOL DEFAULT false
-        )";
-            
+    private function connect() {
+        // Create PDO connection
         try {
-            $this->_dbconn->exec($sql);
-        } catch (PDOException $e) {
-            die($e->getMessage());
+            // Attempt to create a connection using provided parameters
+            $conn = new PDO("mysql:host=$this->_dbhost;dbname=$this->_dbname", $this->_dbuser, $this->_dbpass);
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            // If an exception has not been thrown, set _dbconn to connection
+            $this->_dbconn = $conn;
+            
+        } catch (Exception $e) {
+            // Set success state to false
+            $this->connsuccess = false;
+            
+            // Set error
+            $this->connerror = $e;
         }
     }
 
-    // Test database connection.
-    // DEPRECIATED:
-    // Tests in __construct
-    function testConnection($server="", $dbuser="", $dbpass="", $dbname="") {
-        if ($server=="") {
-            $server = $GLOBALS['server'];
-        }
-        if ($dbuser=="") {
-            $dbuser = $GLOBALS['user'];
-        }
-        if ($dbpass=="") {
-            $dbpass = $GLOBALS['pass'];
-        }
-        if ($dbname=="") {
-            $dbname = $GLOBALS['dbname'];
-        }
+    private $_expectedTables = array('admins', 'logs', 'members', 'privilege', 'readers');
+    // Check that all the expected tables exist within the database.
+    function checkTablesExist() {
+        $return = true;
         
-        // Create connection
-        $connection = new mysqli($server, $dbuser, $dbpass, $dbname);
-                
-        // Check connection and return status
-        if ($connection->connect_error) {
-            $connection->close();
-            return False;
-        } else {
-            $connection->close();
-            return True;
+        // Get a list of tables that exist in the database
+        $actualTables = array();
+        try {
+            $sql = "SHOW TABLES FROM $this->_dbname";
+
+            if ($this->connsuccess) {
+                $stmt = $this->_dbconn->prepare($sql);
+                $stmt->execute();
+                while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+                    array_push($actualTables, $row[0]);
+                }
+            }
+        } catch (Exception $e) {
+            $return = false;
         }
+
+        // If a table is missing from the tables array, return false
+        foreach ($this->_expectedTables as $table) {
+            if (!in_array($table, $actualTables)) { $return = false; }
+        } 
+
+        // If there is no admin in the admins table return false
+        if ($return) {
+            $sql = "SELECT count(*) FROM admins";
+            $stmt = $this->_dbconn->prepare($sql);
+            $stmt->execute();
+            
+            if ($stmt->fetchColumn() < 1) {
+                $return = false;
+            }
+        }
+
+        return $return;
     }
 
     //// ADMIN TABLE FUNCTIONALITY //// 
@@ -189,11 +170,8 @@ class Database {
     // Attempt to login with a given email and password
     function loginAdmin($email, $password) {
         // Login response
-        //[0] = False on failure || True on success.
-        //[1] = Error description on failure.
         //['id'] = Admin's ID on success
         //['fname'] = Admin's first name on success
-        $loginResponse[0] = false;
 
         // Hash password
         $passhash = hash("sha512", $password);
@@ -215,11 +193,12 @@ class Database {
             $stmt->execute($params);
 
             $info = $stmt->fetch();
-            $loginResponse[0] = true;
+            // $loginResponse[0] = true;
             $loginResponse['id'] = $info['id'];
             $loginResponse['fname'] = $info['firstname'];
         } else {
-            $loginResponse[1] = 'Email or password was incorrect.';
+            // $loginResponse[1] = 'Email or password was incorrect.';
+            throw new Exception("Email or password was incorrect.");
         }
 
         // Return login response
@@ -256,7 +235,11 @@ class Database {
         $sql = "INSERT INTO admins (firstname, lastname, email, phone, passhash) 
                 VALUES (:firstname, :lastname, :email, :phone, :passhash)";
         $stmt = $this->_dbconn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        try {
         $stmt->execute($params);
+        } catch (Exception $e) {
+            return false;
+        }
     }
 
     // Update an admin in the admins table.
