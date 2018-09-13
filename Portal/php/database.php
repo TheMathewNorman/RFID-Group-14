@@ -1161,6 +1161,288 @@ class Logs extends Database {
         // Print output
         echo $output; 
     }
+    
+    class List extends Database {
+    // List all members
+    function listMembers($searchq = '') {
+        // Store output
+        $output = "";
+         
+        $rowCount = 0;
+        if ($searchq === "") {
+            // Get number of rows
+            $rowCount = $this->_dbconn->query("SELECT count(*) FROM members")->fetchColumn();
+            
+            // Execute query
+            $sql = "SELECT id, firstname, lastname, email, phone FROM members";
+            $stmt = $this->_dbconn->prepare($sql);
+            $stmt->execute();
+        } else {
+            $params = array(':search' => $searchq, ':searchlike' => '%'.$searchq.'%');
+            // Get number of rows
+            $sql = "SELECT count(*) 
+                    FROM members
+                    WHERE id = :search
+                    OR firstname LIKE :searchlike
+                    OR lastname LIKE :searchlike
+                    OR email LIKE :searchlike
+                    OR phone LIKE :searchlike";
+            $stmt = $this->_dbconn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            $stmt->execute($params);
+            $rowCount = $stmt->fetchColumn();
+            
+            // Execute query
+            $sql = "SELECT id, firstname, lastname, email, phone 
+                    FROM members
+                    WHERE id = :search
+                    OR firstname LIKE :searchlike
+                    OR lastname LIKE :searchlike
+                    OR email LIKE :searchlike
+                    OR phone LIKE :searchlike";
+            
+            $stmt = $this->_dbconn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            $stmt->execute($params);
+        }
+ 
+        // Create a table with any results and print to page
+        if ($rowCount > 0) {
+            // Create table
+            $output.= '<table id="list-table"><tr><th>ID</th><th>Firstname</th><th>Lastname</th><th>Email</th><th>Phone Number</th><th>Update</th><th>Delete</th></tr>';
+ 
+            // Fetch table rows
+            $id = $fname = $lname = $email = $phone = '';
+            while ($row=$stmt->fetch()) {
+                $id = $row['id'];
+                $fname = $row['firstname'];
+                $lname = $row['lastname'];
+                $email = $row['email'];
+                $phone = $row['phone'];
+                
+                // Replace and remove the delete button functionality for the key admin.
+                $output.= "<tr><td>$id</td><td>$fname</td><td>$lname</td><td>$email</td><td>$phone</td><td><a href=\"updatemember.php?id=".$id."\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deleteuser.php?table=member&id=".$row[0]."\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>";
+            }
+ 
+            // Close table tag
+            $output.= '</table>';
+        } else {
+            if ($searchq === "") {
+                $output.= "There were no results.";
+            } else {
+                $output.= "There were no results for $searchq";
+            }
+        }
+ 
+        echo $output;
+     }
+
+    // List all members
+    function listPrivilegeMembers() {
+        $output = '';
+        
+        // Get row count
+        $rowCount;
+        $sql = "SELECT count(*) FROM members ORDER BY id";
+        $stmt = $this->_dbconn->prepare($sql);
+        $stmt->execute();
+        $rowCount = $stmt->fetchColumn();
+        
+        if ($rowCount > 0) {
+            // Execute query
+            $sql = "SELECT id, CONCAT(firstname, ' ', lastname) AS MemberName FROM members ORDER BY id";
+            $stmt = $this->_dbconn->prepare($sql);
+            $stmt->execute();
+
+            // Form table
+            $output.= '<table id="list-table"><tr><th>Member ID</th><th>Name</th><th>Modify Access</th></tr>';
+
+            // Fetch each line and display in table.
+            $id = $membername = '';
+            while ($row = $stmt->fetch()) {
+                $id = $row['id'];
+                $membername = $row['MemberName'];
+                $output.= "<tr><td>$id</td><td>$membername</td><td><a href=\"listaccess.php?id=".$id."\"><i class=\"fas fa-edit fa-lg\"></i></a></td></tr>";
+            }
+        
+            $output.= "</table>";
+        } else {
+            $output = "There are no members. Please add a member before assigning access.";
+        }
+
+        echo $output;
+    }
+    
+    // List all privileges associated with a member
+    function listMemberPrivilege($memberid) {
+        $output = '';
+        
+        // Get row count
+        $rowCount;
+        $params = array(':memberid' => $memberid);
+        $sql = "SELECT count(*)
+        FROM (privilege 
+        INNER JOIN readers ON privilege.reader_id = readers.id)
+        WHERE privilege.member_id = :memberid";
+        $stmt = $this->_dbconn->prepare($sql);
+        $stmt->execute($params);
+        $rowCount = $stmt->fetchColumn();
+        
+        if ($rowCount > 0) {
+            // Execute query
+            $sql = "SELECT privilege.id AS PID, readers.id AS RID, readers.reader_name AS ReaderName
+            FROM (privilege 
+            INNER JOIN readers ON privilege.reader_id = readers.id)
+            WHERE privilege.member_id = :memberid";
+            $stmt = $this->_dbconn->prepare($sql);
+            $stmt->execute($params);
+
+            // Form table
+            $output.= '<table id="list-table"><tr><th>PID</th><th>Reader ID</th><th>Reader Name</th><th>Remove</th></tr>';
+
+
+            // Fetch each line and display in table.
+            $pid = $rid = $readername = '';
+            while ($row = $stmt->fetch()) {
+                $pid = $row['PID'];
+                $rid = $row['RID'];
+                $readername = $row['ReaderName'];
+                $output.= "<tr><td>$pid</td><td>$rid</td><td>$readername</td><td><a href=\"../php/deleteaccess.php?id=".$pid."&member=$memberid\"><i class=\"fas fa-minus-circle fa-lg\"></i></a></td></tr>";
+            }
+        
+            $output.= "</table>";
+        } else {
+            $output = "This member hasn't yet been assigned any privileges. <br>Click the button below to assign one.";
+        }
+
+        echo $output;
+    }
+    
+    // List all readers that can be assigned to a member
+    function listPrivilegeReaders() {
+        $output = '';
+        
+        // Get row count
+        $rowCount;
+        $sql = "SELECT count(*) FROM readers WHERE approved = 1";
+        $stmt = $this->_dbconn->prepare($sql);
+        $stmt->execute();
+        $rowCount = $stmt->fetchColumn();
+        
+        if ($rowCount > 0) {
+            // Execute query
+            $sql = "SELECT id, reader_name AS ReaderName FROM readers WHERE approved = 1";
+            $stmt = $this->_dbconn->prepare($sql);
+            $stmt->execute();
+
+            // Form table
+            $output.= '<table id="list-table"><tr><th>Reader ID</th><th>Reader Name</th><th>Add</th></tr>';
+
+            // Fetch each line and display in table.
+            $id = $readername = '';
+            while ($row = $stmt->fetch()) {
+                $id = $row['id'];
+                $readername = $row['ReaderName'];
+                $output.= "<tr><td>$id</td><td>$readername</td><td><input type=\"checkbox\" name=\"$id\" value=\"$id\"></td></tr>";
+            }
+        
+            $output.= "</table>";
+        } else {
+            $output = "There are no readers. <br>Please connect a reader before trying to assign member access.";
+        }
+
+        echo $output;
+    }
+
+    // List all readers pending approval
+    function listPending() {
+        $output = '';
+
+        // Get number of rows
+        $rowCount = 0;
+        $sql = "SELECT count(*) FROM readers WHERE approved = 0 ORDER BY id";
+        $stmt = $this->_dbconn->prepare($sql);
+        $stmt->execute();
+        $rowCount = $stmt->fetchColumn();
+        
+        if ($rowCount > 0) {
+            // Execute SQL query
+            $sql = "SELECT id, signature FROM readers WHERE approved = 0 ORDER BY id";
+            $stmt = $this->_dbconn->prepare($sql);
+            $stmt->execute();
+
+            // Form table 
+            $output.= '<table id="list-table"><tr><th>ID</th><th>Reader Code</th><th>Approve</th></tr>';
+
+            $id = $readercode = $approve = '';
+            while ($row = $stmt->fetch()) {
+                $id = $row['id'];
+                $readercode = $row['signature'];
+
+                $output.= "<tr><td>$id</td><td>$readercode</td><td><a href=\"../php/approvereader.php?id=$id\"><i class=\"fas fa-check fa-lg\"></i></a></td></tr>";
+            }
+
+            $output.= "</table>";
+        } else {
+            $output = "There are no readers pending approval.";
+        }
+
+        echo $output;
+    }
+
+    // List all approved readers
+    function listReaders($searchq = "") {
+        $output = '';
+
+        if ($searchq == '') {
+            // Get number of rows
+            $rowCount = 0;
+            $sql = "SELECT count(*) FROM readers WHERE approved = 1 ORDER BY id";
+            $stmt = $this->_dbconn->prepare($sql);
+            $stmt->execute();
+            $rowCount = $stmt->fetchColumn();
+        } else {
+            // Get number of rows
+            $rowCount = 0;
+            $params = array(':searchlike' => '%'.$searchq.'%');
+            $sql = "SELECT count(*) FROM readers WHERE approved = 1 AND reader_name LIKE :searchlike ORDER BY id";
+            $stmt = $this->_dbconn->prepare($sql);
+            $stmt->execute($params);
+            $rowCount = $stmt->fetchColumn();
+        }
+        
+        if ($rowCount > 0) {
+            if ($searchq == '') {
+                // Execute SQL query
+                $sql = "SELECT id, reader_name, reader_group, signature FROM readers WHERE approved = 1 ORDER BY id";
+                $stmt = $this->_dbconn->prepare($sql);
+                $stmt->execute();
+            } else {
+                // Execute SQL query
+                $sql = "SELECT id, reader_name, reader_group, signature FROM readers WHERE approved = 1 AND reader_name LIKE :searchlike ORDER BY id";
+                $stmt = $this->_dbconn->prepare($sql);
+                $stmt->execute($params);
+            }
+
+            // Form table 
+            $output.= '<table id="list-table"><tr><th>Reader ID</th><th>Reader Name</th><th>Reader Group</th><th>Signature</th><th>Update</th><th>Remove</th></tr>';
+
+            // Add table rows from database
+            $id = $readername = $readergroup = $readersig = '';
+            while ($row = $stmt->fetch()) {
+                $id = $row['id'];
+                $readername = $row['reader_name'];
+                $readergroup = $row['reader_group'];
+                $readercode = $row['signature'];
+
+                $output.= "<tr><td>$id</td><td>$readername</td><td>$readergroup</td><td>$readercode</td><td><a href=\"updatereader.php?id=$id\"><i class=\"fas fa-sync fa-lg\"></i></a></td><td><a href=\"../php/deletereader.php?id=$id\"><i class=\"fas fa-trash fa-lg\"></i></a></td></tr>";
+            }
+
+            $output.= "</table>";
+        } else {
+            $output = "There are no readers. <br>Please connect and approve a new reader first.";
+        }
+
+        echo $output;
+    }
 }
 
 ?>
