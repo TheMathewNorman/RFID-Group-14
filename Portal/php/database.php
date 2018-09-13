@@ -891,7 +891,7 @@ class Database {
         $stmt = $this->_dbconn->prepare($sql);
         $stmt->execute($params);
     }
-}
+
 
 class Reader extends Database {
     // Add log entry
@@ -976,7 +976,7 @@ class Reader extends Database {
 
         return $return;
     }
-}
+
 
 
 class Logs extends Database {
