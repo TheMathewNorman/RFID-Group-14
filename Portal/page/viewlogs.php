@@ -1,6 +1,6 @@
 <?php
   include_once '../php/database.php';
-  $database = new Database();
+  $database = new Logs();
 
   $search = "";
   if (isset($_GET['search'])) {
