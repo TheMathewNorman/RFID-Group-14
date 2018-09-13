@@ -978,4 +978,189 @@ class Reader extends Database {
     }
 }
 
+
+class Logs extends Database {
+    // Get all entries in the logs table
+    function getLogEntries($searchq = '') {
+        // Store output
+        $output = "";
+
+        $rowCount = 0;
+        if ($searchq === '') {
+            // Get number of rows
+            $rowCount = $this->_dbconn->query("SELECT count(*)
+            FROM ((logs
+            INNER JOIN members ON logs.member_id = members.id)
+            INNER JOIN readers ON logs.reader_id = readers.id)
+            WHERE logs.check_in = 0
+            ORDER BY logs.access_date DESC")->fetchColumn();
+
+            // Execute query
+            $sql = "SELECT logs.id AS ID, members.id AS MID, CONCAT(members.firstname, ' ', members.lastname) AS Member, readers.id AS RID, readers.reader_name AS Reader, DATE_FORMAT(logs.access_date, '%e/%m/%Y at %r') AS Date
+            FROM ((logs
+            INNER JOIN members ON logs.member_id = members.id)
+            INNER JOIN readers ON logs.reader_id = readers.id)
+            WHERE logs.check_in = 0
+            ORDER BY logs.access_date DESC";
+            $stmt = $this->_dbconn->prepare($sql);
+            $stmt->execute();
+        } else {
+            // Set query parameters
+            $params = array(':search' => $searchq, ':searchlike' => '%'.$searchq.'%');
+            
+            // Get number of rows
+            $sql = "SELECT count(*) 
+            FROM ((logs 
+            INNER JOIN members ON logs.member_id = members.id) 
+            INNER JOIN readers ON logs.reader_id = readers.id) 
+            WHERE logs.check_in = 0
+            AND (logs.member_id = :search
+            OR logs.reader_id = :search
+            OR members.firstname LIKE :searchlike
+            OR members.lastname LIKE :searchlike
+            OR readers.reader_name LIKE :searchlike)
+            ORDER BY logs.access_date DESC";
+            $stmt = $this->_dbconn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            $stmt->execute($params);
+            $rowCount = $stmt->fetchColumn();
+
+            // Execute query
+            $sql = "SELECT logs.id AS ID, members.id as MID, CONCAT(members.firstname, ' ', members.lastname) AS Member, readers.id AS RID, readers.reader_name AS Reader, DATE_FORMAT(logs.access_date, '%e/%m/%Y at %r') AS Date 
+            FROM ((logs 
+            INNER JOIN members ON logs.member_id = members.id) 
+            INNER JOIN readers ON logs.reader_id = readers.id) 
+            WHERE logs.check_in = 0
+            AND (logs.member_id = :search
+            OR logs.reader_id = :search
+            OR members.firstname LIKE :searchlike
+            OR members.lastname LIKE :searchlike
+            OR readers.reader_name LIKE :searchlike)
+            ORDER BY logs.access_date DESC";
+            $stmt = $this->_dbconn->prepare($sql);
+            $stmt->execute($params);
+        }
+
+        // Fetch table rows
+        $id = $mid = $member = $rid = $reader = $date = '';
+        if ($rowCount > 0) {
+            // Create table
+            $output.= '<table id="list-table"><thead><tr><th>#</th><th>Member ID</th><th>Member</th><th>Reader ID</th><th>Reader</th><th>Date & Time</th></tr></thead><tbody>';
+
+            while ($row = $stmt->fetch()) {
+                $id = $row['ID'];
+                $mid = $row['MID'];
+                $member = $row['Member'];
+                $rid = $row['RID'];
+                $reader = $row['Reader'];
+                $date = $row['Date'];
+
+                $output.= "<tr>
+                            <td>$id</td>
+                            <td>$mid</td>
+                            <td>$member</td>
+                            <td>$rid</td>
+                            <td>$reader</td>
+                            <td>$date</td>
+                           </tr>";
+            }
+            $output.= "</tbody></table>";
+        } else {
+            if ($searchq === "") {
+                $output.= "There were no results.";
+            } else {
+                $output.= "There were no results for $searchq";
+            }
+        }
+
+        echo $output;
+    }
+
+    // Display a list of check-ins
+    function getCheckinEntries() {
+        $output = "";
+        
+        // Get number of rows
+        $rowCount;
+        $sql = "SELECT count(*)
+        FROM ((logs
+        INNER JOIN members ON logs.member_id = members.id)
+        INNER JOIN (SELECT member_id, MAX(access_date) as visit_date FROM logs WHERE check_in = 1 GROUP BY logs.member_id) last_visit ON logs.member_id = last_visit.member_id)
+        WHERE logs.check_in = 1
+        GROUP BY logs.member_id";
+        $stmt = $this->_dbconn->prepare($sql);
+        $stmt->execute();
+        $rowCount = $stmt->fetchColumn();
+
+        // Execute query
+        $sql = "SELECT 
+        members.id AS MID, 
+        CONCAT(members.firstname, ' ', members.lastname) AS Member,
+        FLOOR(count(check_in) / 2) AS Checkins,
+        CASE
+            when count(logs.check_in) MOD 2 = 0 then 0
+            when count(logs.check_in) MOD 2 = 1 then 1
+        END AS Active,
+        DATE_FORMAT(last_visit.visit_date, '%e/%m/%Y at %r') AS LastCheckin,
+        TIMESTAMPDIFF(HOUR, last_visit.visit_date, NOW()) AS TimeSince
+        FROM ((logs
+        INNER JOIN members ON logs.member_id = members.id)
+        INNER JOIN (SELECT member_id, MAX(access_date) as visit_date FROM logs WHERE check_in = 1 GROUP BY logs.member_id) last_visit ON logs.member_id = last_visit.member_id)
+        WHERE logs.check_in = 1
+        GROUP BY logs.member_id
+        ORDER BY Active DESC";
+        $stmt = $this->_dbconn->prepare($sql);
+        $stmt->execute();
+
+        if ($rowCount > 0) {
+
+            // Create table
+            $output.= '<table id="list-table"><tr><th>Member ID</th><th>Member</th><th># of Visits</th><th>Currently Active</th><th>Last Activity</th><th>Last Visit</th></tr>';      
+
+            // Get table rows
+            $memberid = $membername = $numofvisits = $active = $lastactivity = $lastvisit = '';
+            while ($row = $stmt->fetch()) {
+                $memberid = $row['MID'];
+                $membername = $row['Member'];
+                $numofvisits = $row['Checkins'];
+                $lastactivity = $row['TimeSince'];
+                $lastvisit = $row['LastCheckin'];
+
+                $rowStyle = "";
+                $active;
+                // Adjust table row colour and active status based on check-in trends.
+                if ($row['Active'] == 1 && $lastactivity < 12) {
+                    $active = "YES";
+                    $rowStyle = 'style="background-color:rgba(0,100,0,0.7)"';
+                } else if ($row['Active'] == 1 && $lastactivity > 12) {
+                    $active = "MAYBE";
+                    $rowStyle = 'style="background-color:rgba(125,100,0,0.6)"';
+                } else {
+                    $active = "NO";
+                    $rowStyle = 'style="background-color: rgba(100,0,0,0.2)"';
+                }
+
+                // Format last activity text
+                if ($lastactivity > 1) {
+                    $lastactivity.= ' hours ago';
+                } else if ($lastactivity == 1) {
+                    $lastactivity.= ' hour ago';
+                } else {
+                    $lastactivity = '<1 hour ago';
+                }
+
+                // Form table row
+                $output.= "<tr $rowStyle>";
+                $output.= "<td>$memberid</td><td>$membername</td><td>$numofvisits</td><td>$active</td><td>$lastactivity</td><td>$lastvisit</td>";
+                $output.= "</tr>";
+            }
+            $output.= "</table>";
+        } else {
+            echo "There have been no check-ins.";
+        }
+
+        // Print output
+        echo $output; 
+    }
+}
+
 ?>
