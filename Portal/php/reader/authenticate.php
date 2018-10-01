@@ -1,6 +1,6 @@
 <?php
     include_once('../database.php');
-    $reader = new Reader();
+    $database = new Database();
 
     $return = "0";
 
@@ -9,8 +9,8 @@
         $readerid = $_GET['reader'];
         $key = $_GET['key'];
         
-        if ($reader->checkPrivilege($readerid,$key)) {
-            if ($reader->addLogEntry($readerid,$key)) { 
+        if ($database->checkPrivilege($readerid,$key)) {
+            if ($database->addLogEntry($readerid,$key)) { 
                 $return = "1";
             }
         }   
