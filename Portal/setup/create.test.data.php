@@ -1,12 +1,11 @@
 <?php
-include_once "../php/sqlcreds.php";
-
+include_once "../config.php";
 include_once "../php/database.php";
 $database = new Database();
 $database->createTables();
 
 // Create connection
-$connection = new mysqli($GLOBALS['server'], $GLOBALS['user'], $GLOBALS['pass'], $GLOBALS['dbname']);
+$connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
         
 // Check connection
 if ($connection->connect_error) {
