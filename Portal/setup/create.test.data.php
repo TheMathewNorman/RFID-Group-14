@@ -1,5 +1,5 @@
 <?php
-include_once "../config.php";
+include_once $_SERVER['DOCUMENT_ROOT'].'/config.php';
 include_once "../php/database.php";
 $database = new Database();
 $database->createTables();
